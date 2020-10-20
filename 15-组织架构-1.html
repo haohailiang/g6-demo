@@ -11,6 +11,43 @@
             width: 1440px;
             height: 700px;
         }
+
+        .dom-node {
+            background-color: #fff; 
+            border: 2px solid red; 
+            border-radius: 5px; 
+            /* display: flex; */
+            /* width: 115px;
+            height: 35px; */
+            width: 36px;
+            height: calc(40px + 24px + 18px - 4px);
+        }
+        .image-wrap {
+            height: 40px;
+            background-color: #CDDDFD;
+        }
+        .img {
+            line-height: 100%;
+            margin-left: 7px;
+            margin-top: 5px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+        .main-title {
+            font-size: 14px;
+            color: #5B8FF9;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+        .sub-title {
+            font-size: 12px;
+            color: #ff00ff;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     </style>
     <script src="https://gw.alipayobjects.com/os/lib/antv/g6/3.8.1/dist/g6.min.js"></script>
 </head>
@@ -157,99 +194,35 @@
             },
         };
 
-        G6.registerNode(
-            'icon-node',
-            {
-                draw(cfg, group) {
-                    const styles = this.getShapeStyle(cfg);
-                    const { labelCfg = {} } = cfg;
-
-                    const w = styles.width;
-                    const h = styles.height;
-
-                    console.log('%c styles===', 'color:#fff;background: red;', styles)
-
-                    // 底部容器的样式
-                    const keyShape = group.addShape('rect', {
-                        attrs: {
-                            ...styles,
-                            x: -w / 2,
-                            y: -h / 2,
-                        },
-                    });
-
-                    /**
-                     * leftIcon 格式如下：
-                     *  {
-                     *    style: ShapeStyle;
-                     *    img: ''
-                     *  }
-                     */
-                    if (cfg.leftIcon) {
-                        const { style, img } = cfg.leftIcon;
-                        // group.addShape('rect', {
-                        //     attrs: {
-                        //         x: 1 - w / 2,
-                        //         y: 1 - h / 2,
-                        //         width: 38,
-                        //         height: styles.height - 2,
-                        //         fill: '#8c8c8c',
-                        //         ...style,
-                        //     },
-                        // });
-                        // const picH = 40
-                        // const mainTitle = 24
-                        // const subTitle = 18
-                        group.addShape('image', {
-                            attrs: {
-                                x: - w / 2,
-                                y: - (picH + mainTitle + subTitle) / 2,
-                                width: w,
-                                height: w,
-                                clipCfg: {
-                                    show: true,
-                                    type: 'circle',
-                                    r: 100
-                                },
-                                img:
-                                    img ||
-                                    'https://g.alicdn.com/cm-design/arms-trace/1.0.155/styles/armsTrace/images/TAIR.png',
-                            },
-                            name: 'image-shape',
-                        });
-
-                        // group.addShape('image', {
-                        //     attrs: {
-                        //         x: - w / 2,
-                        //         y: - (picH + mainTitle + subTitle) / 2 + w,
-                        //         width: w,
-                        //         height: 24,
-                        //         img:
-                        //             img ||
-                        //             'https://g.alicdn.com/cm-design/arms-trace/1.0.155/styles/armsTrace/images/TAIR.png',
-                        //     },
-                        //     name: 'image-shape',
-                        // });
-                    }
-
-                    if (cfg.label) {
-                        group.addShape('text', {
-                            attrs: {
-                                ...labelCfg.style,
-                                text: cfg.label,
-                                x: 0,
-                                y: - (picH + mainTitle + subTitle) / 2 + w,
-                            },
-                        });
-                    }
-
-                    return keyShape;
-                },
-                update: undefined
+        G6.registerNode('dom-node', {
+            draw: (cfg, group) => {
+                const stroke = cfg.style ? cfg.style.stroke || '#5B8FF9' : '#5B8FF9';
+                // const width = 40
+                // const height = 40
+                const picH = 40
+                const mainTitle = 24
+                const subTitle = 18
+                const domJsx = `
+                    <div id=${cfg.id} class="dom-node">
+                        <div class="image-wrap">
+                            <img class="img" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
+                        </div>
+                        <div class="main-title">主标题</div>
+                        <span class="sub-title">${cfg.label}</span>
+                    </div>
+                `
+                const shape = group.addShape('dom', {
+                    attrs: {
+                        width: picH,
+                        height: picH + mainTitle + subTitle,
+                        html: domJsx,
+                    },
+                    draggable: true,
+                });
+                return shape;
             },
-            'rect',
-        );
-
+        });
+        
         const defaultLabelCfg = {
             style: {
                 fill: '#000',
@@ -263,6 +236,7 @@
             width: 1440,
             height: 700,
             linkCenter: true,
+            renderer: 'svg',
             fitView: true, // 图像适配画布
             // defaultNode: {
             //     type: 'circle',
@@ -290,11 +264,11 @@
             //     // },
             // },
             defaultNode: {
-                type: 'icon-node',
+                type: 'dom-node',
                 // size: [120, 40],
-                size: [40, picH + mainTitle + subTitle],
-                style: defaultNodeStyle,
-                labelCfg: defaultLabelCfg,
+                // size: [40, picH + mainTitle + subTitle],
+                // style: defaultNodeStyle,
+                // labelCfg: defaultLabelCfg,
             },
             defaultEdge: {
                 type: 'flow-line',

@@ -11,6 +11,7 @@
             width: 1440px;
             height: 700px;
         }
+
         .dom-node {
             background-color: #fff; 
             border: 2px solid red; 
@@ -54,11 +55,49 @@
 <body>
     <!-- 1. 创建容器 -->
     <div id="mountNode"></div>
-    <script>
 
-        /**
- * Register a node type with DOM
- */
+    <script>
+        const data = {
+            nodes: [
+                {
+                    id: '0',
+                    label: '0',
+                },
+                {
+                    id: '1',
+                    label: '1',
+                },
+                {
+                    id: '2',
+                    label: '2',
+                },
+                {
+                    id: '3',
+                    label: '3',
+                },
+                {
+                    id: '4',
+                    label: '4',
+                },
+                {
+                    id: '5',
+                    label: '5',
+                },
+                {
+                    id: '6',
+                    label: '6',
+                },
+                {
+                    id: '7',
+                    label: '7',
+                },
+                {
+                    id: '8',
+                    label: '8',
+                },
+            ],
+        };
+
         G6.registerNode('dom-node', {
             draw: (cfg, group) => {
                 const stroke = cfg.style ? cfg.style.stroke || '#5B8FF9' : '#5B8FF9';
@@ -88,47 +127,45 @@
             },
         });
 
-        /** 数据 */
-        const data = {
-            nodes: [
-                {
-                    id: 'node1',
-                    x: 10,
-                    y: 100,
-                    label: 'Homepage',
-                },
-                {
-                    id: 'node2',
-                    x: 200,
-                    y: 100,
-                    label: 'Subpage',
-                },
-            ],
-            edges: [
-                {
-                    source: 'node1',
-                    target: 'node2',
-                },
-            ],
-        };
+        const width = 1440
+        const height = 700
 
         const graph = new G6.Graph({
             container: 'mountNode',
-            width: 1440,
-            height: 700,
-            // translate the graph to align the canvas's center, support by v3.5.1
-            fitCenter: true,
+            width,
+            height,
             renderer: 'svg',
-            linkCenter: true,
+            modes: {
+                default: ['zoom-canvas', 'drag-canvas', 'drag-node'],
+            },
+            layout: {
+                type: 'grid',
+                begin: [20, 20],
+                width: width - 20,
+                height: height - 20,
+            },
+            animate: true,
+            // defaultNode: {
+            //     size: 20,
+            //     style: {
+            //         fill: '#C6E5FF',
+            //         stroke: '#5B8FF9',
+            //     },
+            // },
             defaultNode: {
                 type: 'dom-node',
                 // size: [120, 40],
+                // size: [40, picH + mainTitle + subTitle],
+                // style: defaultNodeStyle,
+                // labelCfg: defaultLabelCfg,
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
             },
         });
-
         graph.data(data);
         graph.render();
-
     </script>
 </body>
 
