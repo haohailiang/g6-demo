@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+        }
+    </style>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/3.8.1/dist/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+        // 2. 数据准备
+        const main = async () => {
+            // 2.加载远程数据
+            const response = await fetch(
+                'https://gw.alipayobjects.com/os/basement_prod/6cae02ab-4c29-44b2-b1fd-4005688febcb.json',
+            );
+            const remoteData = await response.json();
+
+            // 这样可以覆盖全局的属性
+            const nodes = remoteData.nodes;
+            nodes.forEach((node) => {
+                if (!node.style) {
+                    node.style = {};
+                }
+                switch (
+                node.class // 根据节点数据中的 class 属性配置图形
+                ) {
+                    case 'c0': {
+                        node.type = 'circle'; // class = 'c0' 时节点图形为 circle
+                        break;
+                    }
+                    case 'c1': {
+                        node.type = 'rect'; // class = 'c1' 时节点图形为 rect
+                        node.size = [35, 20]; // class = 'c1' 时节点大小
+                        break;
+                    }
+                    case 'c2': {
+                        node.type = 'ellipse'; // class = 'c2' 时节点图形为 ellipse
+                        node.size = [35, 20]; // class = 'c2' 时节点大小
+                        break;
+                    }
+                }
+            });
+
+            // 3. 创建关系图
+            // 实际渲染的范围是这么大
+            const graph = new G6.Graph({
+                container: 'mountNode', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
+                width: 800, // Number，必须，图的宽度
+                height: 500, // Number，必须，图的高度
+            });
+
+            // 4. 配置数据源，渲染
+            graph.data(remoteData); // 读取 Step 2 中的数据源到图上
+            graph.render(); // 渲染图
+        }
+
+        main();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+            width: 1440px;
+            height: 700px;
+        }
+        .dom-node {
+            background-color: #fff; 
+            border: 2px solid red; 
+            border-radius: 5px; 
+            display: flex;
+        }
+        .image-wrap {
+            height: 100%;
+            width: 33%;
+            background-color: #CDDDFD;
+        }
+        .img {
+            line-height: 100%;
+            margin-left: 7px;
+            margin-top: 5px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+        .label {
+            margin:auto;
+            padding:auto;
+            color: #5B8FF9;
+        }
+    </style>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/3.8.1/dist/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+
+        /**
+ * Register a node type with DOM
+ */
+        G6.registerNode('dom-node', {
+            draw: (cfg, group) => {
+                const stroke = cfg.style ? cfg.style.stroke || '#5B8FF9' : '#5B8FF9';
+                const width = 120
+                const height = 40
+                const domJsx = `
+                    <div id=${cfg.id} class='dom-node' style="width: ${width - 5}px; height: ${height - 5}px;">
+                        <div class='image-wrap'>
+                            <img class="img" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
+                        </div>
+                        <span class="label">${cfg.label}</span>
+                    </div>
+                `
+                const shape = group.addShape('dom', {
+                    attrs: {
+                        width,
+                        height,
+                        html: domJsx,
+                    },
+                    draggable: true,
+                });
+                return shape;
+            },
+        });
+
+        /** 数据 */
+        const data = {
+            nodes: [
+                {
+                    id: 'node1',
+                    x: 10,
+                    y: 100,
+                    label: 'Homepage',
+                },
+                {
+                    id: 'node2',
+                    x: 200,
+                    y: 100,
+                    label: 'Subpage',
+                },
+            ],
+            edges: [
+                {
+                    source: 'node1',
+                    target: 'node2',
+                },
+            ],
+        };
+
+        const graphContainer = document.getElementById('mountNode');
+
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.innerHTML = `由于打包问题，本 demo 的 111-113 行被暂时注释。需要您在代码栏中打开 111-113 行的注释以得到自定义 DOM 节点正确的交互。<br /> Due to the packing problem of the site, we have to note the line 111-113 of this demo temporary. Unnote them to see the result of custom DOM node with interactions please.`;
+        graphContainer.appendChild(descriptionDiv);
+
+        const graph = new G6.Graph({
+            container: 'mountNode',
+            width: 1440,
+            height: 700,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            fitCenter: true,
+            renderer: 'svg',
+            linkCenter: true,
+            defaultNode: {
+                type: 'dom-node',
+                // size: [120, 40],
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+
+        // // click listener for dom nodes to response the click by changing stroke color
+        const listener = (dom) => {
+            const nodeId = dom.id;
+            if (!nodeId) return;
+            const node = graph.findById(nodeId);
+            let stroke = '';
+            if (!node.hasState('selected')) {
+                stroke = '#f00';
+                graph.setItemState(node, 'selected', true);
+            } else {
+                stroke = '#5B8FF9';
+                graph.setItemState(node, 'selected', false);
+            }
+            graph.updateItem(nodeId, {
+                style: {
+                    stroke,
+                },
+            });
+        };
+
+        const bindClickListener = () => {
+            const domNodes = document.getElementsByClassName('dom-node');
+            for (let i = 0; i < domNodes.length; i++) {
+                const dom = domNodes[i];
+                // open the following lines pls!
+                // dom.addEventListener('click', (e) => {
+                //   listener(dom);
+                // });
+            }
+        };
+
+        bindClickListener();
+
+        // after update the item, all the DOMs will be re-rendered
+        // so the listeners should be rebinded to the new DOMs
+        graph.on('afterupdateitem', (e) => {
+            bindClickListener();
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+            width: 1440px;
+            height: 700px;
+        }
+    </style>
+    <script src="https://gw.alipayobjects.com/os/lib/antv/g6/3.8.1/dist/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+
+        const picH = 40
+        const mainTitle = 24
+        const subTitle = 18
+
+        const container = document.getElementById('mountNode');
+
+        const data = {
+            id: 'root',
+            label: 'root',
+            children: [
+                {
+                    id: 'c1',
+                    label: 'c1',
+                    children: [
+                        {
+                            id: 'c1-1',
+                            label: 'c1-1',
+                        },
+                        {
+                            id: 'c1-2',
+                            label: 'c1-2',
+                            children: [
+                                {
+                                    id: 'c1-2-1',
+                                    label: 'c1-2-1',
+                                },
+                                {
+                                    id: 'c1-2-2',
+                                    label: 'c1-2-2',
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    id: 'c2',
+                    label: 'c2',
+                },
+                {
+                    id: 'c3',
+                    label: 'c3',
+                    children: [
+                        {
+                            id: 'c3-1',
+                            label: 'c3-1',
+                        },
+                        {
+                            id: 'c3-2',
+                            label: 'c3-2',
+                            children: [
+                                {
+                                    id: 'c3-2-1',
+                                    label: 'c3-2-1',
+                                },
+                                {
+                                    id: 'c3-2-2',
+                                    label: 'c3-2-2',
+                                },
+                                {
+                                    id: 'c3-2-3',
+                                    label: 'c3-2-3',
+                                },
+                            ],
+                        },
+                        {
+                            id: 'c3-3',
+                            label: 'c3-3',
+                        },
+                    ],
+                },
+            ],
+        };
+
+        G6.Util.traverseTree(data, (d) => {
+            d.leftIcon = {
+                style: {
+                    fill: '#e6fffb',
+                    stroke: '#e6fffb',
+                },
+                img: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ',
+            };
+            return true;
+        });
+
+        G6.registerEdge('flow-line', {
+            draw(cfg, group) {
+                const startPoint = cfg.startPoint;
+                const endPoint = cfg.endPoint;
+
+                const { style } = cfg;
+                const shape = group.addShape('path', {
+                    attrs: {
+                        stroke: style.stroke,
+                        endArrow: style.endArrow,
+                        path: [
+                            ['M', startPoint.x, startPoint.y],
+                            ['L', startPoint.x, (startPoint.y + endPoint.y) / 2],
+                            ['L', endPoint.x, (startPoint.y + endPoint.y) / 2],
+                            ['L', endPoint.x, endPoint.y],
+                        ],
+                    },
+                });
+
+                return shape;
+            },
+        });
+
+        const defaultNodeStyle = {
+            fill: '#91d5ff',
+            stroke: '#ff0000',
+            // radius: 5,
+        };
+
+        const defaultEdgeStyle = {
+            stroke: '#91d5ff',
+        };
+
+        const defaultLayout = {
+            type: 'compactBox',
+            direction: 'TB',
+            getId: function getId(d) {
+                return d.id;
+            },
+            getHeight: function getHeight() {
+                return 16;
+            },
+            getWidth: function getWidth() {
+                return 16;
+            },
+            getVGap: function getVGap() {
+                return 40;
+            },
+            getHGap: function getHGap() {
+                return 70;
+            },
+        };
+
+        G6.registerNode(
+            'icon-node',
+            {
+                draw(cfg, group) {
+                    const styles = this.getShapeStyle(cfg);
+                    const { labelCfg = {} } = cfg;
+
+                    const w = styles.width;
+                    const h = styles.height;
+
+                    console.log('%c styles===', 'color:#fff;background: red;', styles)
+
+                    // 底部容器的样式
+                    const keyShape = group.addShape('rect', {
+                        attrs: {
+                            ...styles,
+                            x: -w / 2,
+                            y: -h / 2,
+                        },
+                    });
+
+                    /**
+                     * leftIcon 格式如下：
+                     *  {
+                     *    style: ShapeStyle;
+                     *    img: ''
+                     *  }
+                     */
+                    if (cfg.leftIcon) {
+                        const { style, img } = cfg.leftIcon;
+                        // group.addShape('rect', {
+                        //     attrs: {
+                        //         x: 1 - w / 2,
+                        //         y: 1 - h / 2,
+                        //         width: 38,
+                        //         height: styles.height - 2,
+                        //         fill: '#8c8c8c',
+                        //         ...style,
+                        //     },
+                        // });
+                        // const picH = 40
+                        // const mainTitle = 24
+                        // const subTitle = 18
+                        group.addShape('image', {
+                            attrs: {
+                                x: - w / 2,
+                                y: - (picH + mainTitle + subTitle) / 2,
+                                width: w,
+                                height: w,
+                                clipCfg: {
+                                    show: true,
+                                    type: 'circle',
+                                    r: 100
+                                },
+                                img:
+                                    img ||
+                                    'https://g.alicdn.com/cm-design/arms-trace/1.0.155/styles/armsTrace/images/TAIR.png',
+                            },
+                            name: 'image-shape',
+                        });
+
+                        // group.addShape('image', {
+                        //     attrs: {
+                        //         x: - w / 2,
+                        //         y: - (picH + mainTitle + subTitle) / 2 + w,
+                        //         width: w,
+                        //         height: 24,
+                        //         img:
+                        //             img ||
+                        //             'https://g.alicdn.com/cm-design/arms-trace/1.0.155/styles/armsTrace/images/TAIR.png',
+                        //     },
+                        //     name: 'image-shape',
+                        // });
+                    }
+
+                    if (cfg.label) {
+                        group.addShape('text', {
+                            attrs: {
+                                ...labelCfg.style,
+                                text: cfg.label,
+                                x: 0,
+                                y: - (picH + mainTitle + subTitle) / 2 + w,
+                            },
+                        });
+                    }
+
+                    return keyShape;
+                },
+                update: undefined
+            },
+            'rect',
+        );
+
+        const defaultLabelCfg = {
+            style: {
+                fill: '#000',
+                fontSize: 12,
+                textAlign: 'center',
+            },
+        };
+
+        const graph = new G6.TreeGraph({
+            container: 'mountNode',
+            width: 1440,
+            height: 700,
+            linkCenter: true,
+            fitView: true, // 图像适配画布
+            // defaultNode: {
+            //     type: 'circle',
+            //     size: [50],
+            //     color: '#5B8FF9',
+            //     style: {
+            //         fill: '#9EC9FF',
+            //         lineWidth: 3,
+            //     },
+            //     labelCfg: {
+            //         style: {
+            //             fill: '#1890ff',
+            //             fontSize: 12,
+            //         },
+            //         position: 'bottom',
+            //     },
+            //     // icon configuration
+            //     // icon: {
+            //     //     // whether show the icon
+            //     //     show: true,
+            //     //     // icon's img address, string type
+            //     //     img: 'https://gw.alipayobjects.com/zos/basement_prod/012bcf4f-423b-4922-8c24-32a89f8c41ce.svg',
+            //     //     width: 60,
+            //     //     height: 60,
+            //     // },
+            // },
+            defaultNode: {
+                type: 'icon-node',
+                // size: [120, 40],
+                size: [40, picH + mainTitle + subTitle],
+                style: defaultNodeStyle,
+                labelCfg: defaultLabelCfg,
+            },
+            defaultEdge: {
+                type: 'flow-line',
+                style: defaultEdgeStyle,
+            },
+            layout: defaultLayout,
+        });
+
+        graph.data(data);
+        graph.render();
+
+    </script>
+</body>
+
+</html>
