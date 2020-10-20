@@ -246,6 +246,7 @@
 
         function remove(id) {
             graph.removeChild(id);
+            // graph.changeData(data)
         }
 
         function add(id) {
@@ -325,7 +326,14 @@
             // 如果是一个对象，则使用parentData.children.push(obj)
             console.log('%c childData===', 'color:#fff;background: red;', childData)
             parentData.children.push(childData);
+            // graph.changeData(data);
             graph.changeData();
+            graph.updateItem(nodeId, parentData);
+            // graph.updateItem(nodeId);
+            // graph.addItem('child-data-' + count, childData)
+            // graph.refresh()
+            // const childDataId = graph.findById('child-data-' + count)
+            // graph.refreshItem(childDataId)
             count++
         }
 
