@@ -16,6 +16,8 @@
             border: 2px solid red; 
             border-radius: 5px; 
             display: flex;
+            width: 115px;
+            height: 35px;
         }
         .image-wrap {
             height: 100%;
@@ -53,8 +55,8 @@
                 const width = 120
                 const height = 40
                 const domJsx = `
-                    <div id=${cfg.id} class='dom-node' style="width: ${width - 5}px; height: ${height - 5}px;">
-                        <div class='image-wrap'>
+                    <div id=${cfg.id} class="dom-node">
+                        <div class="image-wrap">
                             <img class="img" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
                         </div>
                         <span class="label">${cfg.label}</span>
