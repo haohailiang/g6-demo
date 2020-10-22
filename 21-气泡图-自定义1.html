@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            border: 1px solid;
+            width: 700px;
+            height: 700px;
+        }
+
+        .dom-node {
+            background-color: pink;
+            /* border: 2px solid red;  */
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <script src="./lib/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        // G6.registerNode('dom-node', {
+        //     draw: (cfg, group) => {
+        //         // const stroke = cfg.style ? cfg.style.stroke || '#5B8FF9' : '#5B8FF9';
+        //         // const width = 40
+        //         // const height = 40
+        //         // const picH = 40
+        //         // const mainTitle = 24
+        //         // const subTitle = 18
+        //         const domJsx = `
+        //             <div id=${cfg.id} class="dom-node" style="width: ${cfg.size}px;height:${cfg.size}px;">
+        //                 ${cfg.id}
+        //             </div>
+        //         `
+        //         const shape = group.addShape('dom', {
+        //             attrs: {
+        //                 width: cfg.size,
+        //                 height: cfg.size,
+        //                 // nodeSize: cfg.size,
+        //                 // size: cfg.size,
+        //                 html: domJsx,
+        //             },
+        //             draggable: true,
+        //         });
+        //         return shape;
+        //     },
+        // }, 'single-node',);
+
+        const lightBlue = '#5b8ff9';
+        const lightOrange = '#5ad8a6';
+
+        G6.registerNode('pie-node', {
+            draw: (cfg, group) => {
+                const radius = cfg.size / 2; // node radius
+                const inPercentage = cfg.inDegree / cfg.degree; // the ratio of indegree to outdegree
+                const inAngle = inPercentage * Math.PI * 2; // the anble for the indegree fan
+                const inArcEnd = [radius * Math.cos(inAngle), radius * Math.sin(inAngle)]; // the end position for the in-degree fan
+                let isInBigArc = 1,
+                    isOutBigArc = 0;
+                if (inAngle > Math.PI) {
+                    isInBigArc = 0;
+                    isOutBigArc = 1;
+                }
+                // fan shape for the in degree
+                const fanIn = group.addShape('path', {
+                    attrs: {
+                        path: [
+                            ['M', radius, 0],
+                            ['A', radius, radius, 0, isInBigArc, 0, inArcEnd[0], inArcEnd[1]],
+                            ['L', 0, 0],
+                            ['Z'],
+                        ],
+                        lineWidth: 0,
+                        fill: lightOrange,
+                    },
+                    name: 'in-fan-shape',
+                });
+                // draw the fan shape
+                group.addShape('path', {
+                    attrs: {
+                        path: [
+                            ['M', inArcEnd[0], inArcEnd[1]],
+                            ['A', radius, radius, 0, isOutBigArc, 0, radius, 0],
+                            ['L', 0, 0],
+                            ['Z'],
+                        ],
+                        lineWidth: 0,
+                        fill: lightBlue,
+                    },
+                    name: 'out-fan-shape',
+                });
+                // 返回 keyshape
+                return fanIn;
+            },
+        });
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'force',
+                nodeStrength: 1500,
+                // nodeSize: 150,
+                // type: 'random',
+                preventOverlap: true,
+            },
+            renderer: 'svg',
+            // fitView: true,
+            // linkCenter: true,
+            // fitCenter: true,
+            // defaultNode: {
+            //     color: '#5B8FF9',
+            //     style: {
+            //         lineWidth: 2,
+            //         fill: '#C6E5FF',
+            //     },
+            // },
+            // defaultNode: {
+            //     type: 'dom-node',
+            //     // nodeSize: 150,
+            //     // size: [120, 40],
+            // },
+            defaultNode: {
+                type: 'pie-node',
+            },
+            // defaultEdge: {
+            //     size: 1,
+            //     color: '#e2e2e2',
+            // },
+        });
+
+        const data = {
+            nodes: [
+                { id: 'node0', inDegree: 80, degree: 360, size: 50 * 3 },
+                { id: 'node1', inDegree: 80, degree: 360, size: 30 * 3 },
+                { id: 'node2', inDegree: 80, degree: 360, size: 30 * 3 },
+                { id: 'node3', inDegree: 80, degree: 360, size: 30 * 3 },
+                { id: 'node4', inDegree: 80, degree: 360, size: 30 * 3 },
+                { id: 'node5', inDegree: 80, degree: 360, size: 30 * 3 },
+                { id: 'node6', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node7', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node8', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node9', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node10', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node11', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node12', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node13', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node14', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node15', inDegree: 80, degree: 360, size: 15 * 3 },
+                { id: 'node16', inDegree: 80, degree: 360, size: 15 * 3 },
+            ],
+        };
+        // const data = []
+        const nodes = data.nodes;
+        graph.data({
+            nodes: data.nodes.map(function (node, i) {
+                return { ...node, label: i }
+            }),
+        });
+        graph.render();
+
+        graph.on('node:dragstart', function (e) {
+            graph.layout();
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:drag', function (e) {
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:dragend', function (e) {
+            e.item.get('model').fx = null;
+            e.item.get('model').fy = null;
+        });
+
+        function refreshDragedNodePosition(e) {
+            const model = e.item.get('model');
+            model.fx = e.x;
+            model.fy = e.y;
+        }
+
+    </script>
+</body>
+
+</html>
