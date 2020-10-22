@@ -105,7 +105,7 @@
 
         const container = document.getElementById('mountNode');
 
-        const data = {
+        let data = {
             id: 'root',
             label: 'root',
             children: [
@@ -326,6 +326,7 @@
             // }
 
             const parentData = graph.findDataById(nodeId);
+            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             if (!parentData.children) {
                 parentData.children = [];
             }
@@ -334,7 +335,17 @@
             // console.log('%c childData===', 'color:#fff;background: red;', childData)
             parentData.children.push(childData);
             // graph.changeData(data);
-            graph.changeData();
+            data = {
+                id: 'root00',
+                label: 'root00',
+                children: [
+                    data
+                ]
+            }
+            // 更新子节点
+            // graph.changeData();
+            // 更新父节点
+            graph.changeData(data);
             graph.updateItem(nodeId, parentData);
             // graph.updateItem(nodeId);
             // graph.addItem('child-data-' + count, childData)
@@ -557,19 +568,19 @@
             //     //     height: 60,
             //     // },
             // },
-            // defaultNode: {
-            //     type: 'dom-node',
-            //     // type: 'circle',
-            //     // size: [40],
-            //     // size: [nodeWidth, nodeHeight],
-            //     // size: [100, 20],
-            //     // size: [40, picH + mainTitle + subTitle],
-            //     style: defaultNodeStyle,
-            //     labelCfg: defaultLabelCfg,
-            // },
             defaultNode: {
-                shape: 'card-node',
+                type: 'dom-node',
+                // type: 'circle',
+                // size: [40],
+                // size: [nodeWidth, nodeHeight],
+                // size: [100, 20],
+                // size: [40, picH + mainTitle + subTitle],
+                // style: defaultNodeStyle,
+                // labelCfg: defaultLabelCfg,
             },
+            // defaultNode: {
+            //     shape: 'card-node',
+            // },
             defaultEdge: {
                 type: 'flow-line',
                 style: defaultEdgeStyle,

@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        #mountNode {
+        #container {
             border: 1px solid;
-            width: 1440px;
+            width: 700px;
             height: 700px;
         }
     </style>
@@ -18,8 +18,9 @@
 
 <body>
     <!-- 1. 创建容器 -->
-    <div id="mountNode"></div>
+    <div id="container"></div>
     <script>
+        let graph
         insertCss(`
             #contextMenu {
                 position: absolute;
@@ -46,21 +47,40 @@
         const descriptionDiv = document.createElement('div');
         descriptionDiv.id = 'discription';
         descriptionDiv.innerHTML = 'Right click a node to activate a contextMenu.';
-        document.getElementById('mountNode').appendChild(descriptionDiv);
+        document.getElementById('container').appendChild(descriptionDiv);
 
-        const width = document.getElementById('mountNode').scrollWidth;
-        const height = document.getElementById('mountNode').scrollHeight || 500;
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+
+        function itemClick(num) {
+            console.log('%c num===', 'color:#fff;background: red;', num)
+            const parentData = graph.findById('node3');
+            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
+            // graph.updateItem('node3', parentData);
+            graph.updateItem('node3', {
+                id: 'node3',
+                label: 'node4',
+                x: 350,
+                y: 100,
+                type: 'rect',
+            },);
+        }
 
         const contextMenu = new G6.Menu({
             getContent(graph) {
                 console.log('graph', graph);
-                return `<ul>
-                <li title='1'>测试01</li>
-                <li title='2'>测试02</li>
-                <li>测试03</li>
-                <li>测试04</li>
-                <li>测试05</li>
-                </ul>`;
+                // return `<ul>
+                // <li title='1'>测试01</li>
+                // <li title='2'>测试02</li>
+                // <li>测试03</li>
+                // <li>测试04</li>
+                // <li>测试05</li>
+                // </ul>`;
+                return `
+                    <div onClick="itemClick(1)">1</div>
+                    <div onClick="itemClick(2)">2</div>
+                    <div onClick="itemClick(3)">3</div>
+                `;
             },
             handleMenuClick: (target, item) => {
                 console.log(target, item);
@@ -75,9 +95,9 @@
             itemTypes: ['node', 'edge'],
         });
 
-        const graph = new G6.Graph({
+        graph = new G6.Graph({
             // 使用 contextMenu plugins 时，需要将 container 设置为 position: relative;
-            container: 'mountNode',
+            container: 'container',
             width,
             height,
             linkCenter: true,
@@ -149,6 +169,7 @@
 
         graph.data(data);
         graph.render();
+
     </script>
 </body>
 
