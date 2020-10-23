@@ -10,8 +10,8 @@
             border: 1px solid;
             /* width: 1440px;
             height: 700px; */
-            width: 2500px;
-            height: 1400px;
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
         }
 
         .dom-node {
@@ -533,12 +533,14 @@
             },
         };
 
+        const width = document.getElementById('mountNode').scrollWidth;
+        const height = document.getElementById('mountNode').scrollHeight || 500;
         const graph = new G6.TreeGraph({
             container: 'mountNode',
             // width: 1440,
             // height: 700,
-            width: 2500,
-            height: 1400,
+            width,
+            height,
             fitView: true, // 图像适配画布
             // fitCenter: true, // 图像适配画布
             renderer: 'svg',

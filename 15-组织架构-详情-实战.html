@@ -105,70 +105,37 @@
 
         const container = document.getElementById('mountNode');
 
-        const data = {
-            id: 'root',
-            label: 'root',
+        let data = {
+            id: '起始',
+            label: '起始',
             children: [
                 {
-                    id: 'c1',
-                    label: 'c1',
+                    id: '景以民',
+                    label: '景以民',
+                    postionTitle: '畅枫',
+                },
+                {
+                    id: '胥辰',
+                    label: '胥辰',
+                    postionTitle: '市场部高级副总裁',
                     children: [
                         {
-                            id: 'c1-1',
-                            label: 'c1-1',
+                            id: '畅枫',
+                            label: '畅枫',
+                            postionTitle: '市场部高级副总裁',
                         },
                         {
-                            id: 'c1-2',
-                            label: 'c1-2',
-                            children: [
-                                {
-                                    id: 'c1-2-1',
-                                    label: 'c1-2-1',
-                                },
-                                {
-                                    id: 'c1-2-2',
-                                    label: 'c1-2-2',
-                                },
-                            ],
+                            id: '请填写姓名',
+                            label: '请填写姓名',
+                            postionTitle: '请填写职位',
                         },
                     ],
                 },
                 {
-                    id: 'c2',
-                    label: 'c2',
+                    id: '德祥裕',
+                    label: '德祥裕',
+                    postionTitle: '市场部高级副总裁',
                 },
-                // {
-                //     id: 'c3',
-                //     label: 'c3',
-                //     children: [
-                //         {
-                //             id: 'c3-1',
-                //             label: 'c3-1',
-                //         },
-                //         {
-                //             id: 'c3-2',
-                //             label: 'c3-2',
-                //             children: [
-                //                 {
-                //                     id: 'c3-2-1',
-                //                     label: 'c3-2-1',
-                //                 },
-                //                 {
-                //                     id: 'c3-2-2',
-                //                     label: 'c3-2-2',
-                //                 },
-                //                 {
-                //                     id: 'c3-2-3',
-                //                     label: 'c3-2-3',
-                //                 },
-                //             ],
-                //         },
-                //         {
-                //             id: 'c3-3',
-                //             label: 'c3-3',
-                //         },
-                //     ],
-                // },
             ],
         };
 
@@ -326,6 +293,7 @@
             // }
 
             const parentData = graph.findDataById(nodeId);
+            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             if (!parentData.children) {
                 parentData.children = [];
             }
@@ -334,7 +302,17 @@
             // console.log('%c childData===', 'color:#fff;background: red;', childData)
             parentData.children.push(childData);
             // graph.changeData(data);
-            graph.changeData();
+            data = {
+                id: 'root00',
+                label: 'root00',
+                children: [
+                    data
+                ]
+            }
+            // 更新子节点
+            // graph.changeData();
+            // 更新父节点
+            graph.changeData(data);
             graph.updateItem(nodeId, parentData);
             // graph.updateItem(nodeId);
             // graph.addItem('child-data-' + count, childData)
@@ -566,8 +544,8 @@
             //     // size: [nodeWidth, nodeHeight],
             //     // size: [100, 20],
             //     // size: [40, picH + mainTitle + subTitle],
-            //     style: defaultNodeStyle,
-            //     labelCfg: defaultLabelCfg,
+            //     // style: defaultNodeStyle,
+            //     // labelCfg: defaultLabelCfg,
             // },
             defaultNode: {
                 shape: 'card-node',
