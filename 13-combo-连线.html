@@ -47,6 +47,12 @@
                     y: 150,
                     comboId: 'combo2',
                 },
+                {
+                    id: 'node5',
+                    x: 750 / 2,
+                    y: 150 / 2,
+                    // comboId: 'combo2',
+                },
             ],
             combos: [
                 {
@@ -63,6 +69,11 @@
             edges: [
                 {
                     source: 'combo1', // String，必须，起始点 id
+                    target: 'combo2', // String，必须，目标点 id
+                    label: '我是连线', // 边的文本
+                },
+                {
+                    source: 'node5', // String，必须，起始点 id
                     target: 'combo2', // String，必须，目标点 id
                     label: '我是连线', // 边的文本
                 },
