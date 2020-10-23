@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            border: 1px solid;
+            width: 700px;
+            height: 700px;
+        }
+    </style>
+    <script src="./lib/g6.min.js"></script>
+</head>
+
+<body>
+    <div id="container"></div>
+    <script>
+        let pools = Object.keys(new Array(12).fill(0))
+        let nodes = []
+        let edges = []
+        let focusNodeId
+        pools.forEach((nodeItem, index) => {
+            if (index % 4 === 0) {
+                focusNodeId = nodeItem
+
+                nodes.push({
+                    id: nodeItem,
+                    label: nodeItem,
+                    // comboId: 'combo a',
+                    size: 32,
+                    style: {
+                        fill: '#86889D',
+                        lineWidth: 0,
+                    },
+                    labelCfg: {
+                        style: {
+                            fontSize: 12,
+                            fill: '#ffffff',
+                        },
+                    },
+                })
+
+            } else {
+
+                edges.push({
+                    source: focusNodeId,
+                    target: nodeItem,
+                    // style: {
+                    //     strokeOpacity: 0
+                    // }
+                })
+
+                nodes.push({
+                    id: nodeItem,
+                    label: nodeItem,
+                    // comboId: 'combo a',
+                    size: 8,
+                    style: {
+                        fill: '#86889D',
+                        lineWidth: 0,
+                    },
+                    labelCfg: {
+                        refY: 10,
+                        position: 'bottom',
+                        style: {
+                            fontSize: 12,
+                            fill: '#111111',
+                            opacity: 0.65,
+                        },
+                    },
+                })
+            }
+
+        })
+
+        // ([4, 5, 6]).forEach((nodeItem, index) => {
+        //     nodes.push({
+        //         id: nodeItem,
+        //         label: nodeItem,
+        //         // comboId: 'combo a',
+        //         size: 32,
+        //         style: {
+        //             fill: '#86889D',
+        //             lineWidth: 0,
+        //         },
+        //         labelCfg: {
+        //             style: {
+        //                 fontSize: 12,
+        //                 fill: '#ffffff',
+        //             },
+        //         },
+        //     })
+        // })
+
+        // const subGraphEdges = [
+        //     {
+        //         source: '1',
+        //         target: '4',
+        //         // style: {
+        //         //     strokeOpacity: 0
+        //         // }
+        //     },
+        //     {
+        //         source: '1',
+        //         target: '5',
+        //         // style: {
+        //         //     strokeOpacity: 0
+        //         // }
+        //     },
+        //     {
+        //         source: '1',
+        //         target: '6',
+        //         // style: {
+        //         //     strokeOpacity: 0
+        //         // }
+        //     },
+        // ]
+
+        nodes.push({
+            id: 'center',
+            label: 'center',
+            // comboId: 'combo a',
+            size: 50,
+            style: {
+                fill: '#86889D',
+                lineWidth: 0,
+            },
+            labelCfg: {
+                refY: 10,
+                position: 'bottom',
+                style: {
+                    fontSize: 12,
+                    fill: '#111111',
+                    opacity: 0.65,
+                },
+            },
+        })
+
+        edges.push({
+            source: 'center',
+            target: '0',
+        })
+        edges.push({
+            source: 'center',
+            target: '4',
+        })
+        edges.push({
+            source: 'center',
+            target: '8',
+        })
+        console.log('%c edges===', 'color:#fff;background: red;', JSON.stringify(edges))
+        const data = {
+            nodes: [
+                {
+                    "id": "0",
+                    "label": "0",
+                    comboId: 'combo a',
+                    "size": 32,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#ffffff"
+                        }
+                    },
+                },
+                {
+                    "id": "1",
+                    "label": "1",
+                    comboId: 'combo a',
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "2",
+                    "label": "2",
+                    comboId: 'combo a',
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "3",
+                    "label": "3",
+                    comboId: 'combo a',
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "4",
+                    "label": "4",
+                    "size": 32,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#ffffff"
+                        }
+                    },
+                },
+                {
+                    "id": "5",
+                    "label": "5",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "6",
+                    "label": "6",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "7",
+                    "label": "7",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "8",
+                    "label": "8",
+                    "size": 32,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#ffffff"
+                        }
+                    },
+                },
+                {
+                    "id": "9",
+                    "label": "9",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "10",
+                    "label": "10",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "11",
+                    "label": "11",
+                    "size": 8,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                },
+                {
+                    "id": "center",
+                    "label": "center",
+                    "size": 50,
+                    "style": {
+                        "hover": {
+                            "fill": "#226EDA"
+                        },
+                        "fill": "#86889D",
+                        "lineWidth": 0
+                    },
+                    "labelCfg": {
+                        "refY": 10,
+                        "position": "bottom",
+                        "style": {
+                            "fontSize": 12,
+                            "fill": "#111111",
+                            "opacity": 0.65
+                        }
+                    },
+                }
+            ],
+            // nodes,
+            combos: [
+                {
+                    id: 'combo a',
+                    label: 'Combo A',
+                    style: {
+                        fill: '#ffffff',
+                        stroke: '#D8D8D8',
+                        // stroke: '#ff0000',
+                    },
+                    labelCfg: {
+                        refY: 10,
+                        position: 'top',
+                        style: {
+                            fill: '#000000',
+                            fontSize: 16,
+                        },
+                        refY: 25,
+                        position: 'bottom',
+                    },
+                },
+            ],
+            edges: [
+                {
+                    "source": "0",
+                    "target": "1"
+                },
+                {
+                    "source": "0",
+                    "target": "2"
+                },
+                {
+                    "source": "0",
+                    "target": "3"
+                },
+                {
+                    "source": "4",
+                    "target": "5"
+                },
+                {
+                    "source": "4",
+                    "target": "6"
+                },
+                {
+                    "source": "4",
+                    "target": "7"
+                },
+                {
+                    "source": "8",
+                    "target": "9"
+                },
+                {
+                    "source": "8",
+                    "target": "10"
+                },
+                {
+                    "source": "8",
+                    "target": "11"
+                },
+                {
+                    "source": "center",
+                    "target": "0"
+                },
+                {
+                    "source": "center",
+                    "target": "4"
+                },
+                {
+                    "source": "center",
+                    "target": "8"
+                }
+            ],
+            // edges,
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            // fitView: true, // 图像适配画布
+            modes: {
+                // default: ['drag-canvas', 'drag-combo', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
+                default: ['drag-canvas', 'drag-combo', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
+                // 通过切换mode来变换不同的行为
+                // mode2: ['drag-canvas', 'drag-combo', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
+            },
+            comboStateStyles: {
+                // the style configurations for the hover state on the combo
+                hover: {
+                    lineWidth: 2,
+                    stroke: '#226EDA',
+                },
+            },
+            nodeStateStyles: {
+                // the hover configurations for the hover state on the node
+                hover: {
+                    fill: '#226EDA',
+                    // lineWidth: 3,
+                },
+            },
+            layout: {
+                type: 'radial',
+                unitRadius: 50,
+                preventOverlap: true, // 防止节点重叠
+                preventNodeOverlap: true,
+                linkDistance: 50,
+                // linkDistance: (d) => {
+                //     // if (d.source.id === 'node0') {
+                //     //     return 100;
+                //     // }
+                //     return 30;
+                // },
+                // linkDistance: (d) => {
+                //     console.log('%c d===', 'color:#fff;background: red;', d)
+                //     // if (d.source.id === 'node0') {
+                //     //     return 100;
+                //     // }
+                //     // return 500;
+                //     return 50
+                // },
+                // // maxPreventOverlapIteration: 100,
+            },
+            animate: true,
+            // defaultNode: {
+            //     style: {
+            //         lineWidth: 0,
+            //         fill: '#86889D',
+            //         stroke: '#86889D',
+            //     },
+            // },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+                style: {
+                    endArrow: {
+                        path: 'M 0,0 L 8,4 L 8,-4 Z',
+                        fill: '#e2e2e2',
+                    },
+                },
+            },
+        });
+
+        // const nodes = data.nodes;
+        // nodes.forEach((node) => {
+        //     node.size = Math.random() * 20 + 10;
+        // });
+        graph.data(data);
+        graph.render();
+
+
+        graph.on('combo:mouseenter', (evt) => {
+            console.log('%c mouseenter===', 'color:#fff;background: red;')
+            const { item } = evt;
+            // graph.findById()
+            console.log('%c item===', 'color:#fff;background: red;', item)
+            graph.setItemState(item, 'hover', true);
+            item._cfg.nodes.forEach(v => {
+                graph.setItemState(v, 'hover', true);
+            })
+        });
+
+        graph.on('combo:mouseleave', (evt) => {
+            console.log('%c mouseleave===', 'color:#fff;background: red;')
+            const { item } = evt;
+            graph.setItemState(item, 'hover', false);
+            item._cfg.nodes.forEach(v => {
+                graph.setItemState(v, 'hover', false);
+            })
+        });
+
+        graph.on('node:mouseenter', (evt) => {
+            const { item } = evt;
+            // graph.findById()
+            const { comboId } = item.getModel()
+            console.log('%c comboId===', 'color:#fff;background: red;', comboId)
+
+            if (!comboId) {
+                console.log('%c item===', 'color:#fff;background: red;', item)
+                graph.setItemState(item, 'hover', true);
+            } else {
+                const combNode = graph.findById(comboId)
+                graph.setItemState(combNode, 'hover', true);
+                // const haha = graph.findById(comboId)
+                // console.log('%c haha===', 'color:#fff;background: red;', haha)
+                combNode._cfg.nodes.forEach(v => {
+                    graph.setItemState(v, 'hover', true);
+                })
+            }
+        });
+
+        graph.on('node:mouseleave', (evt) => {
+            const { item } = evt;
+            const { comboId } = item.getModel()
+            console.log('%c comboId===', 'color:#fff;background: red;', comboId)
+
+            if (!comboId) {
+                graph.setItemState(item, 'hover', false);
+            } else {
+                const combNode = graph.findById(comboId)
+                graph.setItemState(combNode, 'hover', true);
+                combNode._cfg.nodes.forEach(v => {
+                    graph.setItemState(v, 'hover', true);
+                })
+            }
+        });
+    </script>
+</body>
+
+</html>
