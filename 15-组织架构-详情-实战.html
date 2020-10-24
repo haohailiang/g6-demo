@@ -8,81 +8,8 @@
     <style>
         #mountNode {
             border: 1px solid;
-            /* width: 1440px;
-            height: 700px; */
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
-        }
-
-        .dom-node {
-            background-color: lightgray;
-            border: 2px solid red;
-            border-radius: 5px;
-            display: flex;
-            /* width: 230px;
-            height: 70px; */
-            position: relative;
-            /* display: none; */
-            width: 115px;
-            height: 35px;
-            font-size: 12px;
-        }
-
-        .left-hand {
-            width: 40px;
-            height: 100%;
-            background-color: pink;
-            display: none;
-        }
-
-        .node-main {
-            flex: 1;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            /* display: none; */
-        }
-
-        .node-profile {
-            margin: 0 5px;
-            height: 100%;
-            display: none;
-        }
-
-        .node-lables {
-            flex: 1;
-            height: 100%;
-        }
-
-        .node-main-title {
-            color: red;
-        }
-
-        .node-sub-title {
-            color: blue;
-        }
-
-        .node-plus {
-            position: absolute;
-            right: -10px;
-            top: 10px;
-        }
-
-        .node-number {
-            position: absolute;
-            right: -20px;
-            top: 10px;
-        }
-
-        .node-number.hide {
-            display: none;
-        }
-
-        .node-close {
-            position: absolute;
-            top: 0;
-            right: 0;
-            color: red;
         }
     </style>
     <script src="./lib/g6.min.js"></script>
@@ -93,66 +20,175 @@
     <div id="mountNode"></div>
     <script>
 
-        const picH = 40
-        const mainTitle = 24
-        const subTitle = 18
         let count = 1;
 
-        const ICON_MAP = {
-            a: 'https://gw.alipayobjects.com/mdn/rms_8fd2eb/afts/img/A*0HC-SawWYUoAAAAAAAAAAABkARQnAQ',
-            b: 'https://gw.alipayobjects.com/mdn/rms_8fd2eb/afts/img/A*sxK0RJ1UhNkAAAAAAAAAAABkARQnAQ',
-        };
+        // 布局
+        const vGap = 16
+        const hGap = 48
+        const layoutBorderColor = '#D8D8D8'
+
+        // 外边的box
+        const outerBoxX = 0
+        const outerBoxY = 0
+        const outerBoxWidth = 220
+        const outerBoxHeight = 64
+        const outerBoxBorderWidth = 1
+        const outerBoxBgColor = '#F4F5F6'
+        const outerBoxBorderColor = '#D8D8D8'
+
+        // 拖动滑块
+        const dragBoxX = outerBoxX + outerBoxBorderWidth
+        const dragBoxY = outerBoxY + outerBoxBorderWidth
+        const dragBoxWidth = 34
+        const dragBoxHeight = outerBoxHeight - outerBoxBorderWidth * 2
+        const dragBoxBgColor = '#FFFFFF'
+
+        // 拖动滑块 - 横线
+        const dragLineWidth = 8
+        const dragLineHeight = 1
+        const dragLineBoxHeight = 9
+        const dragLineNums = 3
+        const dargLineBorderColor = '#979797'
+        const dragLineX = dragBoxX + (dragBoxWidth - dragLineWidth) / 2
+        const dragLineY = dragBoxY + (dragBoxHeight - dragLineBoxHeight) / 2
+        const lineVGap = (dragLineBoxHeight - dragLineHeight * dragLineNums) / (dragLineNums - 1)
+
+        // 头像 - 边框
+        const headPortraitBoxHGap = 24
+        const headPortraitBoxRadius = 34 / 2
+        const headPortraitBoxBorderWidth = 1
+        const headPortraitBoxBorderColor = '#D8D8D8'
+        const headPortraitBoxBgColor = '#D8D8D8'
+        const headPortraitBoxX = dragBoxX + dragBoxWidth + headPortraitBoxHGap
+        const headPortraitBoxY = outerBoxY + outerBoxBorderWidth + 14 + headPortraitBoxRadius
+
+        // 头像
+        const headPortraitWidth = headPortraitBoxRadius * 2 - headPortraitBoxBorderWidth * 2
+        const headPortraitHeight = headPortraitWidth
+        const headPortraitX = headPortraitBoxX - headPortraitBoxRadius + headPortraitBoxBorderWidth
+        const headPortraitY = headPortraitBoxY - headPortraitBoxRadius + headPortraitBoxBorderWidth
+        const clipRadius = headPortraitWidth / 2
+        const clipCenterX = headPortraitX + clipRadius
+        const clipCenterY = headPortraitY + clipRadius
+
+        // 添加头像
+        const addPortraitX = headPortraitX + headPortraitWidth / 2
+        const addPortraitY = headPortraitY + headPortraitHeight / 2
+        const addPortraitRadius = clipRadius
+        const addPortraitColor = '#999999'
+        const addPortraitBgColor = '#D8D8D8'
+        const addPortraitLineWidth = 1
+
+        // 姓名
+        const nameX = headPortraitBoxX + headPortraitBoxRadius + headPortraitBoxBorderWidth + 5
+        const nameY = headPortraitBoxY - headPortraitBoxRadius - headPortraitBoxBorderWidth - 4
+        const nameLineHeight = 24
+        const nameColor = '#111111'
+        const nameFontSize = 16
+
+        // 职位
+        const positionX = nameX
+        const positionY = nameY + nameLineHeight
+        const positionLineHeight = 18
+        const positionColor = '#111111'
+        const positionFontSize = 12
+
+        // 添加节点
+        const addNodeRadius = 6
+        const addNodeX = outerBoxX + outerBoxWidth + outerBoxBorderWidth * 2 - addNodeRadius / 2 + 1
+        const addNodeY = outerBoxY + outerBoxHeight / 2 + outerBoxBorderWidth * 2 - addNodeRadius / 2 + 1
+        const addNodeColor = '#2671DB'
+        const addNodeBgColor = '#fff'
+        const addNodeLineWidth = 1
+
+        // 正在添加节点
+        const addingNodeWidth = 16
+        const addingNodeHeight = 16
+        const addingNodeX = addNodeX - addingNodeWidth / 2
+        const addingNodeY = addNodeY - addingNodeHeight / 2
+
+        // 删除节点
+        const removeNodeWidth = 16
+        const removeNodeHeight = 16
+        const removeNodeX = outerBoxX + outerBoxWidth - removeNodeWidth / 2
+        const removeNodeY = outerBoxY + outerBoxBorderWidth - removeNodeHeight / 2 - 1
+
+        // 折叠显示的数字
+        const foldNumsCenterX = addNodeX + 24
+        const foldNumsOffsetY = 1
+        const foldNumsCenterY = addNodeY + foldNumsOffsetY
+        const foldNumsLineHeight = 16
+        const foldNumsColor = '#ffffff'
+        const foldNumsFontSize = 10
+
+        // 折叠显示的线
+        const foldNumsLineX = addNodeX + addNodeRadius
+        const foldNumsLineY = addNodeY
+        const foldNumsLineWidth = foldNumsCenterX - foldNumsLineX
+        const foldNumsLineH = 1
+        const foldNumsLineBgColor = '#2671DB'
+
+        // 折叠显示的线的背景
+        const foldNumsBoxCenterX = foldNumsCenterX
+        const foldNumsBoxHeight = 14
+        const foldNumsBoxOffsetY = 1
+        const foldNumsBoxY = foldNumsCenterY - foldNumsBoxHeight / 2 - foldNumsBoxOffsetY
+        const foldNumsBoxBgColor = '#2671DB'
 
         const container = document.getElementById('mountNode');
 
         let data = {
             id: '起始',
-            label: '起始',
+            name: '起始',
+            foldNums: 0,
+            isNewNode: false,
+            isRoot: true,
             children: [
                 {
                     id: '景以民',
-                    label: '景以民',
-                    postionTitle: '畅枫',
+                    name: '景以民',
+                    position: '市场部高级副总裁',
+                    foldNums: 10,
+                    isNewNode: false,
                 },
                 {
                     id: '胥辰',
-                    label: '胥辰',
-                    postionTitle: '市场部高级副总裁',
+                    name: '胥辰',
+                    position: '市场部高级副总裁',
+                    foldNums: 0,
+                    isNewNode: false,
                     children: [
                         {
                             id: '畅枫',
-                            label: '畅枫',
-                            postionTitle: '市场部高级副总裁',
+                            name: '畅枫',
+                            position: '市场部高级副总裁',
+                            foldNums: 0,
+                            isNewNode: false,
                         },
-                        {
-                            id: '请填写姓名',
-                            label: '请填写姓名',
-                            postionTitle: '请填写职位',
-                        },
+                        // {
+                        //     id: '请填写姓名',
+                        //     name: '请填写姓名',
+                        //     position: '请填写职位',
+                        //     isNewNode: true,
+                        // },
                     ],
                 },
                 {
                     id: '德祥裕',
-                    label: '德祥裕',
-                    postionTitle: '市场部高级副总裁',
+                    name: '德祥裕',
+                    position: '市场部高级副总裁',
+                    foldNums: 0,
+                    isNewNode: false,
                 },
             ],
-        };
+        }
 
-        // G6.Util.traverseTree(data, (d) => {
-        //     // d.leftIcon = {
-        //     //     style: {
-        //     //         fill: '#e6fffb',
-        //     //         stroke: '#e6fffb',
-        //     //     },
-        //     //     img: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ',
-        //     // };
-        //     d.anchorPoints= [
-        //         [0, 0.5], // 左侧中间
-        //         [1, 0.5], // 右侧中间
-        //     ]
-        //     return true;
-        // });
+
+        // 计算节点总个数
+        G6.Util.traverseTree(data, () => {
+            count++
+            return true;
+        });
 
         G6.registerEdge('flow-line', {
             draw(cfg, group) {
@@ -164,12 +200,6 @@
                     attrs: {
                         stroke: style.stroke,
                         endArrow: style.endArrow,
-                        // path: [
-                        //     ['M', startPoint.x, startPoint.y],
-                        //     ['L', startPoint.x, (startPoint.y + endPoint.y) / 2],
-                        //     ['L', endPoint.x, (startPoint.y + endPoint.y) / 2],
-                        //     ['L', endPoint.x, endPoint.y],
-                        // ],
                         path: [
                             ['M', startPoint.x, startPoint.y],
                             ['L', (startPoint.x + endPoint.x) / 2, startPoint.y],
@@ -183,18 +213,6 @@
             },
         });
 
-        const defaultNodeStyle = {
-            // width: 230,
-            // height: 70,
-            fill: '#91d5ff',
-            stroke: '#ff0000',
-            // radius: 5,
-        };
-
-        const defaultEdgeStyle = {
-            stroke: '#91d5ff',
-        };
-
         const defaultLayout = {
             type: 'compactBox',
             direction: 'LR',
@@ -202,357 +220,273 @@
                 return d.id;
             },
             getHeight: function getHeight() {
-                return 16;
+                return outerBoxHeight;
             },
             getWidth: function getWidth() {
-                return 16;
+                return outerBoxWidth;
             },
             getVGap: function getVGap() {
-                return 40;
+                return vGap;
             },
             getHGap: function getHGap() {
-                return 70;
+                return hGap;
             },
         };
 
-        const nodeWidth = 230
-        const nodeHeight = 70
-
-        function remove(id) {
-            graph.removeChild(id);
-            // graph.changeData(data)
-        }
-
-        function add(id) {
-            const item = graph.findDataById(id);
-            // console.log('%c parentData===', 'color:#fff;background: red;', parentData)
-            // const newNode = {
-            //     id: 'root231321',
-            //     label: 'root1231231',
-            // }
-            // parentData.children.push(newNode)
-            const nodeId = id
-            // const model = item.getModel();
-            // const children = item.children;
-            // if (!children || children.length === 0) {
-            // console.log('%c count===', 'color:#fff;background: red;', count)
-            // const childData = [
-            //     {
-            //         id: 'child-data-' + count,
-            //         label: 'child-data-' + count,
-            // type: 'rect',
-            // type: 'dom-node',
-            // children: [
-            //     {
-            //         id: 'x-' + count,
-            //         label: 'x-' + count,
-            //     },
-            //     {
-            //         id: 'y-' + count,
-            //     },
-            // ],
-            // },
-            // {
-            //     id: 'child-data1-' + count,
-            //     children: [
-            //         {
-            //             id: 'x1-' + count,
-            //         },
-            //         {
-            //             id: 'y1-' + count,
-            //         },
-            //     ],
-            // },
-            // ];
-
+        function add(nodeId) {
+            const item = graph.findDataById(nodeId);
             const childData = {
-                id: 'child-data-' + count,
-                label: 'child-data-' + count,
-                // type: 'rect',
-                // type: 'dom-node',
-                // children: [
-                //     {
-                //         id: 'x-' + count,
-                //         label: 'x-' + count,
-                //     },
-                //     {
-                //         id: 'y-' + count,
-                //     },
-                // ],
+                id: String(count++),
+                name: '请填写姓名',
+                position: '请填写职位',
+                isNewNode: true,
             }
 
-            //     const parentData = graph.findDataById(nodeId);
-            //     if (!parentData.children) {
-            //         parentData.children = [];
-            //     }
-            //     // 如果childData是一个数组，则直接赋值给parentData.children
-            //     // 如果是一个对象，则使用parentData.children.push(obj)
-            //     parentData.children.push(childData);
-            //     graph.changeData();
-            //     count ++
-            // }
-
             const parentData = graph.findDataById(nodeId);
-            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             if (!parentData.children) {
                 parentData.children = [];
             }
-            // 如果childData是一个数组，则直接赋值给parentData.children
-            // 如果是一个对象，则使用parentData.children.push(obj)
-            // console.log('%c childData===', 'color:#fff;background: red;', childData)
             parentData.children.push(childData);
-            // graph.changeData(data);
-            data = {
-                id: 'root00',
-                label: 'root00',
-                children: [
-                    data
-                ]
-            }
-            // 更新子节点
-            // graph.changeData();
-            // 更新父节点
-            graph.changeData(data);
+            graph.changeData();
             graph.updateItem(nodeId, parentData);
-            // graph.updateItem(nodeId);
-            // graph.addItem('child-data-' + count, childData)
-            // graph.refresh()
-            // const childDataId = graph.findById('child-data-' + count)
-            // graph.refreshItem(childDataId)
-            count++
         }
-
-        G6.registerNode(
-            'dom-node', {
-            draw: (cfg, group) => {
-                // console.log('%c cfg===', 'color:#fff;background: red;', cfg)
-                // const width = 40
-                // const height = 40
-                // const picH = 40
-                // const mainTitle = 24
-                // const subTitle = 18
-                // const domJsx = `
-                //     <div id=${cfg.id} class="dom-node">
-                //         <div class="image-wrap">
-                //             <img class="img" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
-                //         </div>
-                //         <div class="main-title">主标题</div>
-                //         <span class="sub-title">${cfg.label}</span>
-                //     </div>
-                // `
-                const numClazz = cfg?.children?.length ? 'hide' : ''
-                // console.log('%c numClazz===', 'color:#fff;background: red;', numClazz)
-                const domJsx = `
-                    <div id=${cfg.id} class="dom-node">
-                        <div class="left-hand">left</div>
-                        <div class="node-main">
-                            <img class="node-profile" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
-                            <div class="node-lables">
-                                <div class="node-main-title">${cfg.label}</div>
-                                <div class="node-sub-title">sub title</div>
-                            </div>
-                        </div>
-                        <div class="node-plus" onClick="add('${cfg.id}')">加号</div>
-                        <div class="node-number ${numClazz}">有</div>
-                        <div class="node-close" onClick="remove('${cfg.id}')">关闭</div>
-                    </div>
-                `
-                // const domJsx = '<span>123</span>'
-
-                const shape = group.addShape('dom', {
-                    attrs: {
-                        width: nodeWidth,
-                        height: nodeHeight,
-                        html: domJsx,
-                    },
-                    name: 'key-shape', // Not unique, you can assign any string value to it
-                    draggable: true,
-                });
-                return shape;
-            },
-        },
-            'single-node',
-        );
 
         G6.registerNode(
             'card-node',
             {
                 drawShape: function drawShape(cfg, group) {
-                    const color = cfg.error ? '#F4664A' : '#30BF78';
-                    const r = 2;
                     const shape = group.addShape('rect', {
                         attrs: {
-                            x: 0,
-                            y: 0,
-                            width: 50,
-                            height: 15,
-                            stroke: color,
-                            radius: r,
+                            x: outerBoxX,
+                            y: outerBoxY,
+                            width: outerBoxWidth,
+                            height: outerBoxHeight,
+                            lineWidth: outerBoxBorderWidth,
+                            stroke: outerBoxBorderColor,
+                            fill: outerBoxBgColor,
                         },
-                        name: 'main-box',
+                        name: 'outer-box',
                         draggable: true,
                     });
 
                     group.addShape('rect', {
                         attrs: {
-                            x: 0,
-                            y: 0,
-                            // width: 200,
-                            // height: 20,
-                            width: 50,
-                            height: 15,
-                            fill: color,
-                            radius: [r, r, 0, 0],
+                            x: dragBoxX,
+                            y: dragBoxY,
+                            width: dragBoxWidth,
+                            height: dragBoxHeight,
+                            fill: dragBoxBgColor,
+                            cursor: 'pointer',
                         },
-                        name: 'title-box',
+                        name: 'drag-box',
                         draggable: true,
                     });
 
-                    // left icon
-                    // group.addShape('image', {
-                    //     attrs: {
-                    //         x: 4,
-                    //         y: 2,
-                    //         height: 16,
-                    //         width: 16,
-                    //         cursor: 'pointer',
-                    //         img: ICON_MAP['a'],
-                    //     },
-                    //     name: 'node-icon',
-                    // });
-
-                    // // title text
-                    // group.addShape('text', {
-                    //     attrs: {
-                    //         textBaseline: 'top',
-                    //         y: 2,
-                    //         x: 24,
-                    //         lineHeight: 20,
-                    //         // text: cfg.title,
-                    //         text: 'node1',
-                    //         fill: '#fff',
-                    //     },
-                    //     name: 'title',
-                    // });
-
-                    // // if (cfg.nodeLevel > 0) {
-                    // group.addShape('marker', {
-                    //     attrs: {
-                    //         x: 184,
-                    //         y: 30,
-                    //         r: 6,
-                    //         cursor: 'pointer',
-                    //         // symbol: cfg.collapse ? G6.Marker.expand : G6.Marker.collapse,
-                    //         symbol: G6.Marker.collapse,
-                    //         stroke: '#666',
-                    //         lineWidth: 1,
-                    //     },
-                    //     name: 'collapse-icon',
-                    // });
-                    // }
-
-                    // The content list
-                    // const panels = [
-                    //     { title: '成功率', value: '11%' },
-                    //     { title: '耗时', value: '111' },
-                    //     { title: '错误数', value: '111' },
-                    // ]
-                    const panels = []
-                    // cfg.panels.forEach((item, index) => {
-                    panels.forEach((item, index) => {
-                        // name text
-                        group.addShape('text', {
+                    [0, 1, 2].forEach(order => {
+                        group.addShape('rect', {
                             attrs: {
-                                textBaseline: 'top',
-                                y: 25,
-                                x: 24 + index * 60,
-                                lineHeight: 20,
-                                text: item.title,
-                                fill: 'rgba(0,0,0, 0.4)',
+                                x: dragLineX,
+                                y: dragLineY + lineVGap * order,
+                                width: dragLineWidth,
+                                height: dragLineHeight,
+                                fill: dargLineBorderColor,
+                                cursor: 'pointer',
                             },
-                            name: `index-title-${index}`,
-                        });
+                            name: 'drag-line-' + order,
+                            draggable: true,
+                        })
+                    })
 
-                        // value text
-                        group.addShape('text', {
+                    if (cfg.isNewNode) {
+                        group.addShape('marker', {
                             attrs: {
-                                textBaseline: 'top',
-                                y: 42,
-                                x: 24 + index * 60,
-                                lineHeight: 20,
-                                text: item.value,
-                                fill: '#595959',
+                                x: addPortraitX,
+                                y: addPortraitY,
+                                r: addPortraitRadius,
+                                symbol: G6.Marker.expand,
+                                stroke: addPortraitColor,
+                                fill: addPortraitBgColor,
+                                lineWidth: addPortraitLineWidth,
+                                cursor: 'pointer',
                             },
-                            name: `index-title-${index}`,
-                        });
+                            name: 'add-portrait',
+                        })
+                    } else {
+                        group.addShape('circle', {
+                            attrs: {
+                                x: headPortraitBoxX,
+                                y: headPortraitBoxY,
+                                r: headPortraitBoxRadius,
+                                lineWidth: headPortraitBoxBorderWidth,
+                                stroke: headPortraitBoxBorderColor,
+                                fill: headPortraitBoxBgColor,
+                            },
+                            // draggable: true,
+                            name: 'head-portrait-box',
+                        })
+
+                        group.addShape('image', {
+                            attrs: {
+                                x: headPortraitX,
+                                y: headPortraitY,
+                                width: headPortraitWidth,
+                                height: headPortraitHeight,
+                                img: '../image/1.jpg',
+                            },
+                            // draggable: true,
+                            name: 'head-portrait',
+                        })
+                            .setClip({
+                                type: "circle",
+                                attrs: {
+                                    x: clipCenterX,
+                                    y: clipCenterY,
+                                    r: clipRadius,
+                                }
+                            })
+                    }
+
+                    const nameYOffset = cfg.position ? 0 : (nameLineHeight - nameFontSize + positionFontSize) / 2
+                    const fixNameY = nameY + nameYOffset
+                    group.addShape('text', {
+                        attrs: {
+                            textBaseline: 'top',
+                            x: nameX,
+                            y: fixNameY,
+                            lineHeight: nameLineHeight,
+                            text: cfg.name,
+                            fill: nameColor,
+                            fontSize: nameFontSize,
+                        },
+                        name: 'name',
                     });
+
+                    if (cfg.position) {
+                        group.addShape('text', {
+                            attrs: {
+                                textBaseline: 'top',
+                                x: positionX,
+                                y: positionY,
+                                lineHeight: positionLineHeight,
+                                text: cfg.position,
+                                fill: positionColor,
+                                fontSize: positionFontSize,
+                            },
+                            name: 'position',
+                        });
+                    }
+
+
+                    if (cfg.isNewNode) {
+                        group.addShape('image', {
+                            attrs: {
+                                x: addingNodeX,
+                                y: addingNodeY,
+                                width: addingNodeWidth,
+                                height: addingNodeHeight,
+                                img: '../image/add.png',
+                            },
+                            // draggable: true,
+                            name: 'adding-node',
+                        })
+                    } else {
+                        group.addShape('marker', {
+                            attrs: {
+                                x: addNodeX,
+                                y: addNodeY,
+                                r: addNodeRadius,
+                                cursor: 'pointer',
+                                symbol: G6.Marker.expand,
+                                stroke: addNodeColor,
+                                fill: addNodeBgColor,
+                                lineWidth: addNodeLineWidth,
+                            },
+                            name: 'add-sub-node',
+                        })
+                    }
+
+                    group.addShape('image', {
+                        attrs: {
+                            x: removeNodeX,
+                            y: removeNodeY,
+                            width: removeNodeWidth,
+                            height: removeNodeHeight,
+                            cursor: 'pointer',
+                            img: '../image/close.png',
+                        },
+                        // draggable: true,
+                        name: 'remove-sub-node',
+                    })
+
+                    if (cfg.foldNums) {
+                        const foldNumsX = foldNumsCenterX - (foldNumsFontSize / 2) * String(cfg.foldNums).length / 2
+                        const foldNumsY = foldNumsCenterY - foldNumsLineHeight / 2
+
+                        group.addShape('rect', {
+                            attrs: {
+                                x: foldNumsLineX,
+                                y: foldNumsLineY,
+                                width: foldNumsLineWidth,
+                                height: foldNumsLineH,
+                                fill: foldNumsLineBgColor,
+                                cursor: 'pointer',
+                            },
+                            name: 'fold-nums-line',
+                            // draggable: true,
+                        })
+
+                        const foldNumsBoxPadding = 6
+                        const foldNumsBoxWidth = (foldNumsFontSize / 2) * String(cfg.foldNums).length / 2 + foldNumsBoxPadding * 2
+                        const foldNumsBoxX = foldNumsBoxCenterX - foldNumsBoxWidth / 2
+
+                        group.addShape('rect', {
+                            attrs: {
+                                x: foldNumsBoxX,
+                                y: foldNumsBoxY,
+                                width: foldNumsBoxWidth,
+                                height: foldNumsBoxHeight,
+                                fill: foldNumsBoxBgColor,
+                            },
+                            name: 'fold-nums-box',
+                            // draggable: true,
+                        })
+
+                        group.addShape('text', {
+                            attrs: {
+                                textBaseline: 'top',
+                                x: foldNumsX,
+                                y: foldNumsY,
+                                lineHeight: foldNumsLineHeight,
+                                text: cfg.foldNums,
+                                fill: foldNumsColor,
+                                fontSize: foldNumsFontSize,
+                            },
+                            name: 'fold-nums',
+                        })
+                    }
+
                     return shape;
                 },
             },
             'single-node',
         );
 
-        const defaultLabelCfg = {
-            style: {
-                fill: '#000',
-                fontSize: 12,
-                textAlign: 'center',
-            },
-        };
-
         const width = document.getElementById('mountNode').scrollWidth;
         const height = document.getElementById('mountNode').scrollHeight || 500;
         const graph = new G6.TreeGraph({
             container: 'mountNode',
-            // width: 1440,
-            // height: 700,
             width,
             height,
             fitView: true, // 图像适配画布
-            // fitCenter: true, // 图像适配画布
-            renderer: 'svg',
             linkCenter: true,
-            // defaultNode: {
-            //     type: 'circle',
-            //     size: [50],
-            //     color: '#5B8FF9',
-            //     style: {
-            //         fill: '#9EC9FF',
-            //         lineWidth: 3, 
-            //     },
-            //     labelCfg: {
-            //         style: {
-            //             fill: '#1890ff',
-            //             fontSize: 12,
-            //         },
-            //         position: 'bottom',
-            //     },
-            //     // icon configuration
-            //     // icon: {
-            //     //     // whether show the icon
-            //     //     show: true,
-            //     //     // icon's img address, string type
-            //     //     img: 'https://gw.alipayobjects.com/zos/basement_prod/012bcf4f-423b-4922-8c24-32a89f8c41ce.svg',
-            //     //     width: 60,
-            //     //     height: 60,
-            //     // },
-            // },
-            // defaultNode: {
-            //     type: 'dom-node',
-            //     // type: 'circle',
-            //     // size: [40],
-            //     // size: [nodeWidth, nodeHeight],
-            //     // size: [100, 20],
-            //     // size: [40, picH + mainTitle + subTitle],
-            //     // style: defaultNodeStyle,
-            //     // labelCfg: defaultLabelCfg,
-            // },
             defaultNode: {
                 shape: 'card-node',
             },
             defaultEdge: {
                 type: 'flow-line',
-                style: defaultEdgeStyle,
+                style: {
+                    stroke: layoutBorderColor,
+                },
             },
             layout: defaultLayout,
             modes: {
@@ -572,7 +506,6 @@
 
         let minDisNode;
         graph.on('node:dragstart', (e) => {
-            console.log('%c 123===', 'color:#fff;background: red;')
             minDisNode = undefined;
         });
         graph.on('node:drag', (e) => {
@@ -597,25 +530,23 @@
 
         graph.on('node:dragend', (e) => {
             if (!minDisNode) {
-                // descriptionDiv.innerHTML = 'Failed. No node close to the dragged node.';
                 return;
             }
             const item = e.item;
             const id = item.getID();
             const data = graph.findDataById(id);
-            // if the minDisNode is a descent of the dragged node, return
             let isDescent = false;
             const minDisNodeId = minDisNode.getID();
             G6.Util.traverseTree(data, (d) => {
                 if (d.id === minDisNodeId) isDescent = true;
             });
             if (isDescent) {
-                // descriptionDiv.innerHTML = 'Failed. The target node is a descendant of the dragged node.';
                 return;
             }
 
             const removeData = graph.findDataById(id);
             const { _cfg: { parent: removeParent } } = graph.findById(id)
+            const model = graph.findById(id)
             const { _cfg: { id: removeParentId } } = removeParent
             const removeParentData = graph.findDataById(removeParentId)
             const { children: removeParentChildren } = removeParentData
@@ -630,31 +561,43 @@
                 const { id: newId } = newParentData
 
                 if (removeParent === newParent) {
-                    // console.log('%c 相同的父节点===', 'color:#fff;background: red;')
                     const removeChildIndex = removeParentChildrenClone.findIndex(item => item.id === removeId)
                     const newChildIndex = removeParentChildrenClone.findIndex(item => item.id === newId)
-
-                    // console.log('%c removeParentChildrenClone===', 'color:#fff;background: red;', removeParentChildrenClone)
-                    // console.log('%c removeId===', 'color:#fff;background: red;', removeId)
-                    // console.log('%c newId===', 'color:#fff;background: red;', newId)
-                    // console.log('%c removeChildIndex===', 'color:#fff;background: red;', removeChildIndex)
-                    // console.log('%c newChildIndex===', 'color:#fff;background: red;', newChildIndex)
-
                     const temp = removeParentChildrenClone[removeChildIndex]
                     removeParentChildrenClone[removeChildIndex] = removeParentChildrenClone[newChildIndex]
                     removeParentChildrenClone[newChildIndex] = temp
-
                     removeParentData.children = removeParentChildrenClone
                 }
 
                 if (newParentData.children) newParentData.children.push(data);
                 else newParentData.children = [data];
                 graph.layout();
-                // descriptionDiv.innerHTML = 'Success.';
             }, 600);
         });
 
+        graph.on('node:click', (e) => {
+            const nodeItem = e.item; // 获取被点击的节点元素对象
+            const { id: currId, isRoot, children = [] } = e.item.getModel()
 
+            const { target: { cfg: { name: optType }} } = e
+            if (optType === 'remove-sub-node') {
+                if (isRoot) {
+                    graph.clear()
+                } else {
+                    graph.removeChild(currId)
+                }
+            } else if (optType === 'add-sub-node') {
+                add(currId)
+            } else if (optType === 'add-portrait') {
+                // alert('添加节点!');
+                const tempName = '马云'
+                const tempPosition = 'CEO'
+                const editItem = graph.findById(currId)
+                const editItemModel = editItem.getModel()
+                graph.updateItem(editItem, { ...editItemModel, name: tempName, position: tempPosition, isNewNode: false })
+                graph.changeData(data)
+            }
+        });
     </script>
 </body>
 
