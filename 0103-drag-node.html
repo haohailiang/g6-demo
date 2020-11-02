@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+        }
+    </style>
+    <script src="./lib/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+        // 2. 数据准备
+        const data = {
+            // 点集
+            nodes: [
+                {
+                    id: 'node1', // String，该节点存在则必须，节点的唯一标识
+                    x: 100, // Number，可选，节点位置的 x 值
+                    y: 200, // Number，可选，节点位置的 y 值
+                    label: '起始点', // 节点文本
+                },
+                {
+                    id: 'node2', // String，该节点存在则必须，节点的唯一标识
+                    x: 300, // Number，可选，节点位置的 x 值
+                    y: 200, // Number，可选，节点位置的 y 值
+                    label: '目标点',
+                },
+            ],
+            // 边集
+            edges: [
+                {
+                    source: 'node1', // String，必须，起始点 id
+                    target: 'node2', // String，必须，目标点 id
+                    label: '我是连线', // 边的文本
+                },
+            ],
+        };
+
+        // 3. 创建关系图
+        // 实际渲染的范围是这么大
+        const graph = new G6.Graph({
+            container: 'mountNode', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
+            width: 800, // Number，必须，图的宽度
+            height: 500, // Number，必须，图的高度
+            // modes: {
+            //     default: [
+            //         {
+            //             type: 'drag-node',
+            //             enableDelegate: true,
+            //             shouldBegin: (e) => {
+            //                 // 不允许拖拽 id 为 'node1' 的节点
+            //                 if (e.item && e.item.getModel().id === 'node1') return false;
+            //                 return true
+            //             },
+            //         },
+            //         {
+            //             type: 'click-select',
+            //         }
+            //     ],
+            // },
+            modes: {
+                default: [
+                    {
+                        type: 'click-select',
+                        multiple: true,
+                    }
+                ],
+            },
+        });
+
+        // 4. 配置数据源，渲染
+        graph.data(data); // 读取 Step 2 中的数据源到图上
+        graph.render(); // 渲染图
+
+        graph.on('nodeselectchange', (e) => {
+            // 当前操作的 item
+            // console.log(e.target);
+            // 当前操作后，所有被选中的 items 集合
+            console.log(e.selectedItems);
+            window.curE = e
+            // 当前操作时选中(true)还是取消选中(false)
+            // console.log(e.select);
+        });
+    </script>
+</body>
+
+</html>

@@ -11,7 +11,7 @@ const grid = new G6.Grid();
 const graph = new G6.Graph({
     container: 'mountNode',
     width: 800,
-    height: 600,
+    height: 600, 
     defaultNode: {
         labelCfg: {
             style: {

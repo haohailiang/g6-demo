@@ -52,8 +52,17 @@
                     // nodeSize: 30        // 节点大小，用于算法中防止节点重叠时的碰撞检测。由于已经在上一节的元素配置中设置了每个节点的 size 属性，则不需要在此设置 nodeSize。
                 },
                 modes: {
-                    default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
+                    // default: ['drag-canvas', 'zoom-canvas', 'drag-node'], // 允许拖拽画布、放缩画布、拖拽节点
+                    default: ['click-select'],
                 },
+                nodeStateStyles: {
+                    // The node styles in selected state, corresponds to the built-in click-select behavior
+                    selected: {
+                        stroke: '#666',
+                        lineWidth: 2,
+                        fill: 'steelblue'
+                    }
+                }
             });
 
             // 4. 配置数据源，渲染
