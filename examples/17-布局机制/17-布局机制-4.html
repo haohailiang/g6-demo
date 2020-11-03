@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const data = {
+            nodes: [
+                {
+                    id: '0',
+                    label: '0',
+                },
+                {
+                    id: '1',
+                    label: '1',
+                },
+                {
+                    id: '2',
+                    label: '2',
+                },
+                {
+                    id: '3',
+                    label: '3',
+                },
+                {
+                    id: '4',
+                    label: '4',
+                },
+                {
+                    id: '5',
+                    label: '5',
+                },
+                {
+                    id: '6',
+                    label: '6',
+                },
+                {
+                    id: '7',
+                    label: '7',
+                },
+                {
+                    id: '8',
+                    label: '8',
+                },
+                {
+                    id: '9',
+                    label: '9',
+                },
+            ],
+            edges: [
+                {
+                    source: '0',
+                    target: '1',
+                },
+                {
+                    source: '0',
+                    target: '2',
+                },
+                {
+                    source: '0',
+                    target: '3',
+                },
+                {
+                    source: '0',
+                    target: '4',
+                },
+                {
+                    source: '0',
+                    target: '5',
+                },
+                {
+                    source: '0',
+                    target: '7',
+                },
+                {
+                    source: '0',
+                    target: '8',
+                },
+                {
+                    source: '0',
+                    target: '9',
+                },
+                {
+                    source: '2',
+                    target: '3',
+                },
+                {
+                    source: '4',
+                    target: '5',
+                },
+                {
+                    source: '4',
+                    target: '6',
+                },
+                {
+                    source: '5',
+                    target: '6',
+                },
+            ],
+        };
+
+        const tipDiv = document.createElement('div');
+        const graphDiv = document.getElementById('container');
+        graphDiv.appendChild(tipDiv);
+        const width = graphDiv.scrollWidth;
+        const height = graphDiv.scrollHeight;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'force',
+                preventOverlap: true,
+                nodeSize: 20,
+            },
+            modes: {
+                default: ['drag-node'],
+            },
+            defaultNode: {
+                size: 20,
+                style: {
+                    fill: '#C6E5FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+            },
+        });
+
+        graph.on('beforelayout', function () {
+            tipDiv.innerHTML =
+                'Doing force-directed layout... the text will be changed after the layout being done.';
+        });
+        graph.on('afterlayout', function () {
+            tipDiv.innerHTML = 'Done!';
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

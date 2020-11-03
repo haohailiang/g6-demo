@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <script src="../00-mock/7bacd7d1-4119-4ac1-8be3-4c4b9bcbc25f.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+
+        const graphDiv = document.getElementById('container');
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.innerHTML =
+            'Doing layout... web-worker is enabled in this demo, so the layout will not block the page.';
+        graphDiv.appendChild(descriptionDiv);
+
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            modes: {
+                default: ['drag-canvas', 'drag-node'],
+            },
+            layout: {
+                type: 'fruchterman',
+                maxIteration: 8000,
+                gravity: 1,
+                workerEnabled: true,
+            },
+            animate: true,
+            defaultNode: {
+                size: 10,
+                style: {
+                    lineWidth: 2,
+                    stroke: '#5B8FF9',
+                    fill: '#C6E5FF',
+                },
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#666',
+                style: {
+                    opacity: 0.1,
+                },
+            },
+        });
+
+        graph.on('afterlayout', () => {
+            descriptionDiv.innerHTML = 'Done!';
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>
