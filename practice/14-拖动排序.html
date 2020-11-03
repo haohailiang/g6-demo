@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+        }
+    </style>
+    <script src="../lib/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+        const container = document.getElementById('mountNode');
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.innerHTML =
+            'Move a subtree to a new parent by dragging the root node of the subtree.';
+        container.appendChild(descriptionDiv);
+
+        const data = {
+            "id": "Modeling Methods",
+            "children": [
+                {
+                    "id": "Classification",
+                    "children": [
+                        {
+                            "id": "Logistic regression"
+                        },
+                        {
+                            "id": "Linear discriminant analysis"
+                        },
+                        {
+                            "id": "Rules"
+                        },
+                        {
+                            "id": "Decision trees"
+                        },
+                        {
+                            "id": "Naive Bayes"
+                        },
+                        {
+                            "id": "K nearest neighbor"
+                        },
+                        {
+                            "id": "Probabilistic neural network"
+                        },
+                        {
+                            "id": "Support vector machine"
+                        }
+                    ]
+                },
+                {
+                    "id": "Consensus",
+                    "children": [
+                        {
+                            "id": "Models diversity",
+                            "children": [
+                                {
+                                    "id": "Different initializations"
+                                },
+                                {
+                                    "id": "Different parameter choices"
+                                },
+                                {
+                                    "id": "Different architectures"
+                                },
+                                {
+                                    "id": "Different modeling methods"
+                                },
+                                {
+                                    "id": "Different training sets"
+                                },
+                                {
+                                    "id": "Different feature sets"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "Methods",
+                            "children": [
+                                {
+                                    "id": "Classifier selection"
+                                },
+                                {
+                                    "id": "Classifier fusion"
+                                }
+                            ]
+                        },
+                        {
+                            "id": "Common",
+                            "children": [
+                                {
+                                    "id": "Bagging"
+                                },
+                                {
+                                    "id": "Boosting"
+                                },
+                                {
+                                    "id": "AdaBoost"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "id": "Regression",
+                    "children": [
+                        {
+                            "id": "Multiple linear regression"
+                        },
+                        {
+                            "id": "Partial least squares"
+                        },
+                        {
+                            "id": "Multi-layer feedforward neural network"
+                        },
+                        {
+                            "id": "General regression neural network"
+                        },
+                        {
+                            "id": "Support vector regression"
+                        }
+                    ]
+                }
+            ]
+        }
+
+        const graph = new G6.TreeGraph({
+            container: 'mountNode',
+            width: 1440,
+            height: 700,
+            modes: {
+                default: [
+                    'drag-canvas',
+                    'zoom-canvas',
+                    {
+                        type: 'drag-node',
+                        enableDelegate: true,
+                    },
+                ],
+            },
+            defaultNode: {
+                size: [26, 26],
+                anchorPoints: [
+                    [0, 0.5],
+                    [1, 0.5],
+                ],
+                style: {
+                    fill: '#C6E5FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                type: 'cubic-horizontal',
+                style: {
+                    stroke: '#A3B1BF',
+                },
+            },
+            nodeStateStyles: {
+                closest: {
+                    fill: '#f00',
+                },
+            },
+            layout: {
+                type: 'compactBox',
+                direction: 'LR',
+                getId: function getId(d) {
+                    return d.id;
+                },
+                getHeight: function getHeight() {
+                    return 16;
+                },
+                getWidth: function getWidth() {
+                    return 16;
+                },
+                getVGap: function getVGap() {
+                    return 10;
+                },
+                getHGap: function getHGap() {
+                    return 100;
+                },
+            },
+        });
+
+        graph.node(function (node) {
+            return {
+                label: node.id,
+                labelCfg: {
+                    offset: 10,
+                    position: node.children && node.children.length > 0 ? 'left' : 'right',
+                },
+            };
+        });
+
+        graph.data(data);
+        graph.render();
+        graph.fitView();
+
+        let minDisNode;
+        graph.on('node:dragstart', (e) => {
+            minDisNode = undefined;
+        });
+        graph.on('node:drag', (e) => {
+            minDisNode = undefined;
+            const item = e.item;
+            const model = item.getModel();
+            const nodes = graph.getNodes();
+            let minDis = Infinity;
+            nodes.forEach((inode) => {
+                graph.setItemState(inode, 'closest', false);
+                const node = inode.getModel();
+                if (node.id === model.id) return;
+                const dis = (node.x - e.x) * (node.x - e.x) + (node.y - e.y) * (node.y - e.y);
+                if (dis < minDis) {
+                    minDis = dis;
+                    minDisNode = inode;
+                }
+            });
+            if (minDis < 2000) graph.setItemState(minDisNode, 'closest', true);
+            else minDisNode = undefined;
+        });
+
+        graph.on('node:dragend', (e) => {
+            if (!minDisNode) {
+                descriptionDiv.innerHTML = 'Failed. No node close to the dragged node.';
+                return;
+            }
+            const item = e.item;
+            const id = item.getID();
+            const data = graph.findDataById(id);
+            // if the minDisNode is a descent of the dragged node, return
+            let isDescent = false;
+            const minDisNodeId = minDisNode.getID();
+            G6.Util.traverseTree(data, (d) => {
+                if (d.id === minDisNodeId) isDescent = true;
+            });
+            if (isDescent) {
+                descriptionDiv.innerHTML = 'Failed. The target node is a descendant of the dragged node.';
+                return;
+            }
+
+            const removeData = graph.findDataById(id);
+            const { _cfg: { parent: removeParent } } = graph.findById(id)
+            const { _cfg: { id: removeParentId } } = removeParent
+            const removeParentData = graph.findDataById(removeParentId)
+            const { children: removeParentChildren } = removeParentData
+            const removeParentChildrenClone = JSON.parse(JSON.stringify(removeParentChildren))
+
+            // console.log('%c removeData===', 'color:#fff;background: red;', removeData)
+            // console.log('%c removeParent===', 'color:#fff;background: red;', removeParent)
+            // console.log('%c removeParentChildren===', 'color:#fff;background: red;', removeParentChildren)
+            // console.log('%c removeParentChildren===', 'color:#fff;background: red;', JSON.stringify(removeParentChildren))
+            const removed = graph.removeChild(id);
+            setTimeout(() => {
+                const newParentData = graph.findDataById(minDisNodeId);
+                const { _cfg: { parent: newParent } } = graph.findById(minDisNodeId)
+
+                const { id: removeId } = removeData
+                const { id: newId } = newParentData
+                // console.log('%c removeData===', 'color:#fff;background: red;', removeData)
+                // console.log('%c newParentData===', 'color:#fff;background: red;', newParentData)
+                // const parentId = 
+                //         const removeParent = graph.findById(parentId).getParent()
+                // const removeNode = graph.findById('Logistic regression')
+                // console.log('%c removeNode===', 'color:#fff;background: red;', removeNode)
+                // if (removeNode) {
+                //     const removeNodeParentId = removeNode._cfg.parent._cfg.id
+                //     console.log('%c removeNodeParentId===', 'color:#fff;background: red;', removeNodeParentId)
+                // }
+
+                if (removeParent === newParent) {
+                    console.log('%c 相同的父节点===', 'color:#fff;background: red;')
+                    const removeChildIndex = removeParentChildrenClone.findIndex(item => item.id === removeId)
+                    const newChildIndex = removeParentChildrenClone.findIndex(item => item.id === newId)
+
+                    console.log('%c removeParentChildrenClone===', 'color:#fff;background: red;', removeParentChildrenClone)
+                    console.log('%c removeId===', 'color:#fff;background: red;', removeId)
+                    console.log('%c newId===', 'color:#fff;background: red;', newId)
+                    console.log('%c removeChildIndex===', 'color:#fff;background: red;', removeChildIndex)
+                    console.log('%c newChildIndex===', 'color:#fff;background: red;', newChildIndex)
+
+                    const temp = removeParentChildrenClone[removeChildIndex]
+                    removeParentChildrenClone[removeChildIndex] = removeParentChildrenClone[newChildIndex]
+                    removeParentChildrenClone[newChildIndex] = temp
+
+                    removeParentData.children = removeParentChildrenClone
+                }
+
+                // const parentData = graph.findDataById('Classification')
+                // if (removeId === 'Linear discriminant analysis' && newId === 'Logistic regression') {
+                //     parentData.children = [
+                //         {
+                //             "id": "Logistic regression"
+                //         },
+                //         {
+                //             "id": "Linear discriminant analysis"
+                //         },
+                //         {
+                //             "id": "Rules"
+                //         },
+                //         {
+                //             "id": "Decision trees"
+                //         },
+                //         {
+                //             "id": "Naive Bayes"
+                //         },
+                //         {
+                //             "id": "K nearest neighbor"
+                //         },
+                //         {
+                //             "id": "Probabilistic neural network"
+                //         },
+                //         {
+                //             "id": "Support vector machine"
+                //         }
+                //     ]
+                // } else if (removeId === 'Logistic regression' && newId === 'Linear discriminant analysis') {
+                //     parentData.children = [
+                //         {
+                //             "id": "Linear discriminant analysis"
+                //         },
+                //         {
+                //             "id": "Logistic regression"
+                //         },
+                //         {
+                //             "id": "Rules"
+                //         },
+                //         {
+                //             "id": "Decision trees"
+                //         },
+                //         {
+                //             "id": "Naive Bayes"
+                //         },
+                //         {
+                //             "id": "K nearest neighbor"
+                //         },
+                //         {
+                //             "id": "Probabilistic neural network"
+                //         },
+                //         {
+                //             "id": "Support vector machine"
+                //         }
+                //     ]
+                // }
+                // console.log('%c newParentData===', 'color:#fff;background: red;', newParentData)
+                if (newParentData.children) newParentData.children.push(data);
+                else newParentData.children = [data];
+                graph.layout();
+                descriptionDiv.innerHTML = 'Success.';
+            }, 600);
+        });
+
+    </script>
+</body>
+
+</html>

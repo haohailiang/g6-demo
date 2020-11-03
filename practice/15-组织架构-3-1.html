@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+            /* width: 1440px;
+            height: 700px; */
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .dom-node {
+            background-color: lightgray;
+            border: 2px solid red;
+            border-radius: 5px;
+            display: flex;
+            /* width: 230px;
+            height: 70px; */
+            position: relative;
+            /* display: none; */
+            width: 115px;
+            height: 35px;
+            font-size: 12px;
+        }
+
+        .left-hand {
+            width: 40px;
+            height: 100%;
+            background-color: pink;
+            display: none;
+        }
+
+        .node-main {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            /* display: none; */
+        }
+
+        .node-profile {
+            margin: 0 5px;
+            height: 100%;
+            display: none;
+        }
+
+        .node-lables {
+            flex: 1;
+            height: 100%;
+        }
+
+        .node-main-title {
+            color: red;
+        }
+
+        .node-sub-title {
+            color: blue;
+        }
+
+        .node-plus {
+            position: absolute;
+            right: -10px;
+            top: 10px;
+        }
+
+        .node-number {
+            position: absolute;
+            right: -20px;
+            top: 10px;
+        }
+
+        .node-number.hide {
+            display: none;
+        }
+
+        .node-close {
+            position: absolute;
+            top: 0;
+            right: 0;
+            color: red;
+        }
+    </style>
+    <script src="../lib/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+
+        const picH = 40
+        const mainTitle = 24
+        const subTitle = 18
+        let count = 1;
+
+        const ICON_MAP = {
+            a: 'https://gw.alipayobjects.com/mdn/rms_8fd2eb/afts/img/A*0HC-SawWYUoAAAAAAAAAAABkARQnAQ',
+            b: 'https://gw.alipayobjects.com/mdn/rms_8fd2eb/afts/img/A*sxK0RJ1UhNkAAAAAAAAAAABkARQnAQ',
+        };
+
+        const container = document.getElementById('mountNode');
+
+        let data = {
+            id: 'root',
+            label: 'root',
+            children: [
+                {
+                    id: 'c1',
+                    label: 'c1',
+                    children: [
+                        {
+                            id: 'c1-1',
+                            label: 'c1-1',
+                        },
+                        {
+                            id: 'c1-2',
+                            label: 'c1-2',
+                            children: [
+                                {
+                                    id: 'c1-2-1',
+                                    label: 'c1-2-1',
+                                },
+                                {
+                                    id: 'c1-2-2',
+                                    label: 'c1-2-2',
+                                },
+                            ],
+                        },
+                    ],
+                },
+                {
+                    id: 'c2',
+                    label: 'c2',
+                },
+                // {
+                //     id: 'c3',
+                //     label: 'c3',
+                //     children: [
+                //         {
+                //             id: 'c3-1',
+                //             label: 'c3-1',
+                //         },
+                //         {
+                //             id: 'c3-2',
+                //             label: 'c3-2',
+                //             children: [
+                //                 {
+                //                     id: 'c3-2-1',
+                //                     label: 'c3-2-1',
+                //                 },
+                //                 {
+                //                     id: 'c3-2-2',
+                //                     label: 'c3-2-2',
+                //                 },
+                //                 {
+                //                     id: 'c3-2-3',
+                //                     label: 'c3-2-3',
+                //                 },
+                //             ],
+                //         },
+                //         {
+                //             id: 'c3-3',
+                //             label: 'c3-3',
+                //         },
+                //     ],
+                // },
+            ],
+        };
+
+        // G6.Util.traverseTree(data, (d) => {
+        //     // d.leftIcon = {
+        //     //     style: {
+        //     //         fill: '#e6fffb',
+        //     //         stroke: '#e6fffb',
+        //     //     },
+        //     //     img: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ',
+        //     // };
+        //     d.anchorPoints= [
+        //         [0, 0.5], // 左侧中间
+        //         [1, 0.5], // 右侧中间
+        //     ]
+        //     return true;
+        // });
+
+        G6.registerEdge('flow-line', {
+            draw(cfg, group) {
+                const startPoint = cfg.startPoint;
+                const endPoint = cfg.endPoint;
+
+                const { style } = cfg;
+                const shape = group.addShape('path', {
+                    attrs: {
+                        stroke: style.stroke,
+                        endArrow: style.endArrow,
+                        // path: [
+                        //     ['M', startPoint.x, startPoint.y],
+                        //     ['L', startPoint.x, (startPoint.y + endPoint.y) / 2],
+                        //     ['L', endPoint.x, (startPoint.y + endPoint.y) / 2],
+                        //     ['L', endPoint.x, endPoint.y],
+                        // ],
+                        path: [
+                            ['M', startPoint.x, startPoint.y],
+                            ['L', (startPoint.x + endPoint.x) / 2, startPoint.y],
+                            ['L', (startPoint.x + endPoint.x) / 2, endPoint.y],
+                            ['L', endPoint.x, endPoint.y],
+                        ],
+                    },
+                });
+
+                return shape;
+            },
+        });
+
+        const defaultNodeStyle = {
+            // width: 230,
+            // height: 70,
+            fill: '#91d5ff',
+            stroke: '#ff0000',
+            // radius: 5,
+        };
+
+        const defaultEdgeStyle = {
+            stroke: '#91d5ff',
+        };
+
+        const defaultLayout = {
+            type: 'compactBox',
+            direction: 'LR',
+            getId: function getId(d) {
+                return d.id;
+            },
+            getHeight: function getHeight() {
+                return 16;
+            },
+            getWidth: function getWidth() {
+                return 16;
+            },
+            getVGap: function getVGap() {
+                return 40;
+            },
+            getHGap: function getHGap() {
+                return 70;
+            },
+        };
+
+        const nodeWidth = 230
+        const nodeHeight = 70
+
+        function remove(id) {
+            graph.removeChild(id);
+            // graph.changeData(data)
+        }
+
+        function add(id) {
+            const item = graph.findDataById(id);
+            // console.log('%c parentData===', 'color:#fff;background: red;', parentData)
+            // const newNode = {
+            //     id: 'root231321',
+            //     label: 'root1231231',
+            // }
+            // parentData.children.push(newNode)
+            const nodeId = id
+            // const model = item.getModel();
+            // const children = item.children;
+            // if (!children || children.length === 0) {
+            // console.log('%c count===', 'color:#fff;background: red;', count)
+            // const childData = [
+            //     {
+            //         id: 'child-data-' + count,
+            //         label: 'child-data-' + count,
+            // type: 'rect',
+            // type: 'dom-node',
+            // children: [
+            //     {
+            //         id: 'x-' + count,
+            //         label: 'x-' + count,
+            //     },
+            //     {
+            //         id: 'y-' + count,
+            //     },
+            // ],
+            // },
+            // {
+            //     id: 'child-data1-' + count,
+            //     children: [
+            //         {
+            //             id: 'x1-' + count,
+            //         },
+            //         {
+            //             id: 'y1-' + count,
+            //         },
+            //     ],
+            // },
+            // ];
+
+            const childData = {
+                id: 'child-data-' + count,
+                label: 'child-data-' + count,
+                // type: 'rect',
+                // type: 'dom-node',
+                // children: [
+                //     {
+                //         id: 'x-' + count,
+                //         label: 'x-' + count,
+                //     },
+                //     {
+                //         id: 'y-' + count,
+                //     },
+                // ],
+            }
+
+            //     const parentData = graph.findDataById(nodeId);
+            //     if (!parentData.children) {
+            //         parentData.children = [];
+            //     }
+            //     // 如果childData是一个数组，则直接赋值给parentData.children
+            //     // 如果是一个对象，则使用parentData.children.push(obj)
+            //     parentData.children.push(childData);
+            //     graph.changeData();
+            //     count ++
+            // }
+
+            const parentData = graph.findDataById(nodeId);
+            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
+            if (!parentData.children) {
+                parentData.children = [];
+            }
+            // 如果childData是一个数组，则直接赋值给parentData.children
+            // 如果是一个对象，则使用parentData.children.push(obj)
+            // console.log('%c childData===', 'color:#fff;background: red;', childData)
+            parentData.children.push(childData);
+            // graph.changeData(data);
+            data = {
+                id: 'root00',
+                label: 'root00',
+                children: [
+                    data
+                ]
+            }
+            // 更新子节点
+            // graph.changeData();
+            // 更新父节点
+            graph.changeData(data);
+            graph.updateItem(nodeId, parentData);
+            // graph.updateItem(nodeId);
+            // graph.addItem('child-data-' + count, childData)
+            // graph.refresh()
+            // const childDataId = graph.findById('child-data-' + count)
+            // graph.refreshItem(childDataId)
+            count++
+        }
+
+        G6.registerNode(
+            'dom-node', {
+            draw: (cfg, group) => {
+                // console.log('%c cfg===', 'color:#fff;background: red;', cfg)
+                // const width = 40
+                // const height = 40
+                // const picH = 40
+                // const mainTitle = 24
+                // const subTitle = 18
+                // const domJsx = `
+                //     <div id=${cfg.id} class="dom-node">
+                //         <div class="image-wrap">
+                //             <img class="img" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
+                //         </div>
+                //         <div class="main-title">主标题</div>
+                //         <span class="sub-title">${cfg.label}</span>
+                //     </div>
+                // `
+                const numClazz = cfg?.children?.length ? 'hide' : ''
+                // console.log('%c numClazz===', 'color:#fff;background: red;', numClazz)
+                const domJsx = `
+                    <div id=${cfg.id} class="dom-node">
+                        <div class="left-hand">left</div>
+                        <div class="node-main">
+                            <img class="node-profile" src="https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*Q_FQT6nwEC8AAAAAAAAAAABkARQnAQ" />
+                            <div class="node-lables">
+                                <div class="node-main-title">${cfg.label}</div>
+                                <div class="node-sub-title">sub title</div>
+                            </div>
+                        </div>
+                        <div class="node-plus" onClick="add('${cfg.id}')">加号</div>
+                        <div class="node-number ${numClazz}">有</div>
+                        <div class="node-close" onClick="remove('${cfg.id}')">关闭</div>
+                    </div>
+                `
+                // const domJsx = '<span>123</span>'
+
+                const shape = group.addShape('dom', {
+                    attrs: {
+                        width: nodeWidth,
+                        height: nodeHeight,
+                        html: domJsx,
+                    },
+                    name: 'key-shape', // Not unique, you can assign any string value to it
+                    draggable: true,
+                });
+                return shape;
+            },
+        },
+            'single-node',
+        );
+
+        G6.registerNode(
+            'card-node',
+            {
+                drawShape: function drawShape(cfg, group) {
+                    const color = cfg.error ? '#F4664A' : '#30BF78';
+                    const r = 2;
+                    const shape = group.addShape('rect', {
+                        attrs: {
+                            x: 0,
+                            y: 0,
+                            width: 50,
+                            height: 15,
+                            stroke: color,
+                            radius: r,
+                        },
+                        name: 'main-box',
+                        draggable: true,
+                    });
+
+                    group.addShape('rect', {
+                        attrs: {
+                            x: 0,
+                            y: 0,
+                            // width: 200,
+                            // height: 20,
+                            width: 50,
+                            height: 15,
+                            fill: color,
+                            radius: [r, r, 0, 0],
+                        },
+                        name: 'title-box',
+                        draggable: true,
+                    });
+
+                    // left icon
+                    // group.addShape('image', {
+                    //     attrs: {
+                    //         x: 4,
+                    //         y: 2,
+                    //         height: 16,
+                    //         width: 16,
+                    //         cursor: 'pointer',
+                    //         img: ICON_MAP['a'],
+                    //     },
+                    //     name: 'node-icon',
+                    // });
+
+                    // // title text
+                    // group.addShape('text', {
+                    //     attrs: {
+                    //         textBaseline: 'top',
+                    //         y: 2,
+                    //         x: 24,
+                    //         lineHeight: 20,
+                    //         // text: cfg.title,
+                    //         text: 'node1',
+                    //         fill: '#fff',
+                    //     },
+                    //     name: 'title',
+                    // });
+
+                    // // if (cfg.nodeLevel > 0) {
+                    // group.addShape('marker', {
+                    //     attrs: {
+                    //         x: 184,
+                    //         y: 30,
+                    //         r: 6,
+                    //         cursor: 'pointer',
+                    //         // symbol: cfg.collapse ? G6.Marker.expand : G6.Marker.collapse,
+                    //         symbol: G6.Marker.collapse,
+                    //         stroke: '#666',
+                    //         lineWidth: 1,
+                    //     },
+                    //     name: 'collapse-icon',
+                    // });
+                    // }
+
+                    // The content list
+                    // const panels = [
+                    //     { title: '成功率', value: '11%' },
+                    //     { title: '耗时', value: '111' },
+                    //     { title: '错误数', value: '111' },
+                    // ]
+                    const panels = []
+                    // cfg.panels.forEach((item, index) => {
+                    panels.forEach((item, index) => {
+                        // name text
+                        group.addShape('text', {
+                            attrs: {
+                                textBaseline: 'top',
+                                y: 25,
+                                x: 24 + index * 60,
+                                lineHeight: 20,
+                                text: item.title,
+                                fill: 'rgba(0,0,0, 0.4)',
+                            },
+                            name: `index-title-${index}`,
+                        });
+
+                        // value text
+                        group.addShape('text', {
+                            attrs: {
+                                textBaseline: 'top',
+                                y: 42,
+                                x: 24 + index * 60,
+                                lineHeight: 20,
+                                text: item.value,
+                                fill: '#595959',
+                            },
+                            name: `index-title-${index}`,
+                        });
+                    });
+                    return shape;
+                },
+            },
+            'single-node',
+        );
+
+        const defaultLabelCfg = {
+            style: {
+                fill: '#000',
+                fontSize: 12,
+                textAlign: 'center',
+            },
+        };
+
+        const width = document.getElementById('mountNode').scrollWidth;
+        const height = document.getElementById('mountNode').scrollHeight || 500;
+        const graph = new G6.TreeGraph({
+            container: 'mountNode',
+            // width: 1440,
+            // height: 700,
+            width,
+            height,
+            fitView: true, // 图像适配画布
+            // fitCenter: true, // 图像适配画布
+            renderer: 'svg',
+            linkCenter: true,
+            // defaultNode: {
+            //     type: 'circle',
+            //     size: [50],
+            //     color: '#5B8FF9',
+            //     style: {
+            //         fill: '#9EC9FF',
+            //         lineWidth: 3, 
+            //     },
+            //     labelCfg: {
+            //         style: {
+            //             fill: '#1890ff',
+            //             fontSize: 12,
+            //         },
+            //         position: 'bottom',
+            //     },
+            //     // icon configuration
+            //     // icon: {
+            //     //     // whether show the icon
+            //     //     show: true,
+            //     //     // icon's img address, string type
+            //     //     img: 'https://gw.alipayobjects.com/zos/basement_prod/012bcf4f-423b-4922-8c24-32a89f8c41ce.svg',
+            //     //     width: 60,
+            //     //     height: 60,
+            //     // },
+            // },
+            defaultNode: {
+                type: 'dom-node',
+                // type: 'circle',
+                // size: [40],
+                // size: [nodeWidth, nodeHeight],
+                // size: [100, 20],
+                // size: [40, picH + mainTitle + subTitle],
+                // style: defaultNodeStyle,
+                // labelCfg: defaultLabelCfg,
+            },
+            // defaultNode: {
+            //     shape: 'card-node',
+            // },
+            defaultEdge: {
+                type: 'flow-line',
+                style: defaultEdgeStyle,
+            },
+            layout: defaultLayout,
+            modes: {
+                default: [
+                    'drag-canvas',
+                    'zoom-canvas',
+                    {
+                        type: 'drag-node',
+                        enableDelegate: true,
+                    },
+                ],
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+
+        let minDisNode;
+        graph.on('node:dragstart', (e) => {
+            console.log('%c 123===', 'color:#fff;background: red;')
+            minDisNode = undefined;
+        });
+        graph.on('node:drag', (e) => {
+            minDisNode = undefined;
+            const item = e.item;
+            const model = item.getModel();
+            const nodes = graph.getNodes();
+            let minDis = Infinity;
+            nodes.forEach((inode) => {
+                graph.setItemState(inode, 'closest', false);
+                const node = inode.getModel();
+                if (node.id === model.id) return;
+                const dis = (node.x - e.x) * (node.x - e.x) + (node.y - e.y) * (node.y - e.y);
+                if (dis < minDis) {
+                    minDis = dis;
+                    minDisNode = inode;
+                }
+            });
+            if (minDis < 2000) graph.setItemState(minDisNode, 'closest', true);
+            else minDisNode = undefined;
+        });
+
+        graph.on('node:dragend', (e) => {
+            if (!minDisNode) {
+                // descriptionDiv.innerHTML = 'Failed. No node close to the dragged node.';
+                return;
+            }
+            const item = e.item;
+            const id = item.getID();
+            const data = graph.findDataById(id);
+            // if the minDisNode is a descent of the dragged node, return
+            let isDescent = false;
+            const minDisNodeId = minDisNode.getID();
+            G6.Util.traverseTree(data, (d) => {
+                if (d.id === minDisNodeId) isDescent = true;
+            });
+            if (isDescent) {
+                // descriptionDiv.innerHTML = 'Failed. The target node is a descendant of the dragged node.';
+                return;
+            }
+
+            const removeData = graph.findDataById(id);
+            const { _cfg: { parent: removeParent } } = graph.findById(id)
+            const { _cfg: { id: removeParentId } } = removeParent
+            const removeParentData = graph.findDataById(removeParentId)
+            const { children: removeParentChildren } = removeParentData
+            const removeParentChildrenClone = JSON.parse(JSON.stringify(removeParentChildren))
+
+            const removed = graph.removeChild(id);
+            setTimeout(() => {
+                const newParentData = graph.findDataById(minDisNodeId);
+                const { _cfg: { parent: newParent } } = graph.findById(minDisNodeId)
+
+                const { id: removeId } = removeData
+                const { id: newId } = newParentData
+
+                if (removeParent === newParent) {
+                    // console.log('%c 相同的父节点===', 'color:#fff;background: red;')
+                    const removeChildIndex = removeParentChildrenClone.findIndex(item => item.id === removeId)
+                    const newChildIndex = removeParentChildrenClone.findIndex(item => item.id === newId)
+
+                    // console.log('%c removeParentChildrenClone===', 'color:#fff;background: red;', removeParentChildrenClone)
+                    // console.log('%c removeId===', 'color:#fff;background: red;', removeId)
+                    // console.log('%c newId===', 'color:#fff;background: red;', newId)
+                    // console.log('%c removeChildIndex===', 'color:#fff;background: red;', removeChildIndex)
+                    // console.log('%c newChildIndex===', 'color:#fff;background: red;', newChildIndex)
+
+                    const temp = removeParentChildrenClone[removeChildIndex]
+                    removeParentChildrenClone[removeChildIndex] = removeParentChildrenClone[newChildIndex]
+                    removeParentChildrenClone[newChildIndex] = temp
+
+                    removeParentData.children = removeParentChildrenClone
+                }
+
+                if (newParentData.children) newParentData.children.push(data);
+                else newParentData.children = [data];
+                graph.layout();
+                // descriptionDiv.innerHTML = 'Success.';
+            }, 600);
+        });
+
+
+    </script>
+</body>
+
+</html>

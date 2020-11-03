@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #mountNode {
+            border: 1px solid;
+        }
+    </style>
+    <script src="../lib/g6.min.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="mountNode"></div>
+    <script>
+        // 2. 数据准备
+        const data = {
+            nodes: [
+                {
+                    id: 'node1',
+                    x: 250,
+                    y: 150,
+                    comboId: 'combo',
+                },
+                {
+                    id: 'node2',
+                    x: 350,
+                    y: 150,
+                    comboId: 'combo',
+                },
+            ],
+            combos: [
+                {
+                    id: 'combo',
+                    label: 'Combo',
+                },
+            ],
+        };
+
+        // 3. 创建关系图
+        // 实际渲染的范围是这么大
+        const graph = new G6.Graph({
+            container: 'mountNode', // String | HTMLElement，必须，在 Step 1 中创建的容器 id 或容器本身
+            width: 800, // Number，必须，图的宽度
+            height: 500, // Number，必须，图的高度
+
+            fitCenter: true,
+            // Set groupByTypes to false to get rendering result with reasonable visual zIndex for combos
+            groupByTypes: false,
+            defaultCombo: {
+                type: 'circle',
+                style: {
+                    lineWidth: 1,
+                },
+                labelCfg: {
+                    refY: 10,
+                    position: 'top',
+                    style: {
+                        fontSize: 18,
+                    },
+                },
+            },
+            modes: {
+                default: ['drag-canvas', 'drag-node', 'drag-combo', 'collapse-expand-combo'],
+            },
+            comboStateStyles: {
+                // the style configurations for the hover state on the combo
+                hover: {
+                    lineWidth: 3,
+                },
+            },
+            nodeStateStyles: {
+                // the hover configurations for the hover state on the node
+                hover: {
+                    lineWidth: 3,
+                },
+            },
+        });
+
+        // 4. 配置数据源，渲染
+        graph.data(data); // 读取 Step 2 中的数据源到图上
+        graph.render(); // 渲染图
+
+        graph.on('combo:mouseenter', (evt) => {
+            const { item } = evt;
+            graph.setItemState(item, 'hover', true);
+        });
+
+        graph.on('combo:mouseleave', (evt) => {
+            const { item } = evt;
+            graph.setItemState(item, 'hover', false);
+        });
+    </script>
+</body>
+
+</html>
