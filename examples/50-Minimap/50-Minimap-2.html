@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-minimap-container {
+            border: 1px solid #e2e2e2;
+        }
+
+        .g6-minimap-viewport {
+            border: 2px solid rgb(25, 128, 255);
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        // 我们用 insert-css 演示引入自定义样式
+        // 推荐将样式添加到自己的样式文件中
+        // 若拷贝官方代码，别忘了 npm install insert-css
+        const width = document.getElementById('container').scrollWidth;
+        let height = document.getElementById('container').scrollHeight || 500;
+        height -= 110;
+        const minimap = new G6.ImageMinimap({
+            height: 100,
+            padding: 10,
+            graphImg: 'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*DcGMQ7AN3Z0AAAAAAAAAAABkARQnAQ',
+        });
+        const graph = new G6.TreeGraph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            layout: {
+                type: 'dendrogram',
+                direction: 'LR', // H / V / LR / RL / TB / BT
+                nodeSep: 30,
+                rankSep: 100,
+            },
+            defaultNode: {
+                size: 26,
+                style: {
+                    fill: '#C6E5FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                type: 'cubic-horizontal',
+                style: {
+                    stroke: '#A3B1BF',
+                },
+            },
+            modes: {
+                default: ['drag-canvas', 'zoom-canvas'],
+            },
+            plugins: [minimap],
+        });
+
+        graph.node(function (node) {
+            return {
+                label: node.id,
+                labelCfg: {
+                    position: node.children && node.children.length > 0 ? 'left' : 'right',
+                    offset: 5,
+                },
+            };
+        });
+
+        fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/algorithm-category.json')
+            .then((res) => res.json())
+            .then((data) => {
+                graph.data(data);
+                graph.render();
+            });
+
+        graph.on('canvas:click', () => {
+            minimap.updateGraphImg(
+                'https://gw.alipayobjects.com/mdn/rms_f8c6a0/afts/img/A*7QSRRJwAWxQAAAAAAAAAAABkARQnAQ',
+            );
+        });
+    </script>
+</body>
+
+</html>

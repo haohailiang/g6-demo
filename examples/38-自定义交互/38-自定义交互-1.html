@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        /**
+ * This demo shows how to custom a behavior to allow drag and zoom canvas with two fingers on touchpad and wheel
+ * By Shiwu
+ */
+        G6.registerBehavior('double-finger-drag-canvas', {
+            getEvents: function getEvents() {
+                return {
+                    wheel: 'onWheel',
+                };
+            },
+
+            onWheel: function onWheel(ev) {
+                if (ev.ctrlKey) {
+                    const canvas = graph.get('canvas');
+                    const point = canvas.getPointByClient(ev.clientX, ev.clientY);
+                    let ratio = graph.getZoom();
+                    if (ev.wheelDelta > 0) {
+                        ratio = ratio + ratio * 0.05;
+                    } else {
+                        ratio = ratio - ratio * 0.05;
+                    }
+                    graph.zoomTo(ratio, {
+                        x: point.x,
+                        y: point.y,
+                    });
+                } else {
+                    const x = ev.deltaX || ev.movementX;
+                    const y = ev.deltaY || ev.movementY;
+                    graph.translate(-x, -y);
+                }
+                ev.preventDefault();
+            },
+        });
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            modes: {
+                default: ['double-finger-drag-canvas'],
+            },
+            layout: {
+                type: 'force',
+            },
+        });
+
+        graph.get('canvas').set('localRefresh', false);
+
+        fetch('https://gw.alipayobjects.com/os/antvdemo/assets/data/relations.json')
+            .then((res) => res.json())
+            .then((data) => {
+                graph.data(data);
+                graph.render();
+            });
+    </script>
+</body>
+
+</html>

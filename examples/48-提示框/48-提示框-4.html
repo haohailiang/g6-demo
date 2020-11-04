@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border: 1px solid #e2e2e2;
+            border-radius: 4px;
+            font-size: 12px;
+            color: #545454;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px 8px;
+            box-shadow: rgb(174, 174, 174) 0px 0px 10px;
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        // 我们用 insert-css 演示引入自定义样式
+        // 推荐将样式添加到自己的样式文件中
+        // 若拷贝官方代码，别忘了 npm install insert-css
+        const data = {
+            nodes: [
+                {
+                    id: '0',
+                    label: 'Has Tooltip - node 0',
+                    x: 230,
+                    y: 100,
+                    description: 'This is node-0.',
+                    subdescription: 'This is subdescription of node-0.',
+                },
+                {
+                    id: '1',
+                    label: 'No Tooltip - node 1',
+                    x: 150,
+                    y: 310,
+                    description: 'This is node-1.',
+                    subdescription: 'This is subdescription of node-1.',
+                },
+                {
+                    id: '2',
+                    label: 'Has Tooltip - node 2',
+                    x: 320,
+                    y: 310,
+                    description: 'This is node-2.',
+                    subdescription: 'This is subdescription of node-2.',
+                },
+            ],
+            edges: [
+                {
+                    id: 'e1',
+                    source: '0',
+                    target: '1',
+                    label: 'No Tooltip',
+                    description: 'This is edge from node 0 to node 1.',
+                },
+                {
+                    id: 'e2',
+                    source: '0',
+                    target: '2',
+                    label: 'Has Tooltip',
+                    description: 'This is edge from node 0 to node 2.',
+                },
+            ],
+        };
+        const descriptionDiv = document.createElement('div');
+        descriptionDiv.innerHTML = 'Hover the node label to show the tooltip';
+        const container = document.getElementById('container');
+        container.appendChild(descriptionDiv);
+        const width = container.scrollWidth;
+        const height = container.scrollHeight - 30;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            defaultNode: {
+                size: [150, 50],
+                type: 'rect',
+                style: {
+                    fill: '#DEE9FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                style: {
+                    stroke: '#b5b5b5',
+                    lineAppendWidth: 3,
+                },
+                labelCfg: {
+                    autoRotate: true,
+
+                }
+            },
+            modes: {
+                default: [
+                    'drag-node',
+                    {
+                        type: 'tooltip',
+                        formatText: function formatText(model) {
+                            const text = 'description: ' + model.description;
+                            return text;
+                        },
+                        offset: 20,
+                        shouldBegin: (e) => {
+                            if (e.item.getModel().id === '1') return false;
+                            return true;
+                        },
+                    },
+                    {
+                        type: 'edge-tooltip',
+                        formatText: function formatText(model) {
+                            const text = 'description: ' + model.description;
+                            return text;
+                        },
+                        offset: 20,
+                        shouldBegin: (e) => {
+                            if (e.item.getModel().target === '1') return false;
+                            return true;
+                        },
+                    },
+                ],
+            },
+        });
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

@@ -20,14 +20,29 @@
     <div id="container"></div>
     <script>
         // 减号
+        // const COLLAPSE_ICON = function COLLAPSE_ICON(x, y, r) {
+        //     return [
+        //         ['M', x - r, y - r],
+        //         // 弧线画法参考附件
+        //         ['a', r, r, 0, 1, 0, r * 2, 0],
+        //         ['a', r, r, 0, 1, 0, -r * 2, 0],
+        //         ['M', x + 2 - r, y - r],
+        //         ['L', x + r - 2, y - r],
+        //     ];
+        // };
+
+        // 关闭符号
         const COLLAPSE_ICON = function COLLAPSE_ICON(x, y, r) {
             return [
                 ['M', x - r, y - r],
                 // 弧线画法参考附件
                 ['a', r, r, 0, 1, 0, r * 2, 0],
                 ['a', r, r, 0, 1, 0, -r * 2, 0],
-                ['M', x + 2 - r, y - r],
-                ['L', x + r - 2, y - r],
+                // ['M', x + 2 - r, y - r],
+                ['M', x - (r - 2) * Math.cos(Math.PI / 4), y - (r - 2) * Math.sin(Math.PI / 4) - r],
+                ['L', x + (r - 2) * Math.cos(Math.PI / 4), y + (r - 2) * Math.sin(Math.PI / 4) - r],
+                ['M', x + (r - 2) * Math.cos(Math.PI / 4), y - (r - 2) * Math.sin(Math.PI / 4) - r],
+                ['L', x - (r - 2) * Math.cos(Math.PI / 4), y + (r - 2) * Math.sin(Math.PI / 4) - r],
             ];
         };
         // 加号
@@ -199,7 +214,8 @@
                             x: 80 - w / 2,
                             y: 52 - h / 2,
                             r: 6,
-                            stroke: '#73d13d',
+                            stroke: '#fff',
+                            fill: '#f00',
                             cursor: 'pointer',
                             symbol: COLLAPSE_ICON,
                         },
