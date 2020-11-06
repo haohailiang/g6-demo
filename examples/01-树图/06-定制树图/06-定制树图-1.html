@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>自定义树图中的边</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <!-- <script src="../00-mock/data-1.js"></script> -->
+    <script src="../../../lib/g6.min.js"></script>
+    <!-- <script src="../../00-mock/data-1.js"></script> -->
 </head>
 
 <body>
@@ -139,6 +139,7 @@
         G6.registerNode(
             'icon-node',
             {
+                // 这个选项参数会和defaultNode的参数进行合并,defaultNode优先级比这个高
                 options: {
                     size: [60, 20],
                     stroke: '#ff0000',
@@ -146,7 +147,7 @@
                 },
                 draw(cfg, group) {
                     const styles = this.getShapeStyle(cfg);
-                    // console.log('%c styles===', 'color:#fff;background: red;', styles)
+                    console.log('%c styles===', 'color:#fff;background: red;', styles)
                     const { labelCfg = {} } = cfg;
 
                     const w = styles.width;
@@ -168,7 +169,7 @@
                      *    img: ''
                      *  }
                      */
-                    console.log('cfg.leftIcon', cfg.leftIcon);
+                    // console.log('cfg.leftIcon', cfg.leftIcon);
                     if (cfg.leftIcon) {
                         const { style, img } = cfg.leftIcon;
                         group.addShape('rect', {

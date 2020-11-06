@@ -4,16 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>自定义树图节点</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <!-- <script src="../00-mock/data-1.js"></script> -->
-    <!-- <script src="../00-mock/data-2.js"></script> -->
+    <script src="../../../lib/g6.min.js"></script>
+    <!-- <script src="../../00-mock/data-1.js"></script> -->
+    <!-- <script src="../../00-mock/data-2.js"></script> -->
 </head>
 
 <body>
@@ -213,12 +213,15 @@
                 const { startPoint, endPoint } = cfg;
                 const hgap = Math.abs(endPoint.x - startPoint.x);
 
+                // https://segmentfault.com/a/1190000005053782, 贝塞尔曲线
                 const path = [
                     ['M', startPoint.x, startPoint.y],
                     [
                         'C',
-                        startPoint.x + hgap / 4,
+                        // startPoint.x + hgap / 4,
+                        startPoint.x + hgap / 2,
                         startPoint.y,
+                        // endPoint.x - hgap / 2,
                         endPoint.x - hgap / 2,
                         endPoint.y,
                         endPoint.x,
@@ -350,6 +353,7 @@
                 },
                 getHGap: function getHGap() {
                     return 30;
+                    // return 0;
                 },
             },
         });

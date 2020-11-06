@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>紧凑辐射树</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <script src="../00-mock/data-1.js"></script>
+    <script src="../../../lib/g6.min.js"></script>
+    <script src="../../00-mock/data-1.js"></script>
 </head>
 
 <body>
@@ -25,15 +25,16 @@
             container: 'container',
             width,
             height,
+            linkCenter: true,
             modes: {
                 default: [
                     {
                         type: 'collapse-expand',
-                        // onChange: function onChange(item, collapsed) {
-                        //     const data = item.get('model').data;
-                        //     data.collapsed = collapsed;
-                        //     return true;
-                        // },
+                        onChange: function onChange(item, collapsed) {
+                            const data = item.get('model').data;
+                            data.collapsed = collapsed;
+                            return true;
+                        },
                     },
                     'drag-canvas',
                     'zoom-canvas',
@@ -41,49 +42,41 @@
             },
             defaultNode: {
                 size: 26,
-                anchorPoints: [
-                    [0, 0.5],
-                    [1, 0.5],
-                ],
                 style: {
                     fill: '#C6E5FF',
                     stroke: '#5B8FF9',
                 },
             },
             defaultEdge: {
-                type: 'cubic-horizontal',
                 style: {
                     stroke: '#A3B1BF',
                 },
             },
             layout: {
                 type: 'compactBox',
-                direction: 'LR',
+                direction: 'RL',
                 getId: function getId(d) {
                     return d.id;
                 },
-                getHeight: function getHeight() {
-                    return 16;
+                getHeight: () => {
+                    return 26;
                 },
-                getWidth: function getWidth() {
-                    return 16;
+                getWidth: () => {
+                    return 26;
                 },
-                getVGap: function getVGap() {
-                    return 10;
+                getVGap: () => {
+                    return 20;
                 },
-                getHGap: function getHGap() {
-                    return 100;
+                getHGap: () => {
+                    return 30;
                 },
+                radial: true,
             },
         });
 
         graph.node(function (node) {
             return {
                 label: node.id,
-                labelCfg: {
-                    offset: 10,
-                    position: node.children && node.children.length > 0 ? 'left' : 'right',
-                },
             };
         });
 

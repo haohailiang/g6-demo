@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>缩进树-顶部对齐</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <!-- <script src="../00-mock/data-1.js"></script> -->
+    <script src="../../../lib/g6.min.js"></script>
+    <!-- <script src="../../00-mock/data-1.js"></script> -->
 </head>
 
 <body>
@@ -147,6 +147,9 @@
             layout: {
                 type: 'indented',
                 direction: 'LR',
+                // 根节点在左，往右布局[默认就是顶部对齐的]
+                // https://g6.antv.vision/zh/docs/manual/middle/layout/tree-graph-layout#indented
+                // 每个节点的第一个自节点是否位于下一行。默认为 true, 默认的文件系统就是
                 dropCap: false,
                 indent: 200,
                 getHeight: () => {

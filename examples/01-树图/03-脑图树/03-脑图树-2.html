@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>脑图树-子节点右侧分布</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <script src="../00-mock/data-1.js"></script>
+    <script src="../../../lib/g6.min.js"></script>
+    <script src="../../00-mock/data-1.js"></script>
 </head>
 
 <body>
@@ -25,6 +25,20 @@
             container: 'container',
             width,
             height,
+            modes: {
+                default: [
+                    {
+                        type: 'collapse-expand',
+                        onChange: function onChange(item, collapsed) {
+                            const data = item.get('model').data;
+                            data.collapsed = collapsed;
+                            return true;
+                        },
+                    },
+                    'drag-canvas',
+                    'zoom-canvas',
+                ],
+            },
             defaultNode: {
                 size: 26,
                 anchorPoints: [
@@ -43,17 +57,21 @@
                 },
             },
             layout: {
-                type: 'indented',
+                type: 'mindmap',
                 direction: 'H',
-                indent: 80,
                 getHeight: () => {
-                    return 10;
+                    return 16;
                 },
                 getWidth: () => {
+                    return 16;
+                },
+                getVGap: () => {
                     return 10;
                 },
-                getSide: (d) => {
-                    if (d.id === 'Regression' || d.id === 'Classification') return 'left';
+                getHGap: () => {
+                    return 100;
+                },
+                getSide: () => {
                     return 'right';
                 },
             },
@@ -64,12 +82,13 @@
             if (node.id === 'Modeling Methods') {
                 centerX = node.x;
             }
+
             return {
                 label: node.id,
                 labelCfg: {
                     position:
                         node.children && node.children.length > 0
-                            ? 'left'
+                            ? 'right'
                             : node.x > centerX
                                 ? 'right'
                                 : 'left',

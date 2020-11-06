@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>缩进树-文件系统</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <!-- <script src="../00-mock/data-1.js"></script> -->
+    <script src="../../../lib/g6.min.js"></script>
+    <!-- <script src="../../00-mock/data-1.js"></script> -->
 </head>
 
 <body>
@@ -85,9 +85,12 @@
         G6.registerEdge(
             'step-line',
             {
+                // 获取边的控制点
                 getControlPoints: function getControlPoints(cfg) {
                     const startPoint = cfg.startPoint;
                     const endPoint = cfg.endPoint;
+
+                    // 这个折线画的好
                     return [
                         startPoint,
                         {
@@ -113,6 +116,7 @@
                     {
                         type: 'collapse-expand',
                         animate: false,
+                        // animate: true,
                         onChange: function onChange(item, collapsed) {
                             const data = item.get('model');
                             data.collapsed = collapsed;
@@ -130,7 +134,9 @@
             },
             layout: {
                 type: 'indented',
+                // 是否是水平方向,在这儿似乎没用
                 isHorizontal: true,
+                // isHorizontal: false,
                 direction: 'LR',
                 indent: 30,
                 getHeight: function getHeight() {

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            border: 1px solid;
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="./data.js"></script> -->
+    <script src="./rawData.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            groupByTypes: false,
+            fitView: true,
+            fitViewPadding: 50,
+            layout: {
+                type: 'comboForce',
+                preventOverlap: true,
+                nodeSpacing: 8,
+                comboSpacing: (d) => {
+                    return 100
+                },
+                linkDistance: (d) => {
+                    if (data.soleNodes.includes(d.target)) {
+                        const minDis = 100
+                        const labelLen = G6.Util.getTextSize(d.label, 14)[0]
+                        const padding = 28
+                        return minDis + labelLen + padding
+                    }
+                    return 30;
+                },
+            },
+            defaultNode: {
+                size: 15,
+                style: {
+                    lineWidth: 2,
+                    fill: '#c6e5ff',
+                },
+            },
+            defaultCombo: {
+                type: 'circle',
+                style: {
+                    lineWidth: 1,
+                },
+                labelCfg: {
+                    style: {
+                        fontSize: 18,
+                    },
+                    refY: 25,
+                    position: 'bottom',
+                },
+            },
+            defaultEdge: {
+                size: 2,
+                color: '#e2e2e2',
+                autoRotate: true,
+                labelCfg: {
+                    autoRotate: true, // 边上的标签文本根据边的方向旋转
+                },
+            },
+            modes: {
+                default: ['drag-combo', 'drag-node', 'drag-canvas', 'zoom-canvas'],
+            },
+            comboStateStyles: {
+                hover: {
+                    lineWidth: 2,
+                    stroke: '#226eda',
+                },
+            },
+            nodeStateStyles: {
+                hover: {
+                    fill: '#226eda',
+                },
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

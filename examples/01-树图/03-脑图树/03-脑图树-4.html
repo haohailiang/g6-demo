@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>脑图树-自定义子节点分布</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <script src="../00-mock/data-1.js"></script>
+    <script src="../../../lib/g6.min.js"></script>
+    <script src="../../00-mock/data-1.js"></script>
 </head>
 
 <body>
@@ -25,7 +25,6 @@
             container: 'container',
             width,
             height,
-            linkCenter: true,
             modes: {
                 default: [
                     {
@@ -52,35 +51,52 @@
                 },
             },
             defaultEdge: {
-                type: 'cubic-vertical',
+                type: 'cubic-horizontal',
                 style: {
                     stroke: '#A3B1BF',
                 },
             },
             layout: {
-                type: 'dendrogram',
-                direction: 'TB', // H / V / LR / RL / TB / BT
-                nodeSep: 40,
-                rankSep: 100,
+                type: 'mindmap',
+                direction: 'H',
+                getHeight: () => {
+                    return 16;
+                },
+                getWidth: () => {
+                    return 16;
+                },
+                getVGap: () => {
+                    return 10;
+                },
+                getHGap: () => {
+                    return 50;
+                },
+                getSide: (d) => {
+                    // 节点会在根节点的左侧
+                    if (d.id === 'Classification') {
+                        return 'left';
+                    }
+                    return 'right';
+                },
             },
         });
 
+        let centerX = 0;
         graph.node(function (node) {
-            let position = 'right';
-            let rotate = 0;
-            if (!node.children) {
-                position = 'bottom';
-                rotate = Math.PI / 2;
+            if (node.id === 'Modeling Methods') {
+                centerX = node.x;
             }
+
             return {
                 label: node.id,
                 labelCfg: {
-                    position,
+                    position:
+                        node.children && node.children.length > 0
+                            ? 'left'
+                            : node.x > centerX
+                                ? 'right'
+                                : 'left',
                     offset: 5,
-                    style: {
-                        rotate,
-                        textAlign: 'start',
-                    },
                 },
             };
         });

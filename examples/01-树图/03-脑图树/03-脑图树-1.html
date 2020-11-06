@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>脑图树-子节点自动两侧分布</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6.min.js"></script>
-    <script src="../00-mock/data-1.js"></script>
+    <script src="../../../lib/g6.min.js"></script>
+    <script src="../../00-mock/data-1.js"></script>
 </head>
 
 <body>
@@ -57,18 +57,38 @@
                 },
             },
             layout: {
-                type: 'dendrogram',
-                direction: 'LR', // H / V / LR / RL / TB / BT
-                nodeSep: 30,
-                rankSep: 100,
+                type: 'mindmap',
+                direction: 'H',
+                getHeight: () => {
+                    return 16;
+                },
+                getWidth: () => {
+                    return 16;
+                },
+                getVGap: () => {
+                    return 10;
+                },
+                getHGap: () => {
+                    return 50;
+                },
             },
         });
 
+        let centerX = 0;
         graph.node(function (node) {
+            if (node.id === 'Modeling Methods') {
+                centerX = node.x;
+            }
+
             return {
                 label: node.id,
                 labelCfg: {
-                    position: node.children && node.children.length > 0 ? 'left' : 'right',
+                    position:
+                        node.children && node.children.length > 0
+                            ? 'left'
+                            : node.x > centerX
+                                ? 'right'
+                                : 'left',
                     offset: 5,
                 },
             };
