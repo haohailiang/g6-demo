@@ -12,13 +12,43 @@
         }
     </style>
     <script src="../../lib/g6.min.js"></script>
-    <script src="../00-mock/data-4-relations.js"></script>
+    <!-- <script src="../00-mock/data-4-relations.js"></script> -->
 </head>
 
 <body>
     <!-- 1. 创建容器 -->
     <div id="container"></div>
     <script>
+        const data = {
+            nodes: [
+                {
+                    "id": "4",
+                    "label": "AFG",
+                    // "year": 2012,
+                },
+                {
+                    "id": "8",
+                    "label": "ALB",
+                    // "year": 2012,
+                },
+                {
+                    "id": "10",
+                    "label": "ATA",
+                    // "year": 2012,
+                },
+                {
+                    "id": "12",
+                    "label": "DZA",
+                    // "year": 2012,
+                },
+                {
+                    "id": "16",
+                    "label": "ASM",
+                    // "year": 2012,
+                },
+            ].map(item => ({ ...item, size: 20 + Math.floor(Math.random() * 100)})),
+            edges: [],
+        }
         const width = document.getElementById('container').scrollWidth;
         const height = document.getElementById('container').scrollHeight || 500;
         const graph = new G6.Graph({
@@ -40,37 +70,38 @@
                 preventOverlap: true,
             },
             defaultNode: {
-                size: 15,
-                color: '#5B8FF9',
+                // size: 15,
+                // color: '#5B8FF9',
                 style: {
-                    lineWidth: 2,
-                    fill: '#C6E5FF',
+                    lineWidth: 1,
+                    // fill: '#C6E5FF',
                 },
             },
-            defaultEdge: {
-                size: 1,
-                color: '#e2e2e2',
-            },
+            // defaultEdge: {
+            //     size: 1,
+            //     color: '#e2e2e2',
+            // },
             modes: {
                 default: ['zoom-canvas', 'drag-canvas', 'drag-node']
             }
         });
 
-        let colorMap = {
-            2012: '#BDD2FD',
-            2013: '#BDEFDB',
-            2014: '#F6C3B7',
-            2015: '#FFD8B8',
-            2016: '#D3C6EA',
-        };
-
-        graph.data(data);
+        let colorMap = [
+            '#BDD2FD',
+            '#BDEFDB',
+            '#F6C3B7',
+            '#FFD8B8',
+            '#D3C6EA',
+        ]
         data.nodes.forEach((i) => {
-            i.cluster = i.year;
+            i.cluster = 'cluster';
+            i.color = colorMap[Math.floor(Math.random() * colorMap.length)]
             i.style = Object.assign(i.style || {}, {
-                fill: colorMap[i.year],
+                fill: colorMap[Math.floor(Math.random() * colorMap.length)],
             });
         });
+
+        graph.data(data);
         graph.render();
     </script>
 </body>

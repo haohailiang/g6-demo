@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>基本力导向布局及节点拖拽</title>
     <style>
         #container {
             width: calc(100vw - 50px);
@@ -51,6 +51,7 @@
         });
         graph.render();
 
+        // 这样可以刷新节点的位置,不然拖拽不动
         const forceLayout = graph.get('layoutController').layoutMethod;
         graph.on('node:dragstart', function (e) {
             graph.layout();

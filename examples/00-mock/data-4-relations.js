@@ -27393,5 +27393,5 @@ const data = {
             "embodiedLand": "",
             "embodiedWater": ""
         }
-    ]
+    ],
 }
