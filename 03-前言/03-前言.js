@@ -43,8 +43,10 @@ const graph = new G6.Graph({
         linkDistance: 100,
         preventOverlap: true,
         nodeStrength: -30,
-        edgeStrength: 0.1
+        edgeStrength: 0.1,
+
     },
+    maxZoom: 1,
     modes: {
         default: ['drag-node', 'drag-canvas', 'zoom-canvas',
             // 点提示框交互工具的配置

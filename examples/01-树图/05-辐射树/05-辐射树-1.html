@@ -12,13 +12,74 @@
         }
     </style>
     <script src="../../../lib/g6.min.js"></script>
-    <script src="../../00-mock/data-1.js"></script>
+    <!-- <script src="../../00-mock/data-1.js"></script> -->
 </head>
 
 <body>
     <!-- 1. 创建容器 -->
     <div id="container"></div>
     <script>
+                    // const data = {
+                    //     "id": "group-4144",
+                    //     "children": [
+                    //         {
+                    //             "id": "person-8264",
+                    //             "children": []
+                    //         },
+                    //         {
+                    //             "id": "person-16456",
+                    //             "children": []
+                    //         },
+                    //         {
+                    //             "id": "person-8424",
+                    //             "children": []
+                    //         },
+                    //         {
+                    //             "id": "person-4304",
+                    //             "children": []
+                    //         },
+                    //         {
+                    //             "id": "person-2048004176",
+                    //             "children": []
+                    //         },
+                    //         {
+                    //             "id": "person-4112",
+                    //             "children": []
+                    //         }
+                    //     ]
+                    // }
+
+                    const data = {
+                        "id": "group-source-4144",
+                        "children": [
+                            {
+                                "id": "person-4144-8264",
+                                "children": []
+                            },
+                            {
+                                "id": "person-4144-16456",
+                                "children": []
+                            },
+                            {
+                                "id": "person-4144-8424",
+                                "children": []
+                            },
+                            {
+                                "id": "person-4144-4304",
+                                "children": []
+                            },
+                            {
+                                "id": "person-4144-2048004176",
+                                "children": []
+                            },
+                            {
+                                "id": "person-4144-4112",
+                                "children": []
+                            }
+                        ]
+                    }
+                
+
         const width = document.getElementById('container').scrollWidth;
         const height = document.getElementById('container').scrollHeight || 500;
         const graph = new G6.TreeGraph({

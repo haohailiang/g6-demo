@@ -1,0 +1,1417 @@
+const iconUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo2/images/icon.svg"
+const imageUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo2/images/image1.jpg"
+
+const data = {
+    "id": "virtual-root",
+    "children": [
+        {
+            "id": "virtual-root-40967233744",
+            "realId": "40967233744",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "P&G Innovation Godo Kaisha",
+            "position": [
+                "其他"
+            ],
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "40967233744-34837909528",
+                    "realId": "34837909528",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Kazumi Konishi",
+                    "position": "",
+                    "entityGroup": "person"
+                }
+            ],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": [
+                {
+                    "id": "40967233744-34837909528",
+                    "realId": "34837909528",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Kazumi Konishi",
+                    "position": "",
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-28674551832",
+            "realId": "28674551832",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "江苏宝洁有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-22534910168",
+            "realId": "22534910168",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "THE PROCTER & GAMBLE COMPANY",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-24578855024",
+            "realId": "24578855024",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "金霸王（中国）有限公司",
+            "position": [
+                "工业产品"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-22529282120",
+            "realId": "22529282120",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "广州宝洁科技创新有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "22529282120-36875403456",
+                    "realId": "36875403456",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "潘青云 Alex",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22529282120-28690788552",
+                    "realId": "28690788552",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "海杰Jason",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                }
+            ],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": [
+                {
+                    "id": "22529282120-36875403456",
+                    "realId": "36875403456",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "潘青云 Alex",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22529282120-28690788552",
+                    "realId": "28690788552",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "海杰Jason",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-22537035992",
+            "realId": "22537035992",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "北京宝洁技术有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-40967164112",
+            "realId": "40967164112",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "可丽柏露诊断产品贸易（上海）有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-22530302168",
+            "realId": "22530302168",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "宝洁集团",
+            "position": "",
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "22530302168-28698517672",
+                    "realId": "28698517672",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-8218849328",
+                    "realId": "8218849328",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-22554165336",
+                    "realId": "22554165336",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-28698439864",
+                    "realId": "28698439864",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-stat",
+                    "statNums": "+7",
+                    "entityGroup": "stat"
+                }
+            ],
+            "isCollapse": true,
+            "isShowCollapse": true,
+            "realChildren": [
+                {
+                    "id": "22530302168-28698517672",
+                    "realId": "28698517672",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-8218849328",
+                    "realId": "8218849328",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-22554165336",
+                    "realId": "22554165336",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-28698439864",
+                    "realId": "28698439864",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-18458710024",
+                    "realId": "18458710024",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-24629592192",
+                    "realId": "24629592192",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22530302168-22554161240",
+                    "realId": "22554161240",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "",
+                    "position": "",
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-28673937632",
+            "realId": "28673937632",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "香港宝洁有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-22534201560",
+            "realId": "22534201560",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "P&G",
+            "position": "",
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "22534201560-45078946000",
+                    "realId": "45078946000",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Darin",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-43008544872",
+                    "realId": "43008544872",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jerry Lin",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-36884676800",
+                    "realId": "36884676800",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Carol",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-28677451976",
+                    "realId": "28677451976",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jessica 怀瑾握瑜 休假中",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-stat",
+                    "statNums": "+14",
+                    "entityGroup": "stat"
+                }
+            ],
+            "isCollapse": true,
+            "isShowCollapse": true,
+            "realChildren": [
+                {
+                    "id": "22534201560-45078946000",
+                    "realId": "45078946000",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Darin",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-43008544872",
+                    "realId": "43008544872",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jerry Lin",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-36884676800",
+                    "realId": "36884676800",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Carol",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-28677451976",
+                    "realId": "28677451976",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jessica 怀瑾握瑜 休假中",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-34832826392",
+                    "realId": "34832826392",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jasmine 许敏",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-36870488184",
+                    "realId": "36870488184",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Oscar 周丹升",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-43023790184",
+                    "realId": "43023790184",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "rex",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-24595038424",
+                    "realId": "24595038424",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jacci",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-24585314520",
+                    "realId": "24585314520",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Shelley",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-28696916168",
+                    "realId": "28696916168",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Yabin",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-24585339096",
+                    "realId": "24585339096",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Seacen",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-45080207568",
+                    "realId": "45080207568",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "晓凤",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-36886061176",
+                    "realId": "36886061176",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Weiles",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22534201560-36872368248",
+                    "realId": "36872368248",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Stephen Li",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-22536229080",
+            "realId": "22536229080",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "广州宝洁有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "22536229080-36878180472",
+                    "realId": "36878180472",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "吴琳",
+                    "position": [
+                        "SK-II美容顾问"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22536229080-32798388448",
+                    "realId": "32798388448",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "SunnyX",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                }
+            ],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": [
+                {
+                    "id": "22536229080-36878180472",
+                    "realId": "36878180472",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "吴琳",
+                    "position": [
+                        "SK-II美容顾问"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "22536229080-32798388448",
+                    "realId": "32798388448",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "SunnyX",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-28676608224",
+            "realId": "28676608224",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "宝洁",
+            "position": "",
+            "entityGroup": "organ",
+            "children": [
+                {
+                    "id": "28676608224-43017814120",
+                    "realId": "43017814120",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "是也",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43023790184",
+                    "realId": "43023790184",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "rex",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32798388448",
+                    "realId": "32798388448",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "SunnyX",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32786206944",
+                    "realId": "32786206944",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "青豆",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-stat",
+                    "statNums": "+34",
+                    "entityGroup": "stat"
+                }
+            ],
+            "isCollapse": true,
+            "isShowCollapse": true,
+            "realChildren": [
+                {
+                    "id": "28676608224-43017814120",
+                    "realId": "43017814120",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "是也",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43023790184",
+                    "realId": "43023790184",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "rex",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32798388448",
+                    "realId": "32798388448",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "SunnyX",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32786206944",
+                    "realId": "32786206944",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "青豆",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43024740456",
+                    "realId": "43024740456",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "户抗旨",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43008790632",
+                    "realId": "43008790632",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "可",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28695376072",
+                    "realId": "28695376072",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "馨怡Vicky Zheng",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28677451976",
+                    "realId": "28677451976",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jessica 怀瑾握瑜 休假中",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36886061176",
+                    "realId": "36886061176",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Weiles",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32772268256",
+                    "realId": "32772268256",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "高峰",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-24585339096",
+                    "realId": "24585339096",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Seacen",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36884676800",
+                    "realId": "36884676800",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Carol",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32776700128",
+                    "realId": "32776700128",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "宋泽迎 Sawyer",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28690788552",
+                    "realId": "28690788552",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "海杰Jason",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-45062062288",
+                    "realId": "45062062288",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "赵魏Ted",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32800157920",
+                    "realId": "32800157920",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Mackenzie事假",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32806904032",
+                    "realId": "32806904032",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "王敏Aria 出差中",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28676640912",
+                    "realId": "28676640912",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Luka",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43019255912",
+                    "realId": "43019255912",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jesse🎈",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-24601084120",
+                    "realId": "24601084120",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Ethan.夏博",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36872368248",
+                    "realId": "36872368248",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Stephen Li",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36885270648",
+                    "realId": "36885270648",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Ceci🌺出差了",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-45067579600",
+                    "realId": "45067579600",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Tommy Guo",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36887531640",
+                    "realId": "36887531640",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "ELAINE",
+                    "position": [
+                        "PG CMK"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28684128400",
+                    "realId": "28684128400",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Grace 闫雯",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32780927200",
+                    "realId": "32780927200",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Timeout",
+                    "position": "",
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36870488184",
+                    "realId": "36870488184",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Oscar 周丹升",
+                    "position": [
+                        "P&G"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36877422784",
+                    "realId": "36877422784",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Jade He - sick & WFH",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36887838840",
+                    "realId": "36887838840",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "娇",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-36886921336",
+                    "realId": "36886921336",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Qiqi",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-43023376488",
+                    "realId": "43023376488",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "FrankX",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-32806568160",
+                    "realId": "32806568160",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "石少",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-28675641488",
+                    "realId": "28675641488",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Nevin",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                },
+                {
+                    "id": "28676608224-34829561880",
+                    "realId": "34829561880",
+                    "icon": iconUrl,
+                    "isShowIcon": true,
+                    "img": imageUrl,
+                    "isShowImage": true,
+                    "backColor": "#2BBCFF",
+                    "name": "Simon Yao",
+                    "position": [
+                        "宝洁"
+                    ],
+                    "entityGroup": "person"
+                }
+            ]
+        },
+        {
+            "id": "virtual-root-34819190944",
+            "realId": "34819190944",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "PROCTER & GAMBLE INTERNATIONAL OPERATIONS SA SINGAPOREBRANCH",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-40961683664",
+            "realId": "40961683664",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "PACIFIC ADVANTAGE （INTERNATIONAL） LIMITED",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-24577626224",
+            "realId": "24577626224",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "宝洁（中国）营销有限公司",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-34820046968",
+            "realId": "34820046968",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "PROCTER & GAMBLE INTERNATIONAL OPERATIONS SA",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-40965001424",
+            "realId": "40965001424",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "PROCTER & GAMBLE INTL OPS S.A. SG",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-24579829872",
+            "realId": "24579829872",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "PROCTER & GAMBLE （CHINA） SALES",
+            "position": [
+                "快速消费品 - 个人护理"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        },
+        {
+            "id": "virtual-root-24579166320",
+            "realId": "24579166320",
+            "icon": iconUrl,
+            "isShowIcon": true,
+            "img": imageUrl,
+            "isShowImage": true,
+            "backColor": "#FD960C",
+            "name": "宝洁梯瓦医疗健康（浙江）有限公司",
+            "position": [
+                "制药和医疗保健"
+            ],
+            "entityGroup": "organ",
+            "children": [],
+            "isCollapse": false,
+            "isShowCollapse": false,
+            "realChildren": []
+        }
+    ]
+}

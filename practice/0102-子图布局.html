@@ -33,6 +33,15 @@
                     y: 200, // Number，可选，节点位置的 y 值
                     label: '目标点',
                 },
+
+                {
+                    id: 'node3', // String，该节点存在则必须，节点的唯一标识
+                    label: '起始点3', // 节点文本
+                },
+                {
+                    id: 'node4', // String，该节点存在则必须，节点的唯一标识
+                    label: '目标点4',
+                },
             ],
             // 边集
             edges: [
@@ -40,6 +49,17 @@
                     source: 'node1', // String，必须，起始点 id
                     target: 'node2', // String，必须，目标点 id
                     label: '我是连线', // 边的文本
+                },
+                {
+                    source: 'node2', // String，必须，起始点 id
+                    target: 'node3', // String，必须，目标点 id
+                    label: '我是连线', // 边的文本
+                },
+
+                {
+                    source: 'node3', // String，必须，起始点 id
+                    target: 'node4', // String，必须，目标点 id
+                    label: '我是连线3-4', // 边的文本
                 },
             ],
         };
@@ -58,46 +78,72 @@
 
 
         // 子图布局
-        const subData = {
-            // 点集
-            nodes: [
-                {
-                    id: 'node3', // String，该节点存在则必须，节点的唯一标识
-                    label: '起始点3', // 节点文本
+        // const subData = {
+        //     // 点集
+        //     nodes: [
+        //         {
+        //             id: 'node3', // String，该节点存在则必须，节点的唯一标识
+        //             label: '起始点3', // 节点文本
+        //         },
+        //         {
+        //             id: 'node4', // String，该节点存在则必须，节点的唯一标识
+        //             label: '目标点4',
+        //         },
+        //     ],
+        //     // 边集
+        //     edges: [
+        //         {
+        //             source: 'node3', // String，必须，起始点 id
+        //             target: 'node4', // String，必须，目标点 id
+        //             label: '我是连线3-4', // 边的文本
+        //         },
+        //     ],
+        // };
+
+        setTimeout(() => {
+            data.nodes[2].fx = data.nodes[2].x
+            data.nodes[2].fy = data.nodes[2].y
+
+            // 实例化布局
+            // const subgraphLayout = new G6.Layout['force']({
+            //     center: [data.nodes[2].x, data.nodes[2].y],
+            // });
+    
+            // // 初始化布局，灌入子图数据
+            // subgraphLayout.init({
+            //     nodes: data.nodes.filter(item => ['node3', 'node4'].includes(item.id)),
+            //     edges: [data.edges[2]],
+            // });
+    
+            // // subgraphLayout.init(subData);
+    
+            // // 执行布局
+            // subgraphLayout.execute();
+    
+            // // 图实例根据数据更新节点位置
+            // graph.positionsAnimate();
+
+
+            const subForceLayout = new G6.Layout.force({
+                // center: [nodes[0].x, nodes[0].y],
+                center: [data.nodes[2].x, data.nodes[2].y],
+                linkDistance: 70,
+                preventOverlap: true,
+                nodeSize: 20,
+                tick: function tick() {
+                    // the tick function to show the animation of layout process
+                    graph.refreshPositions();
                 },
-                {
-                    id: 'node4', // String，该节点存在则必须，节点的唯一标识
-                    label: '目标点4',
-                },
-            ],
-            // 边集
-            edges: [
-                {
-                    source: 'node3', // String，必须，起始点 id
-                    target: 'node4', // String，必须，目标点 id
-                    label: '我是连线3-4', // 边的文本
-                },
-            ],
-        };
+            });
+            subForceLayout.init({
+                // nodes: newNodes,
+                nodes: data.nodes.filter(item => ['node3', 'node4'].includes(item.id)),
+                // edges: newEdges,
+                edges: [data.edges[2]],
+            });
+            subForceLayout.execute();
+        }, 1000);
 
-        // 实例化布局
-        const subgraphLayout = new G6.Layout['force']({
-            center: [150, 200],
-        });
-
-        // 初始化布局，灌入子图数据
-        // subgraphLayout.init({
-        //     nodes: subGraphNodes,
-        //     edges: subGraphEdges,
-        // });
-
-        subgraphLayout.init(subData);
-
-        // 执行布局
-        subgraphLayout.execute();
-
-        // 图实例根据数据更新节点位置
-        graph.positionsAnimate();
     </script>
 </body>
 

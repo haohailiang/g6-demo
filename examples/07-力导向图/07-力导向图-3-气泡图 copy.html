@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>力导向布局聚类</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+    </style>
+    <script src="../../lib/g6.min.js"></script>
+    <!-- <script src="../00-mock/data-4-relations.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+
+        const mockRadius = 20 + 17
+        G6.registerNode(
+            'requirement',
+            {
+                draw(cfg, group) {
+                    const shape = group.addShape('circle', {
+                        attrs: {
+                            x: 0,
+                            y: 0,
+                            // r: cfg.circleRadius,
+                            // r: 30,
+                            // r: mockRadius,
+                            r: cfg.size / 2,
+                            fill: cfg.bgColor,
+                            // cursor: 'pointer',
+                        },
+                        name: 'requirement-box',
+                        // draggable: true,
+                    })
+
+                    // group.addShape('text', {
+                    //     attrs: {
+                    //         textBaseline: 'middle',
+                    //         x: 0,
+                    //         y: 0,
+                    //         textAlign: 'center',
+                    //         text: cfg.hotWordName,
+                    //         fill: cfg.hotWordNameColor,
+                    //         fontSize: cfg.hotLevelFontSize,
+                    //         cursor: 'pointer',
+                    //     },
+                    //     name: 'circle-name',
+                    //     draggable: true,
+                    // })
+
+                    return shape
+                },
+            },
+            // 'single-node',
+        )
+
+        G6.registerNode(
+            'card-node',
+            {
+                draw: (cfg, group) => {
+                    const keyShape = group.addShape('circle', {
+                        attrs: {
+                            x: 0,
+                            y: 0,
+                            r: 30,
+                            fill: '#eeeeee',
+                        },
+                        name: 'left-dot-shape',
+                    });
+
+                    return keyShape
+                },
+            },
+            'circle',
+        )
+        const data = {
+            nodes: [
+                {
+                    "id": "4",
+                    "label": "AFG",
+                    // "year": 2012,
+                }
+            ].map(item => ({ ...item, size: [60, 60] })),
+            edges: [],
+        }
+
+        /* 
+        const data = {
+            nodes: [
+                {
+                    id: '猎豹MAIL',
+                    hotWordName: '猎豹MAIL',
+                    circleRadius: 20,
+                    hotLevelFontSize: 3,
+                    bgColor: 'rgba(47, 125, 205, 0.1)',
+                    hotWordNameColor: '#2f7dcd',
+                    cluster: 'cluster',
+                    size: 200,
+                },
+                {
+                    id: '猎豹WIFI',
+                    hotWordName: '猎豹WIFI',
+                    // circleRadius: 7,
+                    circleRadius: 30,
+                    hotLevelFontSize: 2,
+                    bgColor: 'rgba(119, 99, 249, 0.1)',
+                    hotWordNameColor: '#7763f9',
+                    cluster: 'cluster',
+                    // size: [14, 14],
+                    // size: [60, 60],
+                    // size: mockRadius * 2,
+                    size: 40,
+                }
+            ],
+            edges: [],
+        }
+        */
+
+        console.log('%c data===', 'color:#fff;background: red;', data)
+
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            // fitView: true,
+            layout: {
+                type: 'force',
+                // 是否按照聚类信息布局, 会一堆儿一堆儿的分开, 注意版本
+                clustering: true,
+                // clustering: false, // 这样会混合在一起
+                // 聚类节点作用力。负数代表斥力
+                clusterNodeStrength: -5,
+                // clusterNodeStrength: 10,
+                // 聚类边长度
+                clusterEdgeDistance: 200,
+                // clusterNodeSize: 1,
+                clusterFociStrength: 1.2,
+                nodeSpacing: 5,
+                preventOverlap: true,
+            },
+            // defaultNode: {
+            //     // size: 15,
+            //     // color: '#5B8FF9',
+            //     style: {
+            //         lineWidth: 1,
+            //         // fill: '#C6E5FF',
+            //     },
+            // },
+            // defaultNode: {
+            //     // size: [40, 40],
+            //     type: 'card-node',
+            // },
+            // defaultNode: {
+            //     // size: [40, 40],
+            //     type: 'requirement',
+            // },
+            // defaultEdge: {
+            //     size: 1,
+            //     color: '#e2e2e2',
+            // },
+            modes: {
+                default: ['zoom-canvas', 'drag-canvas', 'drag-node']
+            }
+        });
+
+        let colorMap = [
+            '#BDD2FD',
+            '#BDEFDB',
+            '#F6C3B7',
+            '#FFD8B8',
+            '#D3C6EA',
+        ]
+        data.nodes.forEach((i) => {
+            i.cluster = 'cluster';
+            i.color = colorMap[Math.floor(Math.random() * colorMap.length)]
+            i.style = Object.assign(i.style || {}, {
+                fill: colorMap[Math.floor(Math.random() * colorMap.length)],
+            });
+        });
+
+        graph.data(data);
+        graph.render();
+
+        setTimeout(() => {
+            graph.fitView()
+        }, 1000);
+    </script>
+</body>
+
+</html>
