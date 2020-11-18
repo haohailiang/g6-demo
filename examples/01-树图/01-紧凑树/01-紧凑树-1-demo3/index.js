@@ -325,7 +325,6 @@ graph.on('node:click', evt => {
     // console.log('%c model===', 'color:#fff;background: red;', model)
 })
 
-Í
 graph.on('node:click', evt => {
     const model = evt.item.getModel()
     const { target: { cfg: { name: optType } } } = evt
