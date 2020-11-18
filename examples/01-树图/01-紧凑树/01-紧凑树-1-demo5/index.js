@@ -206,6 +206,12 @@ function renderGraph() {
     moveGraph()
 }
 
+function animate(time) {
+    requestAnimationFrame(animate)
+    TWEEN.update(time)
+}
+requestAnimationFrame(animate)
+
 renderGraph()
 window.addEventListener('resize', function () {
     const { width: containerWidth, height: containerHeight } = document.getElementById('container').getBoundingClientRect();
@@ -321,7 +327,18 @@ const moveLeftOrRight = (flag = 'left') => {
     } else {
         canMoveDistance = Math.max(curMoveX - maxMoveDistance, minMoveRange)
     }
-    graph.moveTo(canMoveDistance, curMoveY)
+
+    const coords = { x: curMoveX }
+    const tween = new TWEEN.Tween(coords)
+        .to({ x: canMoveDistance }, 1000)
+        .easing(TWEEN.Easing.Quadratic.Out)
+        .onUpdate(() => {
+            console.log('%c 123===', 'color:#fff;background: red;')
+            // graph.moveTo(coords.x, coords.y)
+            graph.moveTo(coords.x, curMoveY)
+        })
+        .start() // Start the tween immediately.
+    // graph.moveTo(canMoveDistance, curMoveY)
 }
 
 document.querySelector('#left').addEventListener('click', function () {
