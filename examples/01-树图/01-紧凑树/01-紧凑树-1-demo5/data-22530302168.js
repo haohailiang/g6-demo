@@ -1,5 +1,5 @@
-const iconUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo4/images/icon.svg"
-const imageUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo4/images/image1.jpg"
+const iconUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo5/images/icon.svg"
+const imageUrl = "http://127.0.0.1:5500/examples/01-%E6%A0%91%E5%9B%BE/01-%E7%B4%A7%E5%87%91%E6%A0%91/01-%E7%B4%A7%E5%87%91%E6%A0%91-1-demo5/images/image1.jpg"
 
 const data = {
     "id": "virtual-root",

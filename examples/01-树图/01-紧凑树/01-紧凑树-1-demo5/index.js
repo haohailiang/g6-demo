@@ -273,11 +273,6 @@ const toggleCollapseChild = model => {
     modelShadow.isCollapse = !modelShadow.isCollapse
 
     const { x: preCanvasX, y: prevCanvasY } = graph.getCanvasByPoint(modelShadow.x, modelShadow.y)
-    // const { moveX: preMoveX, moveY: preMoveY } = getGraphMove()
-    // prevParentLeftCanvasX = canvasX
-    // prevParentLeftCanvasY = canvasY
-
-    console.log('%c isCollapse===', 'color:#fff;background: red;', isCollapse)
 
     if (isCollapse) {
         modelShadow.children = realChildren
@@ -304,15 +299,9 @@ const toggleCollapseChild = model => {
     // moveGraph()
     const diffCanvasX = nowCanvasX - preCanvasX
     const diffCanvasY = nowCanvasY - prevCanvasY
-    const { moveX: curMoveX, moveY: curMoveY } = getGraphMove()
+    // const { moveX: curMoveX, moveY: curMoveY } = getGraphMove()
 
-    // console.log('%c diffCanvasX===', 'color:#fff;background: red;', diffCanvasX)
-    // console.log('%c diffCanvasY===', 'color:#fff;background: red;', diffCanvasY)
-
-    console.log('%c curMoveX===', 'color:#fff;background: red;', curMoveX)
-    console.log('%c curMoveY===', 'color:#fff;background: red;', curMoveY)
-
-    graph.moveTo(curMoveX - diffCanvasX, curMoveY - diffCanvasY)
+    graph.translate(-diffCanvasX, -diffCanvasY)
 }
 
 graph.on('node:click', evt => {
@@ -364,3 +353,12 @@ graph.on('node:click', evt => {
         })
     }
 })
+
+// 向左移动
+function dragLeft() {
+    console.log('%c 123===', 'color:#fff;background: red;')
+    // graph.translate(-100, 0)
+    graph.translate(-diffCanvasX, -diffCanvasY)
+}
+
+document.addEventListener
