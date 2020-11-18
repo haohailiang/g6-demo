@@ -2,11 +2,11 @@ let graph
 let scrollLeft
 let prevParentLeftCanvasX
 let prevParentLeftCanvasY
+// let graphWidth
 /**
  * 隐藏根节点及相关的边
  */
 const hideRootNode = () => {
-    // const { data } = this.props
     graph.zoomTo(1.0)
 
     const rootId = data.id
@@ -16,31 +16,28 @@ const hideRootNode = () => {
     graph.getEdges()
         .filter(v => v.getModel().source === rootId)
         .map(v => v.hide())
-
-    /* if (data.children.length === 1) {
-        const rootId = data.id
-        const rootNode = graph.findById(rootId)
-        rootNode.hide()
-
-        graph.getEdges()
-            .filter(v => v.getModel().source === rootId)
-            .map(v => v.hide())
-        graph.paint()
-        graph.fitCenter()
-    } else if (data.children.length > 1) {
-        this.scrollLeft = nodeWidth
-        graph.moveTo(nodeWidth, offsetY)
-    } */
-
-    // scrollLeft = nodeWidth / 2
-    // graph.moveTo(nodeWidth, offsetY)
-    // graph.moveTo(scrollLeft, 50)
 }
 
 /**
- * 移动图谱
+ * 获取节点真实的最大宽度
+ * @param model
+ * @returns 节点最大宽度
  */
-const moveGraph = () => {
+const getNodeMaxWidth = (model) => {
+    const { name, position } = model
+    const showName = getShowText(name ?? '')
+    const showPosition = getShowText(position ?? '')
+    const showNameWidth = G6.Util.getTextSize(showName, nameFontSize)[0]
+    const showPositionWidth = G6.Util.getTextSize(showPosition, positionFontSize)[0]
+    const nodeMaxWidth = Math.max(nodeWidth, showNameWidth, showPositionWidth)
+    return nodeMaxWidth
+}
+
+
+/**
+ * 获取图谱的宽高
+ */
+const getGraphSize = () => {
     const organNodes = [] // 倒序 - 子元素正序
     const personNodes = [] // 倒序
 
@@ -53,55 +50,55 @@ const moveGraph = () => {
         return true
     })
 
+    const curZoom = graph.getZoom()
+    const organNums = organNodes.length
+    const personNums = personNodes.length
     let graphWidth = 0
     let graphHeight = 0
-    let organNums = organNodes.length
-    let personNums = personNodes.length
 
+    // 图像的宽
+    const nodesBoundary = [...organNodes, ...personNodes].map(nodeItem => {
+        const model = graph.findById(nodeItem.id).getModel()
+        const { x: clientX } = graph.getClientByPoint(model.x, model.y)
+        const halfRealWidth = getNodeMaxWidth(model) * curZoom / 2
+        const leftX = clientX - halfRealWidth
+        const rightX = clientX + halfRealWidth
+
+        return {
+            leftX,
+            rightX,
+        }
+    })
+    const graphMaxClientX = Math.max(...nodesBoundary.map(boundaryItem => boundaryItem.rightX))
+    const graphMinClientX = Math.min(...nodesBoundary.map(boundaryItem => boundaryItem.leftX))
+
+    graphWidth = graphMaxClientX - graphMinClientX
+
+    // 图像的高
     if (personNums > 0) {
-        const { id: firstParentId } = organNodes[organNums - 1]
-        const { id: lastParentId, children: lastParentChildren } = organNodes[0]
-        const { id: firstChildId } = personNodes[personNums - 1]
-        const { id: lastChildId } = personNodes[0]
-        const firstParentModel = graph.findById(firstParentId).getModel()
-        const firstChildModel = graph.findById(firstChildId).getModel()
-        const { x: firstParentClientX } = graph.getClientByPoint(firstParentModel.x, firstParentModel.y)
-        const { x: firstChildClientX } = graph.getClientByPoint(firstChildModel.x, firstChildModel.y)
-        const graphMinClientX = Math.min(firstParentClientX, firstChildClientX)
-
-        const lastParentModel = graph.findById(lastParentId).getModel()
-        let lastParentLastChildModel
-        if (lastParentChildren.length > 0) {
-            const { id: lastParentLastChildId } = lastParentChildren[lastParentChildren.length - 1]
-            lastParentLastChildModel = graph.findById(lastParentLastChildId).getModel()
-        }
-
-        let graphMaxClientX = -Infinity
-        if (lastParentLastChildModel) {
-            graphMaxClientX = graph.getClientByPoint(lastParentLastChildModel.x, lastParentLastChildModel.y).x
-        } else {
-            graphMaxClientX = graph.getClientByPoint(lastParentModel.x, lastParentModel.y).x
-        }
-        graphWidth = graphMaxClientX - graphMinClientX + nodeWidth
         graphHeight = nodeHeight * 2 + vGap * 1.5
 
         if (data.children.length === 1) {
             graphHeight = nodeHeight * 2 + vGap
         }
     } else if (organNums > 0) {
-        const { id: firstParentId } = organNodes[organNums - 1]
-        const { id: lastParentId } = organNodes[0]
-        const firstParentModel = graph.findById(firstParentId).getModel()
-        const lastParentModel = graph.findById(lastParentId).getModel()
-        const graphMinClientX = graph.getClientByPoint(firstParentModel.x, firstParentModel.y).x
-        const graphMaxClientX = graph.getClientByPoint(lastParentModel.x, lastParentModel.y).x
-        graphWidth = graphMaxClientX - graphMinClientX + nodeWidth
         graphHeight = nodeHeight + vGap * 0.5
 
         if (data.children.length === 1) {
             graphHeight = nodeHeight
         }
     }
+
+    graphHeight *= curZoom
+
+    return { graphWidth, graphHeight }
+}
+
+/**
+ * 移动图谱
+ */
+const moveGraph = () => {
+    const { graphWidth, graphHeight } = getGraphSize()
 
     const { width: containerWidth, height: containerHeight } = document.getElementById('container').getBoundingClientRect();
 
@@ -129,16 +126,14 @@ const moveGraph = () => {
  * @return moveX
  */
 const getFixedMoveX = nodeId => {
-    const { name = '', position = '', x: modelX, y: modelY } = graph.findById(nodeId).getModel()
-    const showName = getShowText(name ?? '')
-    const showPosition = getShowText(position ?? '')
-    const showNameWidth = G6.Util.getTextSize(showName, nameFontSize)[0]
-    const showPositionWidth = G6.Util.getTextSize(showPosition, positionFontSize)[0]
-    const nodeMaxWidth = Math.max(nodeWidth, showNameWidth, showPositionWidth)
+    const model = graph.findById(nodeId).getModel()
+    const { x: modelX, y: modelY } = model
+    const nodeMaxWidth = getNodeMaxWidth(model)
     const redundantWidth = (nodeMaxWidth - nodeWidth) / 2
     const canvasLeft = graph.getCanvasByPoint(modelX, modelY).x
+    const curZoom = graph.getZoom()
 
-    return canvasLeft - redundantWidth
+    return canvasLeft - redundantWidth * curZoom
 }
 
 /**
@@ -162,6 +157,7 @@ const getGraphMove = () => {
     const { id: firstParentId } = organNodes[organNums - 1]
     const firstParentMoveX = getFixedMoveX(firstParentId)
     const rootParentModel = graph.findById('virtual-root').getModel()
+    const curZoom = graph.getZoom()
     let { x: rootMoveX, y: rootMoveY } = graph.getCanvasByPoint(rootParentModel.x, rootParentModel.y)
     let minMoveX = firstParentMoveX
 
@@ -171,14 +167,12 @@ const getGraphMove = () => {
         minMoveX = Math.min(firstParentMoveX, firstChildMoveX)
     }
 
-    return { moveX: minMoveX - nodeWidth / 2, moveY: rootMoveY - nodeHeight / 2 }
+    return { moveX: minMoveX - nodeWidth * curZoom / 2, moveY: rootMoveY - nodeHeight * curZoom / 2 }
 }
 
 function renderGraph() {
     registerNode()
     registerEdge()
-    // const width = document.getElementById('container').scrollWidth;
-    // const height = document.getElementById('container').scrollHeight || 500;
     const { width, height } = document.getElementById('container').getBoundingClientRect();
     graph = new G6.TreeGraph({
         container: 'container',
@@ -208,59 +202,15 @@ function renderGraph() {
     graph.data(data);
     graph.render();
 
-    // if (data.children.length === 1) {
-    //     hideRootNode()
-    // }
-
     // 图谱移动位置
     moveGraph()
 }
 
 renderGraph()
-// let pevWidth
 window.addEventListener('resize', function () {
     graph.destroy()
     renderGraph()
-    // const { width, height } = document.getElementById('container').getBoundingClientRect();
-    // // const height = document.getElementById('container').scrollHeight || 500;
-    // console.log('%c width===', 'color:#fff;background: red;', width)
-    // graph.changeSize(width, height)
-    // graph.layout()
-    // graph.fitCenter()
-    // graph.fitView()
-    // graph.render()
 }, false)
-
-/**
- * 隐藏根节点及相关的边
- */
-/**
-const hideRootNode = () => {
-    const ratio = 1.0
-    graph.zoomTo(ratio);
-
-    if (data.children.length === 1) {
-        // const { data } = this.props
-        const rootId = data.id
-        const rootNode = graph.findById(rootId)
-        rootNode.hide()
-
-        graph.getEdges()
-            .filter(v => v.getModel().source === rootId)
-            .map(v => v.hide())
-        graph.paint()
-        graph.fitCenter()
-    } else if (data.children.length > 1) {
-        const hideHeight = nodeHeight + vGap * 0.5
-        const graphHeight = nodeHeight * 2 + vGap * 1.5
-        // console.log('%c graphHeight===', 'color:#fff;background: red;', graphHeight)
-        const { width, height } = document.getElementById('container').getBoundingClientRect();
-        // const offsetY = (height - graphHeight) / 2 - hideHeight
-        graph.moveTo(nodeWidth, offsetY)
-
-    }
-}
-*/
 
 /**
  * 切换组织model下的人员
@@ -299,7 +249,6 @@ const toggleCollapseChild = model => {
     // moveGraph()
     const diffCanvasX = nowCanvasX - preCanvasX
     const diffCanvasY = nowCanvasY - prevCanvasY
-    // const { moveX: curMoveX, moveY: curMoveY } = getGraphMove()
 
     graph.translate(-diffCanvasX, -diffCanvasY)
 }
@@ -307,11 +256,7 @@ const toggleCollapseChild = model => {
 graph.on('node:click', evt => {
     const item = evt.item
     const tareget = evt.target
-    console.log('%c item===', 'color:#fff;background: red;', item)
-    console.log('%c tareget===', 'color:#fff;background: red;', tareget)
-    // console.log('%c evt===', 'color:#fff;background: red;', evt)
     const model = evt.item.getModel()
-    // console.log('%c model===', 'color:#fff;background: red;', model)
 })
 
 graph.on('node:click', evt => {
@@ -354,11 +299,32 @@ graph.on('node:click', evt => {
     }
 })
 
-// 向左移动
-function dragLeft() {
-    console.log('%c 123===', 'color:#fff;background: red;')
-    // graph.translate(-100, 0)
-    graph.translate(-diffCanvasX, -diffCanvasY)
+/**
+ * 向左移动或向右移动
+ * @param flag left | right
+ */
+const moveLeftOrRight = (flag = 'left') => {
+    const curZoom = graph.getZoom()
+    const containerWidth = document.querySelector('#container').getBoundingClientRect().width
+    const maxMoveDistance = containerWidth - nodeWidth * curZoom
+    const { graphWidth } = getGraphSize()
+    const { moveX: curMoveX, moveY: curMoveY } = getGraphMove()
+    const minMoveRange = - (graphWidth + nodeWidth * curZoom / 2 - containerWidth)
+    const maxMoveRange = nodeWidth * curZoom / 2
+
+    let canMoveDistance
+    if (flag === 'left') {
+        canMoveDistance = Math.min(curMoveX + maxMoveDistance, maxMoveRange)
+    } else {
+        canMoveDistance = Math.max(curMoveX - maxMoveDistance, minMoveRange)
+    }
+    graph.moveTo(canMoveDistance, curMoveY)
 }
 
-document.addEventListener
+document.querySelector('#left').addEventListener('click', function () {
+    moveLeftOrRight()
+}, false)
+
+document.querySelector('#right').addEventListener('click', function () {
+    moveLeftOrRight('right')
+}, false)
