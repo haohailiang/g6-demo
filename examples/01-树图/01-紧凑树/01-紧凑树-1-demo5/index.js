@@ -219,6 +219,7 @@ window.addEventListener('resize', function () {
 const toggleCollapseChild = model => {
     // const { data } = this.props
     const modelShadow = model
+    const curZoom = graph.getZoom()
     const { isCollapse, realChildren, realId: parentRealId, } = modelShadow
     modelShadow.isCollapse = !modelShadow.isCollapse
 
@@ -244,9 +245,9 @@ const toggleCollapseChild = model => {
     }
     const nowData = graph.save()
     graph.changeData(nowData)
+    graph.zoom(curZoom)
     const newPostionParentModel = graph.findById(modelShadow.id).getModel()
     const { x: nowCanvasX, y: nowCanvasY } = graph.getCanvasByPoint(newPostionParentModel.x, newPostionParentModel.y)
-    // moveGraph()
     const diffCanvasX = nowCanvasX - preCanvasX
     const diffCanvasY = nowCanvasY - prevCanvasY
 
