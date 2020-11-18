@@ -181,11 +181,11 @@ function registerNode() {
                             fill: markCircleBgColor,
                             lineWidth: markPlusLineWidth,
                             cursor: 'pointer',
-                            symbol(x, y) {
-                                return createCircleMarker(x, y + markPlusRadius / 2, 8)
+                            symbol(x, y, r) {
+                                return createCircleMarker(x, y + r, r)
                             },
                         },
-                        name: 'mark-circle',
+                        name: 'mark-plus',
                     })
 
                     group.addShape('marker', {
@@ -197,11 +197,11 @@ function registerNode() {
                             fill: markPlusBgColor,
                             lineWidth: markPlusLineWidth,
                             cursor: 'pointer',
-                            symbol(x, y) {
+                            symbol(x, y, r) {
                                 if (cfg.isCollapse) {
-                                    return createPlusOnly(x, y + markPlusRadius / 2, 8)
+                                    return createPlusOnly(x, y + r, r)
                                 }
-                                return createMinusOnly(x, y + markPlusRadius / 2, 8)
+                                return createMinusOnly(x, y + r, r)
                             },
                         },
                         name: 'mark-plus',

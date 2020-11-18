@@ -43,6 +43,6 @@ const positionFontSize = 12
 
 // 加号
 const markPlusX = 20
-const markPlusY = 100
-const markPlusRadius = 5
+const markPlusY = 94
+const markPlusRadius = 6
 const markPlusLineWidth = 2

@@ -115,8 +115,8 @@ const moveGraph = () => {
         moveY -= vGap * 0.5
     }
 
-    console.log('%c moveX===', 'color:#fff;background: red;', moveX)
-    console.log('%c moveY===', 'color:#fff;background: red;', moveY)
+    // console.log('%c moveX===', 'color:#fff;background: red;', moveX)
+    // console.log('%c moveY===', 'color:#fff;background: red;', moveY)
     graph.moveTo(moveX, moveY)
 }
 
@@ -180,7 +180,7 @@ function renderGraph() {
         height,
         linkCenter: true,
         animate: false,
-        maxZoom: 1,
+        // maxZoom: 1,
         modes: {
             default: [
                 'drag-canvas',
@@ -208,8 +208,8 @@ function renderGraph() {
 
 renderGraph()
 window.addEventListener('resize', function () {
-    graph.destroy()
-    renderGraph()
+    const { width: containerWidth, height: containerHeight } = document.getElementById('container').getBoundingClientRect();
+    graph.changeSize(containerWidth, containerHeight)
 }, false)
 
 /**
@@ -253,15 +253,17 @@ const toggleCollapseChild = model => {
     graph.translate(-diffCanvasX, -diffCanvasY)
 }
 
-graph.on('node:click', evt => {
-    const item = evt.item
-    const tareget = evt.target
-    const model = evt.item.getModel()
-})
+// graph.on('node:click', evt => {
+//     const item = evt.item
+//     const tareget = evt.target
+//     const model = evt.item.getModel()
+// })
 
 graph.on('node:click', evt => {
     const model = evt.item.getModel()
-    const { target: { cfg: { name: optType } } } = evt
+    console.log('%c model===', 'color:#fff;background: red;', model)
+    const optType = evt.target.get('name')
+    console.log('%c name===', 'color:#fff;background: red;', optType)
     if (model.entityGroup === 'stat') {
         const realParentId = model.id.replace('-stat', '')
         const parentId = `virtual-root-${realParentId}`
