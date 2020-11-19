@@ -29,7 +29,7 @@
     <div id="container"></div>
     <script>
         /**
- * The usage of arc edge
+ * The usage of built-in polyline
  * by Shiwu
  */
 
@@ -38,36 +38,21 @@
                 {
                     id: '0',
                     x: 150,
-                    y: 50,
+                    y: 100,
+                    label: '0',
                 },
                 {
                     id: '1',
                     x: 350,
-                    y: 250,
+                    y: 300,
+                    label: '1',
                 },
             ],
             edges: [
-                // Built-in arc edges
+                // Built-in polyline
                 {
-                    id: 'edge0',
                     source: '0',
                     target: '1',
-                    label: 'curveOffset = 20',
-                    curveOffset: 20,
-                },
-                {
-                    id: 'edge1',
-                    source: '0',
-                    target: '1',
-                    label: 'curveOffset = 50', // the bending degree
-                    curveOffset: 50,
-                },
-                {
-                    id: 'edge2',
-                    source: '0',
-                    target: '1',
-                    label: 'curveOffset = -50', // the bending degree
-                    curveOffset: -50,
                 },
             ],
         };
@@ -78,28 +63,22 @@
             container: 'container',
             width,
             height,
-            linkCenter: true,
             // translate the graph to align the canvas's center, support by v3.5.1
             fitCenter: true,
             defaultNode: {
-                size: 45,
                 style: {
                     fill: '#DEE9FF',
                     stroke: '#5B8FF9',
                 },
             },
             defaultEdge: {
-                type: 'arc',
+                type: 'polyline',
                 style: {
                     stroke: '#F6BD16',
                 },
-                labelCfg: {
-                    autoRotate: true,
-                    refY: -10,
-                },
             },
             modes: {
-                // 支持的 behavior
+                // behavior
                 default: ['drag-node'],
             },
         });
