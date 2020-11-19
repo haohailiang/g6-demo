@@ -4,15 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>框选</title>
     <style>
         #container {
             width: calc(100vw - 50px);
             height: calc(100vh - 50px);
         }
     </style>
-    <script src="../../lib/g6-3.8.5.min.js"></script>
-    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+    <script src="../../../lib/g6-3.8.5.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
 </head>
 
 <body>
@@ -28,28 +28,29 @@
                 source: 'node1', target: 'node2'
             }]
         };
+
         let shift = true;
 
         const graphDiv = document.getElementById('container');
 
         const switchDiv = document.createElement('div');
         switchDiv.innerHTML =
-            `Press \'shift\' to select multiple nodes. Click Here to switch trigger to key \'alt\'
-  <br /> 按住 'shift' 可多选节点。点击「这里」将 trigger 切换为 'alt'`;
+            `Press 'shift' and drag begin on empty space to brush select. Click 「HERE」 to switch trigger to \'drag\', and disable drag-canvas
+  <br /> 按住 'shift' 并从画布空白处开始拖拽即可开始框选。点击「这里」将 trigger 切换为 'drag'，同时关闭画布拖拽`;
         graphDiv.appendChild(switchDiv);
 
         const width = document.getElementById('container').scrollWidth;
-        const height = (document.getElementById('container').scrollHeight || 500) - 20;
+        const height = (document.getElementById('container').scrollHeight || 500) - 30;
         const graph = new G6.Graph({
             container: 'container',
             width,
             height,
             fitCenter: true,
             modes: {
-                default: ['click-select', 'drag-node'],
+                default: ['brush-select', 'drag-node', 'drag-canvas'],
                 altSelect: [{
-                    type: 'click-select',
-                    trigger: 'alt'
+                    type: 'brush-select',
+                    trigger: 'drag'
                 }, 'drag-node']
             },
             /* styles for different states, there are built-in styles for states: active, inactive, selected, highlight, disable. you can extend or custom it by the following lines */
@@ -85,13 +86,13 @@
             if (shift) {
                 graph.setMode('default');
                 switchDiv.innerHTML =
-                    `Press \'shift\' to select multiple nodes. Click Here to switch trigger to key \'alt\'
-      <br /> 按住 'shift' 可多选节点。点击「这里」将 trigger 切换为 'alt'`;
+                    `Press \'shift\' and drag begin on empty space to brush select. Click Here to switch trigger to \'drag\', and disable drag-canvas
+      <br /> 按住 'shift' 并从画布空白处开始拖拽即可开始框选。点击「这里」将 trigger 切换为 'drag'，同时关闭画布拖拽`;
             } else {
                 graph.setMode('altSelect')
                 switchDiv.innerHTML =
-                    `Press \'alt\' to select multiple nodes. Click Here to switch trigger to key \'shift\'
-      <br /> 按住 'alt' 可多选节点。点击「这里」将 trigger 切换为 'shift'`;
+                    `Press \'alt\' and drag begin on empty space to brush select. Click Here to switch trigger to key \'shift\', and enable drag-canvas
+      <br /> 按住 'alt' 并从画布空白处开始拖拽即可开始框选。点击「这里」将 trigger 切换为 'shift'，同时开启画布拖拽`;
             }
         });
 
