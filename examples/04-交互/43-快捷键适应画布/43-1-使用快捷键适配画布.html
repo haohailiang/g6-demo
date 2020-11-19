@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-3.8.5.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+    <script src="./mock/data-1.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const graphDiv = document.getElementById('container');
+
+        const tipDiv = document.createElement('div');
+        tipDiv.innerHTML =
+            `Press both the keys 'control' and '1' to call graph.fitView. The keys and the called function can be configured.【ATTENTION】: make sure the focus is on the canvas when you pressing keys
+  <br /> 按住 'control' 并按下 '1' 键，将会调用 graph.fitView。组合按键及被调用的函数及其参数均可被配置。【注意】：使用组合件调用函数时，请保证当前焦点在画布上`;
+        graphDiv.appendChild(tipDiv);
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = (document.getElementById('container').scrollHeight || 500) - 100;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            fitCenter: true,
+            modes: {
+                default: ['shortcuts-call']
+            }
+        });
+
+        graph.data(data);
+        graph.render();
+        graph.zoom(2);
+    </script>
+</body>
+
+</html>
