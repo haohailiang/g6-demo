@@ -424,6 +424,9 @@
                 type: 'radial',
                 unitRadius: 70,
                 preventOverlap: true,
+                // 是否必须是严格的radial布局，及每一层的节点严格布局在一个环上。preventOverlap为true时生效
+                // 当preventOverlap为true，且strictRadial为false时，有重叠的节点严格沿着所在的环展开，但在一个环上若节点过多，可能无法完全避免节点重叠
+                // 当preventOverlap为true，且strictRadial为true时，允许同环上重叠的节点不严格沿着该环布局，可以在该环的前后偏移以避免重叠
                 strictRadial: false,
             },
             animate: true,
