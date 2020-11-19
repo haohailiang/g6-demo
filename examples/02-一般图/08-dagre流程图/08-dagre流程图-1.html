@@ -13,11 +13,15 @@
 
         .g6-tooltip {
             border-radius: 6px;
-            font-size: 12px;
+            font-size: 20px;
             color: #fff;
             background-color: #000;
             padding: 2px 8px;
             text-align: center;
+        }
+
+        .tool-tip-my {
+            background-color: teal;
         }
     </style>
     <script src="../../lib/g6.min.js"></script>
@@ -265,13 +269,16 @@
             height,
             layout: {
                 type: 'dagre',
+                // 节点间距（px）的回调函数，通过该参数可以对不同节点设置不同的节点间距。在rankdir为'TB'或'BT'时是节点的水平间距；在rankdir为'LR'或'RL'时代表节点的竖直方向间距。优先级高于nodesep，即若设置了nodesep，则nodesepFunc不生效
+                // 节点间距
                 nodesepFunc: (d) => {
                     if (d.id === '3') {
-                        return 500;
+                        return 100;
                     }
                     return 50;
                 },
-                ranksep: 70,
+                // 层间距[虚数,不准确]
+                ranksep: 50,
                 controlPoints: true,
             },
             defaultNode: {
@@ -300,7 +307,9 @@
                     'click-select',
                     {
                         type: 'tooltip',
+                        // 只是简单的tooltip,复杂的显示不了
                         formatText(model) {
+                            console.log('%c model===', 'color:#fff;background: red;', model)
                             const cfg = model.conf;
                             const text = [];
                             cfg.forEach((row) => {
@@ -308,6 +317,10 @@
                             });
                             return text.join('\n');
                         },
+                        // formatText(model) {
+                        //     const myDiy = '<div class="tool-tip-my">123</div>'
+                        //     return myDiy;
+                        // },
                         offset: 30,
                     },
                 ],
@@ -316,6 +329,19 @@
         });
         graph.data(data);
         graph.render();
+
+    setTimeout(() => {
+        document.querySelector('.tool-tip-my').innerHTML = 5000
+        document.querySelector('.tool-tip-my').style.width = 200
+        document.querySelector('.tool-tip-my').style.height = 100
+    }, 5000);
+
+    setTimeout(() => {
+        document.querySelector('.tool-tip-my').innerHTML = 10000
+        document.querySelector('.tool-tip-my').style.width = 600
+        document.querySelector('.tool-tip-my').style.height = 300
+    }, 10000);
+
     </script>
 </body>
 
