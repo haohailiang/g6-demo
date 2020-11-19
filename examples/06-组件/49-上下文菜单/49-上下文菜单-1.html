@@ -57,6 +57,7 @@
 
         const contextMenu = new G6.Menu({
             getContent(evt) {
+                window.evt = evt
                 console.log('event', evt);
                 return `<ul>
       <li title='1'>测试01</li>
@@ -67,6 +68,7 @@
     </ul>`;
             },
             handleMenuClick: (target, item) => {
+                window.item = item
                 console.log(target, item);
             },
             // offsetX and offsetY include the padding of the parent container
