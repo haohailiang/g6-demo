@@ -107,6 +107,14 @@
                 },
             },
         });
+
+    graph.node((node) => {
+        return {
+            ...node,
+            label: node.id.replace(/\D/g, '')
+        }
+    })
+
         graph.data({
             nodes,
             edges: data.edges.map(function (edge, i) {
