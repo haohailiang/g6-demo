@@ -21,7 +21,7 @@
             box-shadow: rgb(174, 174, 174) 0px 0px 10px;
         }
     </style>
-    <script src="../../lib/g6-3.8.5.min.js"></script>
+    <script src="../../../lib/g6-3.8.5.min.js"></script>
     <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
 </head>
 
@@ -32,63 +32,72 @@
         // 我们用 insert-css 演示引入自定义样式
         // 推荐将样式添加到自己的样式文件中
         // 若拷贝官方代码，别忘了 npm install insert-css
+
         const data = {
             nodes: [
                 {
                     id: '0',
-                    label: 'Has Tooltip - node 0',
-                    x: 230,
+                    label: 'node-0',
+                    x: 100,
                     y: 100,
                     description: 'This is node-0.',
                     subdescription: 'This is subdescription of node-0.',
                 },
                 {
                     id: '1',
-                    label: 'No Tooltip - node 1',
-                    x: 150,
-                    y: 310,
+                    label: 'node-1',
+                    x: 250,
+                    y: 100,
                     description: 'This is node-1.',
                     subdescription: 'This is subdescription of node-1.',
                 },
                 {
                     id: '2',
-                    label: 'Has Tooltip - node 2',
-                    x: 320,
+                    label: 'node-2',
+                    x: 150,
                     y: 310,
                     description: 'This is node-2.',
                     subdescription: 'This is subdescription of node-2.',
                 },
+                {
+                    id: '3',
+                    label: 'node-3',
+                    x: 320,
+                    y: 310,
+                    description: 'This is node-3.',
+                    subdescription: 'This is subdescription of node-3.',
+                },
             ],
             edges: [
                 {
-                    id: 'e1',
+                    id: 'e0',
                     source: '0',
                     target: '1',
-                    label: 'No Tooltip',
                     description: 'This is edge from node 0 to node 1.',
+                },
+                {
+                    id: 'e1',
+                    source: '0',
+                    target: '2',
+                    description: 'This is edge from node 0 to node 2.',
                 },
                 {
                     id: 'e2',
                     source: '0',
-                    target: '2',
-                    label: 'Has Tooltip',
-                    description: 'This is edge from node 0 to node 2.',
+                    target: '3',
+                    description: 'This is edge from node 0 to node 3.',
                 },
             ],
         };
-        const descriptionDiv = document.createElement('div');
-        descriptionDiv.innerHTML = 'Hover the node label to show the tooltip';
-        const container = document.getElementById('container');
-        container.appendChild(descriptionDiv);
-        const width = container.scrollWidth;
-        const height = container.scrollHeight - 30;
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
         const graph = new G6.Graph({
             container: 'container',
             width,
             height,
             linkCenter: true,
             defaultNode: {
-                size: [150, 50],
+                size: [80, 40],
                 type: 'rect',
                 style: {
                     fill: '#DEE9FF',
@@ -100,10 +109,6 @@
                     stroke: '#b5b5b5',
                     lineAppendWidth: 3,
                 },
-                labelCfg: {
-                    autoRotate: true,
-
-                }
             },
             modes: {
                 default: [
@@ -114,11 +119,7 @@
                             const text = 'description: ' + model.description;
                             return text;
                         },
-                        offset: 20,
-                        shouldBegin: (e) => {
-                            if (e.item.getModel().id === '1') return false;
-                            return true;
-                        },
+                        offset: 30,
                     },
                     {
                         type: 'edge-tooltip',
@@ -126,11 +127,7 @@
                             const text = 'description: ' + model.description;
                             return text;
                         },
-                        offset: 20,
-                        shouldBegin: (e) => {
-                            if (e.item.getModel().target === '1') return false;
-                            return true;
-                        },
+                        offset: 30,
                     },
                 ],
             },
