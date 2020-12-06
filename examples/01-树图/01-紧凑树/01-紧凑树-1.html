@@ -12,6 +12,7 @@
         }
     </style>
     <script src="../../../lib/g6-4.0.1.min.js"></script>
+    <script src="../../00-util/tranverseTreeNodes.js"></script>
     <script src="../../00-mock/data-1.js"></script>
 </head>
 
@@ -86,6 +87,10 @@
                 },
             };
         });
+
+        // traverseTreeNodes(data)
+
+        // console.log('%c data===', 'color:#fff;background: red;', JSON.stringify(data))
 
         graph.data(data);
         graph.render();
