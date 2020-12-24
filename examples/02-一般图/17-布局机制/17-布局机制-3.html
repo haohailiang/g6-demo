@@ -164,6 +164,7 @@
                 const nodeSep = self.nodeSep || 20;
                 const nodeSize = self.nodeSize || 20;
                 const direction = self.direction || 'horizontal';
+                console.log('%c direction===', 'color:#fff;background: red;', direction)
                 let part1Pos = 0;
                 let part2Pos = 0;
                 if (direction === 'horizontal') {
@@ -268,6 +269,7 @@
                 nodeSep: 20,
                 // nodeSize: 20,
                 nodeSize: 80,
+                // direction: 'horizontal'
             },
             animate: true,
             defaultNode: {

@@ -30,7 +30,8 @@
                     {
                         type: 'collapse-expand',
                         onChange: function onChange(item, collapsed) {
-                            const data = item.get('model').data;
+                            const data = item.get('model');
+                            console.log('%c data===', 'color:#fff;background: red;', data)
                             data.collapsed = collapsed;
                             return true;
                         },
