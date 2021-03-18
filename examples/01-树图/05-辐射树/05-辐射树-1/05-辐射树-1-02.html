@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生态辐射树-基本功能实现[算法实现]</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script src="../../../../lib/g6-4.0.3.min.js"></script>
+    <script src="./mock-data/data-2.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        // 定义边的样式
+        const lineDash = [4, 2, 1, 2];
+        G6.registerEdge(
+            'line-dash',
+            {
+                afterDraw(cfg, group) {
+                    // get the first shape in the group, it is the edge's path here=
+                    const shape = group.get('children')[0];
+                    let index = 0;
+                    // Define the animation
+                    shape.animate(
+                        () => {
+                            index++;
+                            if (index > 9) {
+                                index = 0;
+                            }
+                            const res = {
+                                lineDash,
+                                lineDashOffset: -index,
+                                // lineDashOffset: -1,
+                            };
+                            // returns the modified configurations here, lineDash and lineDashOffset here
+                            return res;
+                        },
+                        {
+                            repeat: true, // whether executes the animation repeatly
+                            duration: 1000, // the duration for executing once
+                        },
+                    );
+                },
+            },
+            'line', // extend the built-in edge 'cubic'
+        );
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.TreeGraph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            modes: {
+                default: [
+                    {
+                        type: 'collapse-expand',
+                        // onChange: function onChange(item, collapsed) {
+                        //     debugger
+                        //     const data = item.get('model').data;
+                        //     data.collapsed = collapsed;
+                        //     return true;
+                        // },
+                    },
+                    'drag-canvas',
+                    'zoom-canvas',
+                ],
+            },
+            defaultNode: {
+                size: 26,
+                style: {
+                    fill: '#C6E5FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            // defaultEdge: {
+            //     style: {
+            //         stroke: '#A3B1BF',
+            //     },
+            // },
+            defaultEdge: {
+                type: 'line-dash',
+                style: {
+                    lineWidth: 2,
+                    stroke: '#bae7ff',
+                },
+            },
+            nodeStateStyles: {
+                click: {
+                    fill: '#f00',
+                    stroke: '#000',
+                    lineWidth: 3
+                }
+            },
+            // nodeStateStyles: {
+            //     click: {
+            //         'sub-element': {
+            //             fill: 'lightsteelblue',
+            //             stroke: '#000',
+            //             lineWidth: 3,
+            //         },
+            //         'text-element': {
+            //             stroke: 'red',
+            //         },
+            //     },
+            //     hover: {
+            //         // TODO
+            //     },
+            //     select: {
+            //         // TODO
+            //     },
+            //     'bodyState:healthy': {
+            //         fill: 'green',
+            //     },
+            //     'bodyState:suspect': {},
+            //     'bodyState:ill': {},
+            // },
+            layout: {
+                type: 'dendrogram',
+                direction: 'LR',
+                nodeSep: 20,
+                rankSep: 100,
+                radial: true,
+            },
+        });
+
+        graph.node(function (node) {
+            return {
+                label: node.id,
+            };
+        });
+
+        graph.data(data);
+        graph.render();
+        graph.fitView();
+
+        function mockClick(nodeId) {
+            const clickNodes = graph.findAllByState('node', 'click')
+            clickNodes.forEach((cn) => {
+                graph.setItemState(cn, 'click', false)
+            })
+            // const nodeItem = evt.item
+            // 模拟点击
+            // const targetNodes = graph.getNodes().filter(item => {
+            //     const model = item.getModel()
+            //     return model?.id === nodeId
+            // })
+
+            const targetNode = graph.findById(nodeId)
+
+            // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
+            // graph.setItemState(nodeItem, 'click', true)
+            // console.log('%c eipNode===', 'color:#fff;background: red;font-size:18px;', targetNodes[0])
+            if (targetNode) {
+                graph.setItemState(targetNode, 'click', true)
+
+                // window.debugHaha = targetNode
+
+                // targetNode.children = []
+                const targetNodeModel = targetNode.getModel()
+                // console.log('%c targetNode===', 'color:#fff;background: red;font-size:18px;', targetNode)
+                // console.log('%c targetNodeModel===', 'color:#fff;background: red;font-size:18px;', targetNodeModel)
+                // targetNode.children = []
+                // graph.updateItem(targetNode, {
+                //     ...targetNodeModel,
+                //     children: [],
+                // })
+                // graph.changeData({
+                //     id: 'EIP'
+                // })
+                // graph.render();
+                // graph.fitView();
+
+                const targetChildren = targetNodeModel?.children ?? []
+
+                // 删除子节点 - OK
+                // targetChildren.forEach((targetItem, index) => {
+                //     setTimeout(() => {
+                //         const targetId = targetItem.id
+                //         graph.removeChild(targetId)
+                //     }, 3000 * index);
+                // })
+
+                // 增加子节点
+                const newData = {
+                    id: 'sub1',
+                    children: [
+                        {
+                            id: 'subTree1',
+                            children: []
+                        },
+                        {
+                            id: 'subTree2',
+                            children: []
+                        }
+                    ]
+                }
+
+                setTimeout(() => {
+                    graph.addChild(newData, targetNodeModel.id)
+                }, 3000);
+
+                setTimeout(() => {
+                    const newCenterNode = graph.findById('subTree1')
+                    // graph.focusItem(targetNode, true, {
+                    graph.focusItem(newCenterNode, true, {
+                        easing: 'easeCubic',
+                        duration: 500,
+                    });
+                }, 10000);
+            }
+        }
+
+        // 绑定事件
+        // graph.on('node:click', evt => {
+        //     const clickNodes = graph.findAllByState('node', 'click')
+        //     clickNodes.forEach((cn) => {
+        //         graph.setItemState(cn, 'click', false)
+        //     })
+        //     const nodeItem = evt.item
+        //     // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
+        //     graph.setItemState(nodeItem, 'click', true)
+
+        // })
+
+        // graph.on('itemcollapsed', (e) => {
+        //     // 当前被操作的节点 item
+        //     console.log(e.item);
+        //     // 当前操作是收起（`true`）还是展开（`false`）
+        //     console.log(e.collapsed);
+        // });
+        // graph.getNodes()
+
+        // 模拟点击
+        // const eipNode = graph.getNodes().filter(item => {
+        //     const model = item.getModel()
+        //     return model?.id === 'EIP'
+        // })
+        mockClick('EIP')
+    </script>
+</body>
+
+</html>

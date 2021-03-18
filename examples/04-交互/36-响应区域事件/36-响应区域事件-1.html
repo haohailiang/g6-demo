@@ -42,6 +42,7 @@
                 // 绘制节点
                 drawShape: function drawShape(cfg, group) {
                     const shapeType = this.shapeType;
+                    console.log('%c shapeType===', 'color:#fff;background: red;', this)
                     const style = Object.assign({}, this.getShapeStyle(cfg), {
                         x: 0,
                         y: 0,
