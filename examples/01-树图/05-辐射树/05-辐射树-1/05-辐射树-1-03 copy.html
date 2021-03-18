@@ -16,6 +16,7 @@
             height: 100vh;
         }
     </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/lodash.js/4.17.20/lodash.min.js"></script>
     <script src="../../../../lib/g6-4.0.3.min.js"></script>
     <script src="./mock-data/data-3.js"></script>
 </head>
@@ -70,7 +71,6 @@
                     {
                         type: 'collapse-expand',
                         // onChange: function onChange(item, collapsed) {
-                        //     debugger
                         //     const data = item.get('model').data;
                         //     data.collapsed = collapsed;
                         //     return true;
@@ -168,7 +168,6 @@
             if (targetNode) {
                 graph.setItemState(targetNode, 'click', true)
 
-                // window.debugHaha = targetNode
 
                 // targetNode.children = []
                 const targetNodeModel = targetNode.getModel()
@@ -279,6 +278,7 @@
         * @returns 
         */
         function delayExecFn(callback, seconds = 5) {
+            // console.log('%c seconds===', 'color:#fff;background: red;font-size:18px;', seconds)
             return delaySeconds(seconds).then(() => {
                 // TODO处理增加哪些节点,删除哪些节点
                 callback()
@@ -394,7 +394,6 @@
         */
         function getCurrentShowTreeIds(focusId, ancestorIds) {
             // if (focusId === 'a') {
-            //     debugger
             // }
             const currentShowTreeIds = []
             // 排序的不用再添加的节点ID[从祖先节点排除]
@@ -467,7 +466,7 @@
                 addShowTreeIds = currentShowTreeIds.filter(currId => !preShowTreeIds.includes(currId)) // 比之前新增的节点
                 removeShowTreeIds = preShowTreeIds.filter(preId => !currentShowTreeIds.includes(preId)) // 比之前少的节点
                 preShowTreeIds = [...currentShowTreeIds]
-                // console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
+                console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
 
                 // promiseLoop([
                 //     () => delayExecFn(() => ),
@@ -494,12 +493,47 @@
                     paramAddShowTreeIds,
                     paramRemoveShowTreeIds,
                 ) {
+                    const debuggerFocusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
+                    // console.log('%c debuggerFocusNodeId===', 'color:#fff;background: red;font-size:18px;', debuggerFocusNodeId)
+                    let delayTime = 5
+                    // if (debuggerFocusNodeId === '3') {
+                    //     delayTime = 1
+                    // }
                     promiseLoopArrs.push(() => {
                         return delayExecFn((() => {
                             console.log('id: ', paramId, 'currentShowTreeIds:', paramCurrentShowTreeIds, 'addShowTreeIds: ', paramAddShowTreeIds, 'removeShowTreeIds:', paramRemoveShowTreeIds)
 
+                            const focusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
+
+                            const focusNodeCanvas = graph.findById(focusNodeId)
+
+                            // if (focusNodeId === '3') {
+
+                            // }
+                            // 不在画布中时
+                            if (!focusNodeCanvas) {
+                                const focusNodeJson = getNodeById(focusNodeId, dataWithParent[0])
+                                const { parentId } = focusNodeJson
+                                focusNodeJson.children = []
+                                graph.addChild(focusNodeJson, parentId)
+
+                                // if (focusNodeId === '3') {
+                                //     console.log('%c 3 - parentId===', 'color:#fff;background: red;font-size:18px;', parentId)
+                                //     const todo = graph.findById(parentId)
+                                //     console.log('%c 3 - parentNodeCanvas===', 'color:#fff;background: red;font-size:18px;', todo)
+                                // }
+                            }
+
+                            // if (focusNodeId === '3') {
+                            //     const todo = graph.findById(focusNodeId)
+                            //     console.log('%c 3 - focusNodeCanvas===', 'color:#fff;background: red;font-size:18px;', todo)
+                            // }
                             // TODO 父节点添加子节点[只添加自己]
-                            paramAddShowTreeIds.forEach(addId => {
+                            // paramAddShowTreeIds.forEach(addId => {
+                            paramAddShowTreeIds.slice(0, 0).forEach(addId => {
+                                // if (addId === '6') {
+                                //     graph.getNodes().map(item => console.log(_.cloneDeep(item.getModel())))
+                                // }
                                 // dataWithParent
                                 // 完整处理是下边的模式,现在使用简单模式
                                 const addNode = getNodeById(addId, dataWithParent[0])
@@ -510,8 +544,20 @@
                                 // 通过父节点添加现在的节点
                                 // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
 
-                                graph.addChild(addNodeShort, parentId)
+                                const addNodeCanvas = graph.findById(addId)
+                                if (!addNodeCanvas) {
+                                    if (addId === '6') {
+                                        // console.log('%c 6 parentId===', 'color:#fff;background: red;font-size:18px;', parentId)
+                                        // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
+                                    }
+                                    graph.addChild(addNodeShort, parentId)
+                                }
+
                             })
+
+                            // if (focusNodeId === '3' && window.debugAAA) {
+                            //     return
+                            // }
 
                             // TODO 父节点删除子节点[删除全部]
                             paramRemoveShowTreeIds.forEach(removeId => {
@@ -524,9 +570,9 @@
                                 graph.removeChild(removeId)
                             })
 
-                            const focusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
+                            // const focusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
                             mockClick(focusNodeId)
-                        }))
+                        }), delayTime)
                     })
                 }
                 bindLocalParams(id, preShowTreeIds, addShowTreeIds, removeShowTreeIds)
