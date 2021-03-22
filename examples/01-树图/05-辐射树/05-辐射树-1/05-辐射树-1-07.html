@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生态辐射树-基本功能实现[算法实现-基于04版本改造]</title>
+    <title>生态辐射树-基本功能实现[请求所有的数据]</title>
     <style>
         * {
             margin: 0;
@@ -16,8 +16,9 @@
             height: 100vh;
         }
     </style>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <script src="./lib/g6-4.0.3.min.js"></script>
-    <script src="./mock-data/data-6.js"></script>
+    <script src="./mock-data/data-7.js"></script>
 </head>
 
 <body>
@@ -536,7 +537,7 @@
                 addShowTreeIds = currentShowTreeIds.filter(currId => !preShowTreeIds.includes(currId)) // 比之前新增的节点
                 removeShowTreeIds = preShowTreeIds.filter(preId => !currentShowTreeIds.includes(preId)) // 比之前少的节点
                 preShowTreeIds = [...currentShowTreeIds]
-                // console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
+                console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
 
                 /**
                 * 绑定传入的参数
@@ -585,7 +586,6 @@
                                 const removeChildrenIds = getRemoveChildrenIdsByParentId(nodeRemoveId, dataWithParent[0])
 
                                 const allSubChildrenIds = [nodeRemoveId, ...removeChildrenIds]
-                                console.log('allSubChildrenIds: ', allSubChildrenIds)
 
                                 allSubChildrenIds.forEach(tempNodeRemoveId => {
 
@@ -605,11 +605,7 @@
                                 })
                             })
 
-                            console.log('id: ', paramId, 'currentShowTreeIds:', paramCurrentShowTreeIds, 'addShowTreeIds: ', paramAddShowTreeIds, 'removeShowTreeIds:', paramRemoveShowTreeIds)
-
-                            if (paramRemoveShowTreeIds.includes('群00-00')) {
-                                const todo = graph.getNodes().map(item => item.getModel())
-                            }
+                            // console.log('id: ', paramId, 'currentShowTreeIds:', paramCurrentShowTreeIds, 'addShowTreeIds: ', paramAddShowTreeIds, 'removeShowTreeIds:', paramRemoveShowTreeIds)
 
                             mockClick(focusNodeId)
 
@@ -629,7 +625,7 @@
             getFocusNodeAndShowIds(data)
         }
 
-        getNodeIdsChange()
+        // getNodeIdsChange()
 
         /**
         * 根据ID获取目标节点
@@ -656,9 +652,11 @@
             return targetNode
         }
 
-        promiseLoop(promiseLoopArrs)
+        // promiseLoop(promiseLoopArrs)
 
     </script>
+    <script src="./mock-data/http-7.js"></script>
+    <script src="./mock-data/test.js"></script>
 </body>
 
 </html>

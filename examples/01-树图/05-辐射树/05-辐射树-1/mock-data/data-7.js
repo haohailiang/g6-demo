@@ -326,10 +326,10 @@ serverData.children = organChildren
 //     children: dataChildren,
 // }
 
-const data = serverData
-// let data = {
-//     id: "EIP",
-// }
+// const data = serverData
+let data = {
+    id: "EIP",
+}
 
 /**
 const data = {
@@ -393,12 +393,24 @@ const data = {
  */
 
 // 模拟发送请求
+// function getHttp(id) {
+//     return $.ajax({
+//         url: "http://localhost:7011/graph?id=" + id,
+//         cache: false,
+//         // success: function(res) {
+//         //     console.log(res)
+//         // }
+//     });
+// }
+
 function getHttp(id) {
-    return $.ajax({
-        url: "http://localhost:7011/graph?id=" + id,
-        cache: false,
-        // success: function(res) {
-        //     console.log(res)
-        // }
-    });
+    return new Promise(resolve => {
+        $.ajax({
+            url: "http://localhost:7011/graph?id=" + id,
+            cache: false,
+            success: function(res) {
+                resolve(res)
+            }
+        });
+    })
 }
