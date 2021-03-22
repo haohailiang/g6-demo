@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>生态辐射树-基本功能实现[ready动态发送请求, 待定-布局要修改了]</title>
+    <title>生态辐射树-基本功能实现[算法实现-基于04版本改造]</title>
     <style>
         * {
             margin: 0;
@@ -16,9 +16,8 @@
             height: 100vh;
         }
     </style>
-    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/1.12.1/jquery.min.js"></script>
     <script src="../../../../lib/g6-4.0.3.min.js"></script>
-    <script src="./mock-data/data-5.js"></script>
+    <script src="./mock-data/data-6.js"></script>
 </head>
 
 <body>
@@ -83,6 +82,11 @@
             },
             defaultNode: {
                 size: 26,
+                // labelCfg: {
+                //     style: {
+                //         opacity: 0,
+                //     },
+                // },
                 style: {
                     fill: '#C6E5FF',
                     stroke: '#5B8FF9',
@@ -140,9 +144,25 @@
             animate: false,
         });
 
+        const fontSizes = [40, 35, 30, 25]
         graph.node(function (node) {
+            const nodeSize = fontSizes[node.level]
+
+            if (node.level === "3") {
+                return {
+                    label: node.id,
+                    size: nodeSize,
+                    labelCfg: {
+                        style: {
+                            opacity: 0,
+                        },
+                    },
+                };
+            }
+
             return {
                 label: node.id,
+                size: nodeSize,
             };
         });
 
@@ -150,72 +170,10 @@
         // graph.data(data);
         // 值渲染根节点
         const rootNodeClone = JSON.parse(JSON.stringify(data))
-        rootNodeClone.children = []
+        // rootNodeClone.children = []
         graph.data(rootNodeClone);
         graph.render();
         graph.fitView();
-
-        // 一次把数据生成好
-        // changeDataByHttp('EIP', data)
-
-
-        /**
-         * 通过发送请求增加graph data的值
-         * 1. 已经请求过,直接使用reducer中的数据
-         * 2. 没有请求发请求
-         * 最终都会根据最新的数据重新渲染
-         * @param id http请求的参数id
-         */
-        // function changeDataByHttp(id, reduceData) {
-        //     const hasVisited = false
-
-        //     function loopFind(rootNode) {
-        //         const { id, children = [] } = rootNode
-                
-        //         if (id === anchorId && rootNode.children) {
-        //             hasVisited = true
-        //             return
-        //         }
-            
-        //         children.forEach(child => {
-        //             loopFind(child)
-        //         })
-        //     }
-
-        //     loopFind(reduceData)
-
-        //     if (hasVisited) {
-
-        //     } else {
-        //         getHttp(id).then(res => {
-        //             insertDataAnchorId(res, id, reduceData)
-        //             graph.changeData(reduceData)
-        //             graph.fitView()
-        //         })
-        //     }
-        // }
-
-        /**
-         * 在某个指定的ID下插入数据
-         * @param childArr 要插入的子元素集合
-         * @param anchorId 要插入的锚点ID
-         */
-        function insertDataAnchorId(childArr = [], anchorId, reduceData) {
-            function loopFind(rootNode) {
-                const { id, children = [] } = rootNode
-                
-                if (id === anchorId) {
-                    rootNode.children = childArr
-                    return
-                }
-            
-                children.forEach(child => {
-                    loopFind(child)
-                })
-            }
-
-            loopFind(reduceData)
-        }
 
         function mockClick(nodeId) {
             const clickNodes = graph.findAllByState('node', 'click')
@@ -297,37 +255,8 @@
             }
         }
 
-        // 绑定事件
-        // graph.on('node:click', evt => {
-        //     const clickNodes = graph.findAllByState('node', 'click')
-        //     clickNodes.forEach((cn) => {
-        //         graph.setItemState(cn, 'click', false)
-        //     })
-        //     const nodeItem = evt.item
-        //     // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
-        //     graph.setItemState(nodeItem, 'click', true)
-
-        // })
-
-        // graph.on('itemcollapsed', (e) => {
-        //     // 当前被操作的节点 item
-        //     console.log(e.item);
-        //     // 当前操作是收起（`true`）还是展开（`false`）
-        //     console.log(e.collapsed);
-        // });
-        // graph.getNodes()
-
-        // 模拟点击
-        // const eipNode = graph.getNodes().filter(item => {
-        //     const model = item.getModel()
-        //     return model?.id === 'EIP'
-        // })
         mockClick('EIP')
 
-
-
-
-        // 无限循环滚动添加进来
         /**
         * 延迟函数
         * @param seconds 延迟多少秒
@@ -502,37 +431,6 @@
             return currentShowTreeIds
         }
 
-                                                /**
-                                                 * 向data中插数据
-                                                 * @param {*} selfJson 要插入的JSON
-                                                 * @param {*} parentId 父节点
-                                                 * @returns 修改过后的data
-                                                 */
-                                            // function insertNode2Tree(selfJson, parentId) {
-                                            //     const graphModels = graph.getNodes().map(item => item.getModel())
-                                            //     console.log('%c graphModels===', 'color:#fff;background: red;font-size:18px;', graphModels)
-
-                                            //     function innerLoop(graphModels) {
-                                            //         graphModels.forEach(groupItem => {
-                                            //             const { id, children = [] } = groupItem
-
-                                            //             children.forEach(child => {
-                                            //                 innerLoop(child)
-                                            //             })
-
-                                            //             const childIds = children.map(item => item.id)
-                                            //             if (id === parentId && !childIds.includes(selfJson.id)) {
-                                            //                 children.push(selfJson)
-                                            //                 groupItem.children = children
-                                            //             }
-
-                                            //         })
-                                            //     }
-
-                                            //     innerLoop(graphModels)
-
-                                            //     return graphModels
-                                            // }
         /**
          * 根据显示节点返回显示的树
          * @param {*} currentShowTreeIds 显示的节点ID
@@ -541,7 +439,7 @@
          */
         function getCurrentTreeDataByIds(currentShowTreeIds, treeDataWithParentId) {
             const treeDataWithParentIdClone = JSON.parse(JSON.stringify(treeDataWithParentId))
-            let deleteInfos = []
+            let hideInfos = []
             
             function recordNode(paramServerTreeDataWithParentId) {
                 const { parentId, id, children = [] } = paramServerTreeDataWithParentId
@@ -551,7 +449,7 @@
                 })
             
                 if (!currentShowTreeIds.includes(id)) {
-                    deleteInfos.push({
+                    hideInfos.push({
                         parentId,
                         id,
                     })
@@ -560,17 +458,17 @@
 
             recordNode(treeDataWithParentIdClone)
 
-            let deleteInfoParentIds = Array.from(new Set(deleteInfos.map(item => item.parentId)))
+            let deleteInfoParentIds = Array.from(new Set(hideInfos.map(item => item.parentId)))
 
             function deleteNode(paramServerTreeDataWithParentId) {
                 const { id, children = [] } = paramServerTreeDataWithParentId
                 let newChildren = [...children]
 
                 if (deleteInfoParentIds.includes(id)) {
-                    const deleteChildIds = deleteInfos.filter(item => item.parentId === id).map(item => item.id)
+                    const deleteChildIds = hideInfos.filter(item => item.parentId === id).map(item => item.id)
                     newChildren = children.filter(item => !deleteChildIds.includes(item.id))
 
-                    deleteInfos = deleteInfos.filter(item => item.paramId !== id)
+                    hideInfos = hideInfos.filter(item => item.paramId !== id)
                     deleteInfoParentIds = deleteInfoParentIds.filter(item => item.id !== id)
                 }
 
@@ -588,6 +486,24 @@
 
         const promiseLoopArrs = []
 
+        function getRemoveChildrenIdsByParentId(parentId, wholeData) {
+            const childrenIds = []
+            function simpleLoop(tempParentId, node) {
+                const { parentId, id, children = [] } = node
+                if (parentId === tempParentId) {
+                    childrenIds.push(id)
+                }
+
+                children.forEach(child => {
+                    simpleLoop(tempParentId, child)
+                })
+            }
+
+            simpleLoop(parentId, wholeData)
+
+            return childrenIds
+        }
+
         /**
         * 获取显示节点的变化
         */
@@ -599,7 +515,6 @@
             G6.Util.traverseTree(data, (d) => {
                 preShowTreeIds.push(d.id)
             });
-            // console.log('%c preShowTreeIds===', 'color:#fff;background: red;font-size:18px;', preShowTreeIds)
 
             /**
             * 获取焦点和要展示的节点ID
@@ -611,6 +526,7 @@
                 // console.log(id, parentNodes2)
                 const result = flattenTreeDataClosure([data]);
                 const ancestorIds = findAncestor(id, result)
+                // console.log('%c ancestorIds===', 'color:#fff;background: red;font-size:18px;', id, ancestorIds)
                 ancestorIds.pop()
                 const currentShowTreeIds = getCurrentShowTreeIds(id, ancestorIds)
                 // console.log(id, ancestorIds)
@@ -621,18 +537,6 @@
                 removeShowTreeIds = preShowTreeIds.filter(preId => !currentShowTreeIds.includes(preId)) // 比之前少的节点
                 preShowTreeIds = [...currentShowTreeIds]
                 // console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
-
-                // promiseLoop([
-                //     () => delayExecFn(() => ),
-                //     () => delayExecFn(fn2),
-                //     () => delayExecFn(fn3),
-                // ])
-
-                // promiseLoopArrs.push(() => {
-                //     return delayExecFn((() => {
-                //         console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'addShowTreeIds: ', addShowTreeIds, 'removeShowTreeIds:', removeShowTreeIds)
-                //     }))
-                // })
 
                 /**
                 * 绑定传入的参数
@@ -648,81 +552,67 @@
                     paramRemoveShowTreeIds,
                 ) {
                     // let timeout = 1
-                    let timeout = 1
+                    let timeout = 5
                     // if (paramId === '6') {
                     //     timeout = 10
                     // }
                     promiseLoopArrs.push(() => {
                         return delayExecFn((() => {
                             // console.log('id: ', paramId, 'currentShowTreeIds:', paramCurrentShowTreeIds, 'addShowTreeIds: ', paramAddShowTreeIds, 'removeShowTreeIds:', paramRemoveShowTreeIds)
+                            // console.log('id: ', paramId, 'removeShowTreeIds:', paramRemoveShowTreeIds)
 
                             const focusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
+                            // const autoPaint = graph.get('autoPaint')
+                            // graph.setAutoPaint(false)
 
-                            // const currentTreeData = getCurrentTreeDataByIds(paramCurrentShowTreeIds, data)
-                            const dataWithParentClone = JSON.parse(JSON.stringify(dataWithParent[0]))
-                            const currentShowTree = getCurrentTreeDataByIds(paramCurrentShowTreeIds, dataWithParentClone)
-                            console.log('id: ', id, 'currentShowTreeIds:', currentShowTreeIds, 'currentShowTree: ', currentShowTree)
-                            // const focusNodeCanvas = graph.findById(focusNodeId)
-                            // if (!focusNodeId) {
-                            //     const focusNodeJson = getNodeById(focusNodeId, dataWithParent[0])
-                            //     // 阉割下
-                            //     const focusNodeShort = JSON.parse(JSON.stringify(focusNodeJson))
-                            //     focusNodeShort.children = []
-                            //     const { parentId } = focusNodeShort
+                            paramAddShowTreeIds.forEach(nodeAddId => {
+                                const nodeAddNode = graph.findById(nodeAddId)
+                                const nodeAddModel = graph.findById(nodeAddId).getModel()
 
-                            // }
+                                setTimeout(() => {
+                                    nodeAddNode.update({
+                                        ...nodeAddModel,
+                                        labelCfg: {
+                                            style: {
+                                                opacity: 1,
+                                            },
+                                        },
+                                    })
+                                });
+                            })
 
-                            // const focusNodeJson = getNodeById(focusNodeId, dataWithParent[0])
-                            // const focusNodeShort = JSON.parse(JSON.stringify(focusNodeJson))
-                            // focusNodeShort.children = []
-                            // const { parentId: focusParentId } = focusNodeShort
-                            // let tempAddTreeData = insertNode2Tree(focusNodeShort, focusParentId)
+                            paramRemoveShowTreeIds.forEach(nodeRemoveId => {
+                                const removeChildrenIds = getRemoveChildrenIdsByParentId(nodeRemoveId, dataWithParent[0])
 
-                            // TODO 父节点添加子节点[只添加自己]
+                                const allSubChildrenIds = [nodeRemoveId, ...removeChildrenIds]
+                                console.log('allSubChildrenIds: ', allSubChildrenIds)
 
-                            // paramAddShowTreeIds.forEach(addId => {
-                            //     // dataWithParent
-                            //     // 完整处理是下边的模式,现在使用简单模式
-                            //     const addNode = getNodeById(addId, dataWithParent[0])
-                            //     // 阉割下
-                            //     const addNodeShort = JSON.parse(JSON.stringify(addNode))
-                            //     addNodeShort.children = []
-                            //     const { parentId } = addNodeShort
-                            //     // 通过父节点添加现在的节点
-                            //     // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
+                                allSubChildrenIds.forEach(tempNodeRemoveId => {
 
-                            //     graph.addChild(addNodeShort, parentId)
-                            //     // graph.refresh()
-                            // })
+                                    const tempNodeRemoveNode = graph.findById(tempNodeRemoveId)
+                                    const nodeRemoveModel = graph.findById(tempNodeRemoveId).getModel()
 
-                            // paramAddShowTreeIds.forEach(addId => {
-                            //     const addNodeJson = getNodeById(addId, dataWithParent[0])
-                            //     const addNodeShort = JSON.parse(JSON.stringify(addNodeJson))
-                            //     addNodeShort.children = []
-                            //     const { parentId: addParentId } = addNodeShort
-                            //     tempAddTreeData = insertNode2Tree(addNodeShort, addParentId)
-                            // })
-                            // console.log('%c tempAddTreeData===', 'color:#fff;background: red;font-size:18px;', tempAddTreeData)
-                            // graph.changeData(tempAddTreeData)
-                            // graph.changeData(currentTreeData)
-                            graph.changeData(currentShowTree)
-                            graph.fitView();
+                                    setTimeout(() => {
+                                        tempNodeRemoveNode.update({
+                                            ...nodeRemoveModel,
+                                            labelCfg: {
+                                                style: {
+                                                    opacity: 0,
+                                                },
+                                            },
+                                        })
+                                    });
+                                })
+                            })
 
-                            // TODO 父节点删除子节点[删除全部]
-                            // paramRemoveShowTreeIds.forEach(removeId => {
-                                // dataWithParent
-                                // 完整处理是下边的模式,现在使用简单模式
-                                // const removeNode = getNodeById(removeId, dataWithParent[0])
-                                // const { parentId } = removeNode
-                                // 通过父节点添加现在的节点
-                                // 这个简单,直接删除
-                                // graph.removeChild(removeId)
-                            // })
+                            console.log('id: ', paramId, 'currentShowTreeIds:', paramCurrentShowTreeIds, 'addShowTreeIds: ', paramAddShowTreeIds, 'removeShowTreeIds:', paramRemoveShowTreeIds)
 
-                            // graph.changeData()
+                            if (paramRemoveShowTreeIds.includes('群00-00')) {
+                                const todo = graph.getNodes().map(item => item.getModel())
+                            }
 
-                            // const focusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
                             mockClick(focusNodeId)
+
                         }), timeout)
                     })
                 }
@@ -730,33 +620,6 @@
                 if (addShowTreeIds.length > 0 || removeShowTreeIds.length > 0) {
                     bindLocalParams(id, preShowTreeIds, addShowTreeIds, removeShowTreeIds)
                 }
-
-
-                /**
-                // TODO 父节点添加子节点[只添加自己]
-                addShowTreeIds.forEach(addId => {
-                    // dataWithParent
-                    // 完整处理是下边的模式,现在使用简单模式
-                    const addNode = getNodeById(addId, dataWithParent[0])
-                    // 阉割下
-                    const addNodeShort = JSON.parse(JSON.stringify(addNode))
-                    addNodeShort.children = []
-                    // const 
-                    const { parentId } = addNodeShort
-                    // 通过父节点添加现在的节点
-                    // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
-                })
-
-                // TODO 父节点删除子节点[删除全部]
-                removeShowTreeIds.forEach(removeId => {
-                    // dataWithParent
-                    // 完整处理是下边的模式,现在使用简单模式
-                    const removeNode = getNodeById(removeId, dataWithParent[0])
-                    const { parentId } = removeNode
-                    // 通过父节点添加现在的节点
-                    // 这个简单,直接删除
-                })
-                */
 
                 children.forEach(child => {
                     getFocusNodeAndShowIds(child)
@@ -794,6 +657,7 @@
         }
 
         promiseLoop(promiseLoopArrs)
+
     </script>
 </body>
 
