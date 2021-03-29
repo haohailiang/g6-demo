@@ -249,7 +249,7 @@
             requestAnimationFrame(animate);
             new TWEEN.Tween({ x: sourceX, y: sourceY }).to({x: targetX, y: targetY}, 1000).onUpdate(function (object) {
                 // element.style.transform = 'translate(' + object.left + 'px, ' + object.top + 'px)'
-                console.log('object: ', object)
+                // console.log('object: ', object)
                 const model = targetNode.get('model');
                 model.fx = object.x
                 model.fy = object.y
@@ -309,6 +309,13 @@
             //     targetNode.updatePosition({ x: targetX, y: targetY })
             //     graph.refresh()
             // }, 600);
+
+            graph.on('afterlayout', evt => {
+                setTimeout(() => {
+                    mockDrag('EIP')
+                }, 2000);
+                console.log('%c evt===', 'color:#fff;background: red;font-size:18px;', evt)
+            })
     </script>
 </body>
 
