@@ -20,7 +20,7 @@
             text-align: center;
         }
     </style>
-    <script src="../../lib/g6-4.0.3.min.js"></script>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
     <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
 </head>
 
@@ -30,6 +30,7 @@
     <script>
         const r = 50;
         const radius = Math.PI;
+        let renderCount = 0
 
         const width = document.getElementById('container').scrollWidth;
         const height = document.getElementById('container').scrollHeight || 500;
@@ -41,16 +42,24 @@
             animateCfg: {
                 duration: 1000,
                 onFrame(node, ratio, toAttrs, fromAttrs) {
+                    console.log(`${renderCount} - node: `, node.getModel(), 'ratio: ', ratio, 'toAttrs: ', toAttrs, 'fromAttrs: ', fromAttrs, )
+                    // 角度,比如60°, Math.cos(60°) = 0.5, 在这里是弧度
                     const current = radius * ratio;
+                    // console.log('Math.cos(current): ', Math.cos(current))
+                    console.log('角度: ', 180 * current / Math.PI)
                     let x = fromAttrs.x;
                     let y = fromAttrs.y;
                     if (fromAttrs.x > toAttrs.x) {
+                        console.log(1)
                         x = x - r + r * Math.cos(current);
                         y += r * Math.sin(current);
                     } else {
+                        console.log(2)
                         x = x + r - r * Math.cos(current);
                         y -= r * Math.sin(current);
                     }
+                    console.log('x, y: ', x, y)
+                    renderCount++
                     return { x, y };
                 },
             },
@@ -62,29 +71,34 @@
             x: 100,
             y: 100,
             type: 'circle',
-            style: { fill: '#5B8FF9', lineWidth: 0 },
+            style: { fill: '#ff0000', lineWidth: 0 },
         });
-        const node2 = graph.addItem('node', {
-            id: 'node2',
-            x: 200,
-            y: 100,
-            type: 'circle',
-            style: { fill: '#5AD8A6', lineWidth: 0 },
-        });
+        // const node2 = graph.addItem('node', {
+        //     id: 'node2',
+        //     x: 200,
+        //     y: 100,
+        //     type: 'circle',
+        //     style: { fill: '#000000', lineWidth: 0 },
+        // });
 
         // 循环动画
         let count = 0;
-        setInterval(() => {
+        let t = setInterval(() => {
             if (count % 2 === 0) {
                 node1.get('model').x = 200;
-                node2.get('model').x = 100;
+                // node2.get('model').x = 100;
             } else {
                 node1.get('model').x = 100;
-                node2.get('model').x = 200;
+                // node2.get('model').x = 200;
             }
             count++;
             graph.refresh();
-        }, 1000);
+
+            console.log('========================')
+            if (count === 2) {
+                clearInterval(t)
+            }
+        }, 5000);
     </script>
 </body>
 

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>定制不同节点的参数[模拟真实的数据] - 缓动函数添加成功</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <script src="../../../lib/tween.umd.js"></script>
+    <!-- <script src="../../00-mock/data-4-relations.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'force',
+                preventOverlap: true,
+                nodeSpacing: (d) => {
+                    return d.size * 1
+                },
+                onTick: () => {
+                    const nodeItems = graph.getNodes();
+                    const height = graph.get('height');
+                    const width = graph.get('width');
+                    const padding = 70; // 比最大的多10
+                    nodeItems.forEach((item) => {
+                        const model = item.getModel();
+                        if (model.x > width - padding) model.x = width - padding;
+                        else if (model.x < padding) model.x = padding;
+
+                        if (model.y > height - padding) model.y = height - padding;
+                        else if (model.y < padding) model.y = padding;
+                    });
+                },
+            },
+            defaultNode: {
+                color: '#5B8FF9',
+                style: {
+                    lineWidth: 2,
+                    fill: '#C6E5FF',
+                },
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+            },
+        });
+
+        const data = {
+            nodes: [
+                { id: 'EIP', size: 120 },
+                { id: '客户组织01', size: 80 },
+                { id: '客户组织02', size: 80 },
+                { id: '客户组织03', size: 80 },
+                { id: '客户组织04', size: 80, isLeaf: true },
+                { id: '客户组织05', size: 80, isLeaf: true },
+                { id: '群01-01', size: 40 },
+                    { id: '01-01-01', size: 15, isLeaf: true },
+                    { id: '01-01-02', size: 15, isLeaf: true },
+                    { id: '01-01-03', size: 15, isLeaf: true },
+                { id: '群01-02', size: 40 },
+                    { id: '01-02-01', size: 15, isLeaf: true },
+                    { id: '01-02-02', size: 15, isLeaf: true },
+                    { id: '01-02-03', size: 15, isLeaf: true },
+                { id: '群02-01', size: 40 },
+                    { id: '02-01-01', size: 15, isLeaf: true },
+                    { id: '02-01-02', size: 15, isLeaf: true },
+                    { id: '02-01-03', size: 15, isLeaf: true },
+                { id: '群02-02', size: 40 },
+                    { id: '02-02-01', size: 15, isLeaf: true },
+                    { id: '02-02-02', size: 15, isLeaf: true },
+                    { id: '02-02-03', size: 15, isLeaf: true },
+                { id: '群02-03', size: 40 },
+                    { id: '02-03-01', size: 15, isLeaf: true },
+                    { id: '02-03-02', size: 15, isLeaf: true },
+                    { id: '02-03-03', size: 15, isLeaf: true },
+                { id: '群02-04', size: 40 },
+                    { id: '02-04-01', size: 15, isLeaf: true },
+                    { id: '02-04-02', size: 15, isLeaf: true },
+                    { id: '02-04-03', size: 15, isLeaf: true },
+                { id: '群02-05', size: 40, isLeaf: true },
+                { id: '群02-06', size: 40, isLeaf: true },
+                { id: '群03-01', size: 40, isLeaf: true },
+                { id: '群03-02', size: 40, isLeaf: true },
+                { id: '群03-03', size: 40, isLeaf: true },
+            ],
+            edges: [
+                { source: 'EIP', target: '客户组织01' },
+                { source: 'EIP', target: '客户组织02' },
+                { source: 'EIP', target: '客户组织03' },
+                { source: 'EIP', target: '客户组织04' },
+                { source: 'EIP', target: '客户组织05' },
+                { source: '客户组织01', target: '群01-01' },
+                { source: '客户组织01', target: '群01-02' },
+                { source: '客户组织02', target: '群02-01' },
+                { source: '客户组织02', target: '群02-02' },
+                { source: '客户组织02', target: '群02-03' },
+                { source: '客户组织02', target: '群02-04' },
+                { source: '客户组织02', target: '群02-05' },
+                { source: '客户组织02', target: '群02-06' },
+                { source: '客户组织03', target: '群03-01' },
+                { source: '客户组织03', target: '群03-02' },
+                { source: '客户组织03', target: '群03-03' },
+
+                { source: '群01-01', target: '01-01-01' },
+                { source: '群01-01', target: '01-01-02' },
+                { source: '群01-01', target: '01-01-03' },
+
+                { source: '群01-02', target: '01-02-01' },
+                { source: '群01-02', target: '01-02-02' },
+                { source: '群01-02', target: '01-02-03' },
+
+                { source: '群02-01', target: '02-01-01' },
+                { source: '群02-01', target: '02-01-02' },
+                { source: '群02-01', target: '02-01-03' },
+
+                { source: '群02-02', target: '02-02-01' },
+                { source: '群02-02', target: '02-02-02' },
+                { source: '群02-02', target: '02-02-03' },
+
+                { source: '群02-03', target: '02-03-01' },
+                { source: '群02-03', target: '02-03-02' },
+                { source: '群02-03', target: '02-03-03' },
+
+                { source: '群02-04', target: '02-04-01' },
+                { source: '群02-04', target: '02-04-02' },
+                { source: '群02-04', target: '02-04-03' },
+            ],
+        };
+        data.nodes.forEach((i) => {
+            if (!i.isLeaf) {
+                i.label = i.id.replace('node', '')
+            }
+        });
+        const nodes = data.nodes;
+        graph.data({
+            nodes,
+            edges: data.edges.map(function (edge, i) {
+                edge.id = 'edge' + i;
+                return Object.assign({}, edge);
+            }),
+        });
+        graph.render();
+
+        // 借鉴拖动效果
+        graph.on('node:dragstart', function (e) {
+            graph.layout();
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:drag', function (e) {
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:dragend', function (e) {
+            e.item.get('model').fx = null;
+            e.item.get('model').fy = null;
+        });
+
+        function refreshDragedNodePosition(e) {
+            const model = e.item.get('model');
+            // console.log('%c model===', 'color:#fff;background: red;', model)
+            model.fx = e.x;
+            model.fy = e.y;
+        }
+
+        function animate(time) {
+            requestAnimationFrame(animate);
+            TWEEN.update(time);
+        }
+
+        function mockDrag1(targetNodeId) {
+            graph.layout();
+
+            const targetNode = graph.findById(targetNodeId)
+            const { x: sourceX, y: sourceY } = targetNode.getModel()
+            const targetX = width / 2
+            const targetY = height / 2
+
+            const steps = 20
+            const interval = 1000
+            let count = 0
+            const model = targetNode.get('model');
+            model.fx = width / 2;
+            model.fy = height / 2;
+
+            setTimeout(() => {
+                targetNode.get('model').fx = null;
+                targetNode.get('model').fy = null;
+            }, 3000);
+        }
+
+        function mockDrag(targetNodeId) {
+            graph.layout();
+
+            const targetNode = graph.findById(targetNodeId)
+            const { x: sourceX, y: sourceY } = targetNode.getModel()
+            const targetX = width / 2
+            const targetY = height / 2
+
+            const steps = 20
+            const totalTime = 2000
+            const interval = totalTime / steps
+            let count = 0
+            // let t = setInterval(() => {
+            //     console.log('count: ', count)
+            //     const model = targetNode.get('model');
+            //     // console.log('%c model===', 'color:#fff;background: red;', model)
+            //     model.fx = (targetX - sourceX) / steps * count + sourceX; 
+            //     model.fy = (targetY - sourceY) / steps * count + sourceY;
+
+            //     if (count >= steps) {
+            //         clearInterval(t)
+            //     }
+
+            //     count++
+            // }, interval);
+
+            // new TWEEN.Tween({ x: sourceX, y: sourceY }) // Create a new tween that modifies 'coords'.
+            // .to({x: targetX, y: targetY}, 1000) // Move to (300, 200) in 1 second.
+            // // .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+            // .onUpdate((object) => {
+            //     console.log('object: ', object)
+            //         const model = targetNode.get('model');
+            //         // Called after tween.js updates 'coords'.
+            //         // Move 'box' to the position described by 'coords' with a CSS translation.
+            //         // box.style.setProperty('transform', `translate(${coords.x}px, ${coords.y}px)`)
+            //         model.fx = object.x
+            //         model.fy = object.y
+            //     })
+            //     .start() // Start the tween immediately.
+
+            requestAnimationFrame(animate);
+            new TWEEN.Tween({ x: sourceX, y: sourceY }).to({x: targetX, y: targetY}, 1000).onUpdate(function (object) {
+                // element.style.transform = 'translate(' + object.left + 'px, ' + object.top + 'px)'
+                console.log('object: ', object)
+                const model = targetNode.get('model');
+                model.fx = object.x
+                model.fy = object.y
+            }).start()
+            
+            // const model = targetNode.get('model');
+            // // // console.log('%c model===', 'color:#fff;background: red;', model)
+            // model.fx = width / 2;
+            // model.fy = height / 2;
+
+            setTimeout(() => {
+                console.log('finish')
+                targetNode.get('model').fx = null;
+                targetNode.get('model').fy = null;
+            }, interval * steps + 2000);
+
+            // setTimeout(() => {
+            //     targetNode.get('model').fx = null;
+            //     targetNode.get('model').fy = null;
+            // }, 1000);
+        }
+
+        // 小球不停的摆动
+        // setInterval(() => {
+        //     data.nodes.forEach((node) => {
+        //         node.x += Math.random() * 50 - 25;
+        //         node.y += Math.random() * 50 - 25;
+        //     });
+        //     graph.changeData(data);
+        // }, 600);
+
+        
+
+            // data.nodes.forEach((node) => {
+            //     if (node.id === '群02-05') {
+            //         node.x += Math.random() * 50 - 25;
+            //         node.y += Math.random() * 50 - 25;
+            //     }
+            // });
+            /**
+            // sourceNode = graph.findById('node2')
+            targetNode = graph.findById('群02-05')
+            targetModel = targetNode.getModel()
+            targetX = targetModel.x + Math.random() * 50 - 25
+            targetY = targetModel.y + Math.random() * 50 - 25
+            targetNode.updatePosition({ x: targetX, y: targetY })
+            graph.refresh()
+            */
+            // graph.changeData(data);
+
+            // 小范围摆动,成功
+            // setInterval(() => {
+            //     targetNode = graph.findById('群02-05')
+            //     targetModel = targetNode.getModel()
+            //     targetX = targetModel.x + Math.random() * 50 - 25
+            //     targetY = targetModel.y + Math.random() * 50 - 25
+            //     targetNode.updatePosition({ x: targetX, y: targetY })
+            //     graph.refresh()
+            // }, 600);
+    </script>
+</body>
+
+</html>

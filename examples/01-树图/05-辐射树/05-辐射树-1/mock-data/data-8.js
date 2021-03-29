@@ -11,7 +11,7 @@ let data = {
 function getHttp(id) {
     return new Promise(resolve => {
         $.ajax({
-            url: "http://localhost:7011/graph?id=" + id,
+            url: "http://localhost:7011/mock/graph?id=" + id,
             cache: false,
             success: function(res) {
                 resolve(res)
