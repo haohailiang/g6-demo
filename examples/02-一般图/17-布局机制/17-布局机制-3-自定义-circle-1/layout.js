@@ -33,19 +33,14 @@ G6.registerLayout('bigraph-layout', {
             realEdges.map(realEdge => {
                 const realEdgeLabel = realEdge.label ?? ''
                 const realEdgeLabelLen = realEdgeLabel.length + realLabelPaddingLen
-                console.log('%c realEdgeLabelLen===', 'color:#fff;background: red;', realEdgeLabelLen)
-                console.log('%c realEdgeFontSize===', 'color:#fff;background: red;', realEdgeFontSize)
                 const realEdgeLabelSize = realEdgeLabelLen * realEdgeFontSize
-                console.log('%c realEdgeLabelSize===', 'color:#fff;background: red;', realEdgeLabelSize)
                 return realEdgeLabelSize
             })
         )
-        // console.log('%c realEdgeFontSize===', 'color:#fff;background: red;', realEdgeFontSize)
         // const maxRealEdgeLen = Math.max(
         //     realEdges.map(realEdge => G6.Util.getTextSize((realEdge.label ?? '') + '中古', realEdgeFontSize)[0])
         // )
 
-        console.log('%c maxRealEdgeLen===', 'color:#fff;background: red;', maxRealEdgeLen)
         const realObjectNodes = nodes.filter(node => node.layoutType === 'realObject')
 
         realObjectNodes.forEach((node, i) => {

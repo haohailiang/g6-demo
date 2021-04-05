@@ -258,7 +258,6 @@
 
         function add(id) {
             const item = graph.findDataById(id);
-            // console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             // const newNode = {
             //     id: 'root231321',
             //     label: 'root1231231',
@@ -268,7 +267,6 @@
             // const model = item.getModel();
             // const children = item.children;
             // if (!children || children.length === 0) {
-            // console.log('%c count===', 'color:#fff;background: red;', count)
             // const childData = [
             //     {
             //         id: 'child-data-' + count,
@@ -326,13 +324,11 @@
             // }
 
             const parentData = graph.findDataById(nodeId);
-            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             if (!parentData.children) {
                 parentData.children = [];
             }
             // 如果childData是一个数组，则直接赋值给parentData.children
             // 如果是一个对象，则使用parentData.children.push(obj)
-            // console.log('%c childData===', 'color:#fff;background: red;', childData)
             parentData.children.push(childData);
             // graph.changeData(data);
             data = {
@@ -358,7 +354,6 @@
         G6.registerNode(
             'dom-node', {
             draw: (cfg, group) => {
-                // console.log('%c cfg===', 'color:#fff;background: red;', cfg)
                 // const width = 40
                 // const height = 40
                 // const picH = 40
@@ -374,7 +369,6 @@
                 //     </div>
                 // `
                 const numClazz = cfg?.children?.length ? 'hide' : ''
-                // console.log('%c numClazz===', 'color:#fff;background: red;', numClazz)
                 const domJsx = `
                     <div id=${cfg.id} class="dom-node">
                         <div class="left-hand">left</div>
@@ -605,7 +599,6 @@
 
         let minDisNode;
         graph.on('node:dragstart', (e) => {
-            console.log('%c 123===', 'color:#fff;background: red;')
             minDisNode = undefined;
         });
         graph.on('node:drag', (e) => {
@@ -663,15 +656,8 @@
                 const { id: newId } = newParentData
 
                 if (removeParent === newParent) {
-                    // console.log('%c 相同的父节点===', 'color:#fff;background: red;')
                     const removeChildIndex = removeParentChildrenClone.findIndex(item => item.id === removeId)
                     const newChildIndex = removeParentChildrenClone.findIndex(item => item.id === newId)
-
-                    // console.log('%c removeParentChildrenClone===', 'color:#fff;background: red;', removeParentChildrenClone)
-                    // console.log('%c removeId===', 'color:#fff;background: red;', removeId)
-                    // console.log('%c newId===', 'color:#fff;background: red;', newId)
-                    // console.log('%c removeChildIndex===', 'color:#fff;background: red;', removeChildIndex)
-                    // console.log('%c newChildIndex===', 'color:#fff;background: red;', newChildIndex)
 
                     const temp = removeParentChildrenClone[removeChildIndex]
                     removeParentChildrenClone[removeChildIndex] = removeParentChildrenClone[newChildIndex]

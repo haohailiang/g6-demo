@@ -190,9 +190,7 @@
 
             const targetNode = graph.findById(nodeId)
 
-            // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
             // graph.setItemState(nodeItem, 'click', true)
-            // console.log('%c eipNode===', 'color:#fff;background: red;font-size:18px;', targetNodes[0])
             if (targetNode) {
                 graph.setItemState(targetNode, 'click', true)
 
@@ -200,8 +198,6 @@
 
                 // targetNode.children = []
                 const targetNodeModel = targetNode.getModel()
-                // console.log('%c targetNode===', 'color:#fff;background: red;font-size:18px;', targetNode)
-                // console.log('%c targetNodeModel===', 'color:#fff;background: red;font-size:18px;', targetNodeModel)
                 // targetNode.children = []
                 // graph.updateItem(targetNode, {
                 //     ...targetNodeModel,
@@ -527,7 +523,6 @@
                 // console.log(id, parentNodes2)
                 const result = flattenTreeDataClosure([data]);
                 const ancestorIds = findAncestor(id, result)
-                // console.log('%c ancestorIds===', 'color:#fff;background: red;font-size:18px;', id, ancestorIds)
                 ancestorIds.pop()
                 const currentShowTreeIds = getCurrentShowTreeIds(id, ancestorIds)
                 // console.log(id, ancestorIds)

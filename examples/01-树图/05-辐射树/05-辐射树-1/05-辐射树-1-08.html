@@ -551,7 +551,6 @@
                 // console.log(id, parentNodes2)
                 const result = flattenTreeDataClosure([data]);
                 const ancestorIds = findAncestor(id, result)
-                // console.log('%c ancestorIds===', 'color:#fff;background: red;font-size:18px;', id, ancestorIds)
                 ancestorIds.pop()
                 const currentShowTreeIds = getCurrentShowTreeIds(id, ancestorIds)
                 // console.log(id, ancestorIds)

@@ -416,7 +416,6 @@
         const height = document.getElementById('container').scrollHeight || 500;
 
         const size = Math.sqrt((width * height) / data.nodes.length / Math.PI)
-        console.log('%c size===', 'color:#fff;background: red;', size)
         data.nodes.forEach(item => {
             // item.size = Math.floor(Math.random() * 100 + 20)
             item.size = size

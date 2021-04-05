@@ -162,17 +162,13 @@
 
             const targetNode = graph.findById(nodeId)
 
-            // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
             // graph.setItemState(nodeItem, 'click', true)
-            // console.log('%c eipNode===', 'color:#fff;background: red;font-size:18px;', targetNodes[0])
             if (targetNode) {
                 graph.setItemState(targetNode, 'click', true)
 
 
                 // targetNode.children = []
                 const targetNodeModel = targetNode.getModel()
-                // console.log('%c targetNode===', 'color:#fff;background: red;font-size:18px;', targetNode)
-                // console.log('%c targetNodeModel===', 'color:#fff;background: red;font-size:18px;', targetNodeModel)
                 // targetNode.children = []
                 // graph.updateItem(targetNode, {
                 //     ...targetNodeModel,
@@ -234,7 +230,6 @@
         //         graph.setItemState(cn, 'click', false)
         //     })
         //     const nodeItem = evt.item
-        //     // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
         //     graph.setItemState(nodeItem, 'click', true)
 
         // })
@@ -278,7 +273,6 @@
         * @returns 
         */
         function delayExecFn(callback, seconds = 5) {
-            // console.log('%c seconds===', 'color:#fff;background: red;font-size:18px;', seconds)
             return delaySeconds(seconds).then(() => {
                 // TODO处理增加哪些节点,删除哪些节点
                 callback()
@@ -445,7 +439,6 @@
             G6.Util.traverseTree(data, (d) => {
                 preShowTreeIds.push(d.id)
             });
-            console.log('%c preShowTreeIds===', 'color:#fff;background: red;font-size:18px;', preShowTreeIds)
 
             /**
             * 获取焦点和要展示的节点ID
@@ -494,7 +487,6 @@
                     paramRemoveShowTreeIds,
                 ) {
                     const debuggerFocusNodeId = paramCurrentShowTreeIds[paramCurrentShowTreeIds.length - 1]
-                    // console.log('%c debuggerFocusNodeId===', 'color:#fff;background: red;font-size:18px;', debuggerFocusNodeId)
                     let delayTime = 5
                     // if (debuggerFocusNodeId === '3') {
                     //     delayTime = 1
@@ -518,15 +510,12 @@
                                 graph.addChild(focusNodeJson, parentId)
 
                                 // if (focusNodeId === '3') {
-                                //     console.log('%c 3 - parentId===', 'color:#fff;background: red;font-size:18px;', parentId)
                                 //     const todo = graph.findById(parentId)
-                                //     console.log('%c 3 - parentNodeCanvas===', 'color:#fff;background: red;font-size:18px;', todo)
                                 // }
                             }
 
                             // if (focusNodeId === '3') {
                             //     const todo = graph.findById(focusNodeId)
-                            //     console.log('%c 3 - focusNodeCanvas===', 'color:#fff;background: red;font-size:18px;', todo)
                             // }
                             // TODO 父节点添加子节点[只添加自己]
                             // paramAddShowTreeIds.forEach(addId => {
@@ -542,13 +531,10 @@
                                 addNodeShort.children = []
                                 const { parentId } = addNodeShort
                                 // 通过父节点添加现在的节点
-                                // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
 
                                 const addNodeCanvas = graph.findById(addId)
                                 if (!addNodeCanvas) {
                                     if (addId === '6') {
-                                        // console.log('%c 6 parentId===', 'color:#fff;background: red;font-size:18px;', parentId)
-                                        // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
                                     }
                                     graph.addChild(addNodeShort, parentId)
                                 }
@@ -590,7 +576,6 @@
                     // const 
                     const { parentId } = addNodeShort
                     // 通过父节点添加现在的节点
-                    // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
                 })
 
                 // TODO 父节点删除子节点[删除全部]

@@ -464,7 +464,6 @@
                 // linkDistance: 50,
                 linkDistance: (d) => {
                     if (d.source === '32') {
-                        console.log('%c d===', 'color:#fff;background: red;', d)
                         return 200;
                     }
                     return 30;
@@ -551,15 +550,12 @@
             // });
             const nodeItem = e.item; // 获取被点击的节点元素对象
             const model = e.item.getModel()
-            console.log('%c model===', 'color:#fff;background: red;', model)
             // graph.setItemState(nodeItem, 'click', true); // 设置当前节点的 click 状态为 true
         });
 
         graph.on('combo:mouseenter', (evt) => {
-            console.log('%c mouseenter===', 'color:#fff;background: red;')
             const { item } = evt;
             // graph.findById()
-            console.log('%c item===', 'color:#fff;background: red;', item)
             graph.setItemState(item, 'hover', true);
             item._cfg.nodes.forEach(v => {
                 graph.setItemState(v, 'hover', true);
@@ -567,7 +563,6 @@
         });
 
         graph.on('combo:mouseleave', (evt) => {
-            console.log('%c mouseleave===', 'color:#fff;background: red;')
             const { item } = evt;
             graph.setItemState(item, 'hover', false);
             item._cfg.nodes.forEach(v => {
@@ -579,16 +574,13 @@
             const { item } = evt;
             // graph.findById()
             const { comboId } = item.getModel()
-            console.log('%c comboId===', 'color:#fff;background: red;', comboId)
 
             if (!comboId) {
-                console.log('%c item===', 'color:#fff;background: red;', item)
                 graph.setItemState(item, 'hover', true);
             } else {
                 const combNode = graph.findById(comboId)
                 graph.setItemState(combNode, 'hover', true);
                 // const haha = graph.findById(comboId)
-                // console.log('%c haha===', 'color:#fff;background: red;', haha)
                 combNode._cfg.nodes.forEach(v => {
                     graph.setItemState(v, 'hover', true);
                 })
@@ -598,7 +590,6 @@
         graph.on('node:mouseleave', (evt) => {
             const { item } = evt;
             const { comboId } = item.getModel()
-            console.log('%c comboId===', 'color:#fff;background: red;', comboId)
 
             if (!comboId) {
                 graph.setItemState(item, 'hover', false);

@@ -252,10 +252,6 @@
             const { children: removeParentChildren } = removeParentData
             const removeParentChildrenClone = JSON.parse(JSON.stringify(removeParentChildren))
 
-            // console.log('%c removeData===', 'color:#fff;background: red;', removeData)
-            // console.log('%c removeParent===', 'color:#fff;background: red;', removeParent)
-            // console.log('%c removeParentChildren===', 'color:#fff;background: red;', removeParentChildren)
-            // console.log('%c removeParentChildren===', 'color:#fff;background: red;', JSON.stringify(removeParentChildren))
             const removed = graph.removeChild(id);
             setTimeout(() => {
                 const newParentData = graph.findDataById(minDisNodeId);
@@ -263,27 +259,16 @@
 
                 const { id: removeId } = removeData
                 const { id: newId } = newParentData
-                // console.log('%c removeData===', 'color:#fff;background: red;', removeData)
-                // console.log('%c newParentData===', 'color:#fff;background: red;', newParentData)
                 // const parentId = 
                 //         const removeParent = graph.findById(parentId).getParent()
                 // const removeNode = graph.findById('Logistic regression')
-                // console.log('%c removeNode===', 'color:#fff;background: red;', removeNode)
                 // if (removeNode) {
                 //     const removeNodeParentId = removeNode._cfg.parent._cfg.id
-                //     console.log('%c removeNodeParentId===', 'color:#fff;background: red;', removeNodeParentId)
                 // }
 
                 if (removeParent === newParent) {
-                    console.log('%c 相同的父节点===', 'color:#fff;background: red;')
                     const removeChildIndex = removeParentChildrenClone.findIndex(item => item.id === removeId)
                     const newChildIndex = removeParentChildrenClone.findIndex(item => item.id === newId)
-
-                    console.log('%c removeParentChildrenClone===', 'color:#fff;background: red;', removeParentChildrenClone)
-                    console.log('%c removeId===', 'color:#fff;background: red;', removeId)
-                    console.log('%c newId===', 'color:#fff;background: red;', newId)
-                    console.log('%c removeChildIndex===', 'color:#fff;background: red;', removeChildIndex)
-                    console.log('%c newChildIndex===', 'color:#fff;background: red;', newChildIndex)
 
                     const temp = removeParentChildrenClone[removeChildIndex]
                     removeParentChildrenClone[removeChildIndex] = removeParentChildrenClone[newChildIndex]
@@ -348,7 +333,6 @@
                 //         }
                 //     ]
                 // }
-                // console.log('%c newParentData===', 'color:#fff;background: red;', newParentData)
                 if (newParentData.children) newParentData.children.push(data);
                 else newParentData.children = [data];
                 graph.layout();

@@ -175,7 +175,6 @@
 
         function refreshDragedNodePosition(e) {
             const model = e.item.get('model');
-            // console.log('%c model===', 'color:#fff;background: red;', model)
             model.fx = e.x;
             model.fy = e.y;
         }
@@ -221,7 +220,6 @@
             // let t = setInterval(() => {
             //     console.log('count: ', count)
             //     const model = targetNode.get('model');
-            //     // console.log('%c model===', 'color:#fff;background: red;', model)
             //     model.fx = (targetX - sourceX) / steps * count + sourceX; 
             //     model.fy = (targetY - sourceY) / steps * count + sourceY;
 
@@ -256,7 +254,6 @@
             }).start()
             
             // const model = targetNode.get('model');
-            // // // console.log('%c model===', 'color:#fff;background: red;', model)
             // model.fx = width / 2;
             // model.fy = height / 2;
 
@@ -314,7 +311,6 @@
                 setTimeout(() => {
                     mockDrag('EIP')
                 }, 2000);
-                console.log('%c evt===', 'color:#fff;background: red;font-size:18px;', evt)
             })
     </script>
 </body>

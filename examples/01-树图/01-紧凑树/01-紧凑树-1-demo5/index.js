@@ -115,8 +115,6 @@ const moveGraph = () => {
         moveY -= vGap * 0.5
     }
 
-    // console.log('%c moveX===', 'color:#fff;background: red;', moveX)
-    // console.log('%c moveY===', 'color:#fff;background: red;', moveY)
     graph.moveTo(moveX, moveY)
 }
 
@@ -268,9 +266,7 @@ const toggleCollapseChild = model => {
 
 graph.on('node:click', evt => {
     const model = evt.item.getModel()
-    console.log('%c model===', 'color:#fff;background: red;', model)
     const optType = evt.target.get('name')
-    console.log('%c name===', 'color:#fff;background: red;', optType)
     if (model.entityGroup === 'stat') {
         const realParentId = model.id.replace('-stat', '')
         const parentId = `virtual-root-${realParentId}`
@@ -333,7 +329,6 @@ const moveLeftOrRight = (flag = 'left') => {
         .to({ x: canMoveDistance }, 1000)
         .easing(TWEEN.Easing.Quadratic.Out)
         .onUpdate(() => {
-            console.log('%c 123===', 'color:#fff;background: red;')
             // graph.moveTo(coords.x, coords.y)
             graph.moveTo(coords.x, curMoveY)
         })

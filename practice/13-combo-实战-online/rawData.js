@@ -339,8 +339,6 @@ function getFormatContactsGraphData(contactsGraphData) {
         new Set(relations.filter(item => item.isVirtualRelation).map(item => item.labelName))
     ).map(item => ({ id: item, label: item }))
 
-    console.log('%c combos===', 'color:#fff;background: red;', combos)
-
     // 主体
     const { subjectId } = relations[0]
     const subjectEntity = entities.find(item => item.id === subjectId)
@@ -377,8 +375,6 @@ function getFormatContactsGraphData(contactsGraphData) {
         target: comboItem.id,
     }))
 
-    console.log('%c comboEdges===', 'color:#fff;background: red;', comboEdges)
-
     const realEdges = relations.filter(item => !item.isVirtualRelation)
         .map(readEdge => ({
             id: `${subjectEntity.id}-${readEdge.objectId}`,
@@ -387,8 +383,6 @@ function getFormatContactsGraphData(contactsGraphData) {
             label: readEdge.labelName,
             fontSize: 14,
         }))
-
-    console.log('%c realEdges===', 'color:#fff;background: red;', realEdges)
 
     // 客体
     const objectNodes = []

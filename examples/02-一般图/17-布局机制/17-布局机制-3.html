@@ -153,18 +153,15 @@
             execute() {
                 const self = this;
                 // const center = self.center;
-                // console.log('%c self===', 'color:#fff;background: red;', self)
                 // const biSep = self.biSep;
                 // const nodeSep = self.nodeSep;
                 // const nodeSize = self.nodeSize;
                 // const direction = self.direction;
-                console.log('%c self===', 'color:#fff;background: red;', self)
                 const center = self.center || [0, 0];
                 const biSep = self.biSep || 100;
                 const nodeSep = self.nodeSep || 20;
                 const nodeSize = self.nodeSize || 20;
                 const direction = self.direction || 'horizontal';
-                console.log('%c direction===', 'color:#fff;background: red;', direction)
                 let part1Pos = 0;
                 let part2Pos = 0;
                 if (direction === 'horizontal') {

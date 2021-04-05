@@ -160,7 +160,6 @@
                     node.x = i * 80
                     node.y = i * 80
                 })
-                console.log('%c newNodes===', 'color:#fff;background: red;', JSON.stringify(nodes))
             },
         });
 
@@ -194,7 +193,6 @@
                 default: ['drag-node', 'drag-canvas', 'zoom-canvas'],
             },
         });
-            console.log('%c data===', 'color:#fff;background: red;', JSON.stringify(data))
         graph.data(data);
         graph.render();
     </script>

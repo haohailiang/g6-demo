@@ -169,7 +169,6 @@ window.addEventListener('resize', function () {
     renderGraph()
     // const { width, height } = document.getElementById('container').getBoundingClientRect();
     // // const height = document.getElementById('container').scrollHeight || 500;
-    // console.log('%c width===', 'color:#fff;background: red;', width)
     // graph.changeSize(width, height)
     // graph.layout()
     // graph.fitCenter()
@@ -199,7 +198,6 @@ const hideRootNode = () => {
     } else if (data.children.length > 1) {
         const hideHeight = nodeHeight + vGap * 0.5
         const graphHeight = nodeHeight * 2 + vGap * 1.5
-        // console.log('%c graphHeight===', 'color:#fff;background: red;', graphHeight)
         const { width, height } = document.getElementById('container').getBoundingClientRect();
         // const offsetY = (height - graphHeight) / 2 - hideHeight
         graph.moveTo(nodeWidth, offsetY)
@@ -211,7 +209,5 @@ const hideRootNode = () => {
 // hideRootNode()
 
 graph.on('node:click', evt => {
-    // console.log('%c evt===', 'color:#fff;background: red;', evt)
     const model = evt.item.getModel()
-    console.log('%c model===', 'color:#fff;background: red;', model)
 })

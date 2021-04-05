@@ -231,9 +231,7 @@
 
             const targetNode = graph.findById(nodeId)
 
-            // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
             // graph.setItemState(nodeItem, 'click', true)
-            // console.log('%c eipNode===', 'color:#fff;background: red;font-size:18px;', targetNodes[0])
             if (targetNode) {
                 graph.setItemState(targetNode, 'click', true)
 
@@ -241,8 +239,6 @@
 
                 // targetNode.children = []
                 const targetNodeModel = targetNode.getModel()
-                // console.log('%c targetNode===', 'color:#fff;background: red;font-size:18px;', targetNode)
-                // console.log('%c targetNodeModel===', 'color:#fff;background: red;font-size:18px;', targetNodeModel)
                 // targetNode.children = []
                 // graph.updateItem(targetNode, {
                 //     ...targetNodeModel,
@@ -304,7 +300,6 @@
         //         graph.setItemState(cn, 'click', false)
         //     })
         //     const nodeItem = evt.item
-        //     // console.log('%c nodeItem===', 'color:#fff;background: red;font-size:18px;', nodeItem)
         //     graph.setItemState(nodeItem, 'click', true)
 
         // })
@@ -510,7 +505,6 @@
                                                  */
                                             // function insertNode2Tree(selfJson, parentId) {
                                             //     const graphModels = graph.getNodes().map(item => item.getModel())
-                                            //     console.log('%c graphModels===', 'color:#fff;background: red;font-size:18px;', graphModels)
 
                                             //     function innerLoop(graphModels) {
                                             //         graphModels.forEach(groupItem => {
@@ -599,7 +593,6 @@
             G6.Util.traverseTree(data, (d) => {
                 preShowTreeIds.push(d.id)
             });
-            // console.log('%c preShowTreeIds===', 'color:#fff;background: red;font-size:18px;', preShowTreeIds)
 
             /**
             * 获取焦点和要展示的节点ID
@@ -689,7 +682,6 @@
                             //     addNodeShort.children = []
                             //     const { parentId } = addNodeShort
                             //     // 通过父节点添加现在的节点
-                            //     // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
 
                             //     graph.addChild(addNodeShort, parentId)
                             //     // graph.refresh()
@@ -702,7 +694,6 @@
                             //     const { parentId: addParentId } = addNodeShort
                             //     tempAddTreeData = insertNode2Tree(addNodeShort, addParentId)
                             // })
-                            // console.log('%c tempAddTreeData===', 'color:#fff;background: red;font-size:18px;', tempAddTreeData)
                             // graph.changeData(tempAddTreeData)
                             // graph.changeData(currentTreeData)
                             graph.changeData(currentShowTree)
@@ -744,7 +735,6 @@
                     // const 
                     const { parentId } = addNodeShort
                     // 通过父节点添加现在的节点
-                    // console.log('%c addNodeShort===', 'color:#fff;background: red;font-size:18px;', addNodeShort)
                 })
 
                 // TODO 父节点删除子节点[删除全部]

@@ -53,9 +53,7 @@
         const height = document.getElementById('container').scrollHeight || 500;
 
         function itemClick(num) {
-            console.log('%c num===', 'color:#fff;background: red;', num)
             const parentData = graph.findById('node3');
-            console.log('%c parentData===', 'color:#fff;background: red;', parentData)
             // graph.updateItem('node3', parentData);
             graph.updateItem('node3', {
                 id: 'node3',

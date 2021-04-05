@@ -118,8 +118,6 @@ const moveGraph = () => {
         moveY -= vGap * 0.5
     }
 
-    console.log('%c moveX===', 'color:#fff;background: red;', moveX)
-    console.log('%c moveY===', 'color:#fff;background: red;', moveY)
     graph.moveTo(moveX, moveY)
 }
 
@@ -223,7 +221,6 @@ window.addEventListener('resize', function () {
     renderGraph()
     // const { width, height } = document.getElementById('container').getBoundingClientRect();
     // // const height = document.getElementById('container').scrollHeight || 500;
-    // console.log('%c width===', 'color:#fff;background: red;', width)
     // graph.changeSize(width, height)
     // graph.layout()
     // graph.fitCenter()
@@ -253,7 +250,6 @@ const hideRootNode = () => {
     } else if (data.children.length > 1) {
         const hideHeight = nodeHeight + vGap * 0.5
         const graphHeight = nodeHeight * 2 + vGap * 1.5
-        // console.log('%c graphHeight===', 'color:#fff;background: red;', graphHeight)
         const { width, height } = document.getElementById('container').getBoundingClientRect();
         // const offsetY = (height - graphHeight) / 2 - hideHeight
         graph.moveTo(nodeWidth, offsetY)
@@ -276,8 +272,6 @@ const toggleCollapseChild = model => {
     // const { moveX: preMoveX, moveY: preMoveY } = getGraphMove()
     // prevParentLeftCanvasX = canvasX
     // prevParentLeftCanvasY = canvasY
-
-    console.log('%c isCollapse===', 'color:#fff;background: red;', isCollapse)
 
     if (isCollapse) {
         modelShadow.children = realChildren
@@ -306,23 +300,13 @@ const toggleCollapseChild = model => {
     const diffCanvasY = nowCanvasY - prevCanvasY
     const { moveX: curMoveX, moveY: curMoveY } = getGraphMove()
 
-    // console.log('%c diffCanvasX===', 'color:#fff;background: red;', diffCanvasX)
-    // console.log('%c diffCanvasY===', 'color:#fff;background: red;', diffCanvasY)
-
-    console.log('%c curMoveX===', 'color:#fff;background: red;', curMoveX)
-    console.log('%c curMoveY===', 'color:#fff;background: red;', curMoveY)
-
     graph.moveTo(curMoveX - diffCanvasX, curMoveY - diffCanvasY)
 }
 
 graph.on('node:click', evt => {
     const item = evt.item
     const tareget = evt.target
-    console.log('%c item===', 'color:#fff;background: red;', item)
-    console.log('%c tareget===', 'color:#fff;background: red;', tareget)
-    // console.log('%c evt===', 'color:#fff;background: red;', evt)
     const model = evt.item.getModel()
-    // console.log('%c model===', 'color:#fff;background: red;', model)
 })
 
 graph.on('node:click', evt => {
