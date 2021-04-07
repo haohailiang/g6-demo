@@ -29,9 +29,10 @@
                 type: 'force',
                 preventOverlap: true,
                 linkDistance: (d) => {
-                    if (d.source.id === 'node0') {
-                        return 100;
-                    }
+                    console.log(d.source)
+                    // if (d.source.id === 'node0') {
+                    //     return 100;
+                    // }
                     return 30;
                 },
                 nodeStrength: (d) => {

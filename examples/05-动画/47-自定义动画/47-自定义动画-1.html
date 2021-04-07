@@ -28,6 +28,7 @@
     <!-- 1. 创建容器 -->
     <div id="container"></div>
     <script>
+        // https://antv-g6.gitee.io/zh/examples/scatter/customAnimate#position
         const r = 50;
         const radius = Math.PI;
         let renderCount = 0
@@ -73,32 +74,32 @@
             type: 'circle',
             style: { fill: '#ff0000', lineWidth: 0 },
         });
-        // const node2 = graph.addItem('node', {
-        //     id: 'node2',
-        //     x: 200,
-        //     y: 100,
-        //     type: 'circle',
-        //     style: { fill: '#000000', lineWidth: 0 },
-        // });
+        const node2 = graph.addItem('node', {
+            id: 'node2',
+            x: 200,
+            y: 100,
+            type: 'circle',
+            style: { fill: '#000000', lineWidth: 0 },
+        });
 
         // 循环动画
         let count = 0;
         let t = setInterval(() => {
             if (count % 2 === 0) {
                 node1.get('model').x = 200;
-                // node2.get('model').x = 100;
+                node2.get('model').x = 100;
             } else {
                 node1.get('model').x = 100;
-                // node2.get('model').x = 200;
+                node2.get('model').x = 200;
             }
             count++;
             graph.refresh();
 
             console.log('========================')
-            if (count === 2) {
-                clearInterval(t)
-            }
-        }, 5000);
+            // if (count === 2) {
+            //     clearInterval(t)
+            // }
+        }, 1000);
     </script>
 </body>
 
