@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 600px;
+            height: 400px;
+            border: 1px solid;
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <script src="./my-grid/layout.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const data = {
+            nodes: [
+                {
+                    id: 'node1',
+                    x: 0,
+                    y: 0,
+                }, {
+                    id: 'node2',
+                    x: 20,
+                    y: 20,
+                },
+            ],
+            edges: [
+                {
+                    source: 'node1',
+                    target: 'node2',
+                },
+            ],
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'my-grid',
+                type: 'grid',
+                width: 600,
+                height: 400,
+                rows: 4,
+                cols: 4,
+            },
+            animate: true,
+            // defaultNode: {
+            //     // size: 20,
+            //     size: 80,
+            //     style: {
+            //         fill: '#C6E5FF',
+            //         stroke: '#5B8FF9',
+            //     },
+            // },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+            },
+            modes: {
+                default: ['drag-node', 'drag-canvas', 'zoom-canvas'],
+            },
+        });
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

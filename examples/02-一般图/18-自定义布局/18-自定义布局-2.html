@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const data = {
+            nodes: [
+                {
+                    id: '0',
+                    label: '4/3-A',
+                    cluster: 'part1',
+                },
+                {
+                    id: '1',
+                    label: '4/3-B',
+                    cluster: 'part1',
+                },
+                {
+                    id: '2',
+                    label: '5/3-C',
+                    cluster: 'part1',
+                },
+                {
+                    id: '3',
+                    label: '2-D',
+                    cluster: 'part1',
+                },
+                {
+                    id: '4',
+                    label: '0.5-E',
+                    cluster: 'part1',
+                },
+                {
+                    id: '5',
+                    label: '3-F',
+                    cluster: 'part1',
+                },
+
+
+                {
+                    id: '6',
+                    label: '29/24-a',
+                    cluster: 'part2',
+                },
+                {
+                    id: '7',
+                    label: '19/18-b',
+                    cluster: 'part2',
+                },
+                {
+                    id: '8',
+                    label: '11/6-c',
+                    cluster: 'part2',
+                },
+                {
+                    id: '9',
+                    label: '11/6-d',
+                    cluster: 'part2',
+                },
+            ],
+            edges: [
+                {
+                    source: '0',
+                    target: '6',
+                },
+                {
+                    source: '0',
+                    target: '7',
+                },
+                {
+                    source: '0',
+                    target: '9',
+                },
+                {
+                    source: '1',
+                    target: '6',
+                },
+                {
+                    source: '1',
+                    target: '9',
+                },
+                {
+                    source: '1',
+                    target: '7',
+                },
+                {
+                    source: '2',
+                    target: '8',
+                },
+                {
+                    source: '2',
+                    target: '9',
+                },
+                {
+                    source: '2',
+                    target: '6',
+                },
+                {
+                    source: '3',
+                    target: '8',
+                },
+                {
+                    source: '4',
+                    target: '6',
+                },
+                {
+                    source: '4',
+                    target: '7',
+                },
+                {
+                    source: '5',
+                    target: '9',
+                },
+            ],
+        };
+
+        G6.registerLayout('bigraph-layout', {
+            // 默认参数
+            getDefaultCfg: function getDefaultCfg() {
+                return {
+                    center: [0, 0], // 布局的中心
+                    biSep: 100, // 两部分的间距
+                    nodeSep: 20, // 同一部分的节点间距
+                    nodeSize: 20, // 节点大小
+                    direction: 'horizontal', // 两部分的分布方向
+                };
+            },
+            execute() {
+                const self = this;
+                const { nodes } = self
+                console.log('%c self===', 'color:#fff;background: red;font-size:18px;', self)
+                const step = 80
+                // const step = 160
+                let dis = 0
+                nodes.forEach((node, i) => {
+                    node.x = i * 80
+                    node.y = i * 80
+                })
+            },
+        });
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'bigraph-layout',
+                biSep: 300,
+                nodeSep: 20,
+                // nodeSize: 20,
+                nodeSize: 80,
+            },
+            animate: true,
+            defaultNode: {
+                // size: 20,
+                size: 80,
+                style: {
+                    fill: '#C6E5FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+            },
+            modes: {
+                default: ['drag-node', 'drag-canvas', 'zoom-canvas'],
+            },
+        });
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>
