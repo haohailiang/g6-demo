@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+    </style>
+    <script src="../../lib/g6-4.0.3.min.js"></script>
+    <script src="./mock/inter4.js"></script>
+    <!-- <script src="../../examples/00-mock/data-3-relations.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+
+        // 把mock服务启动起来, 数据太大, 
+        // fetch('http://localhost:7011/taskmanage/inter_4')
+        //     .then(function (response) {
+        //         return response.json();
+        //     })
+        //     .then(function (res) {
+        //         console.log(res);
+        //         const { data: { nodes, edges } } = inter4
+        //         renderGraph(nodes, edges)
+        //     });
+
+        const { data: { nodes, edges } } = inter4
+        renderGraph(nodes, edges)
+
+        function renderGraph(nodes, edges) {
+            const width = document.getElementById('container').scrollWidth;
+            const height = document.getElementById('container').scrollHeight || 500;
+            const graph = new G6.Graph({
+                container: 'container',
+                width,
+                height,
+                layout: {
+                    type: 'force',
+                    preventOverlap: true,
+                    nodeSpacing: (d) => {
+                        return d.size * 1 / 3
+                    },
+                },
+                modes: {
+                    default: [
+                        'drag-canvas',
+                        'zoom-canvas',
+                        'drag-node',
+                    ],
+                },
+                defaultNode: {
+                    size: 100,
+                    color: '#5B8FF9',
+                    style: {
+                        lineWidth: 2,
+                        fill: '#C6E5FF',
+                    },
+                },
+                defaultEdge: {
+                    size: 1,
+                    color: '#e2e2e2',
+                    labelCfg: {
+                        autoRotate: true,
+                        style: {
+                            background: {
+                                fill: '#ffffff',
+                                // fill: '#ff0000',
+                                padding: [2, 20, 2, 20],
+                            },
+                        }
+                    },
+                },
+            });
+
+            graph.data({
+                nodes,
+                edges,
+            });
+            graph.render();
+        }
+    </script>
+</body>
+
+</html>
