@@ -20,8 +20,10 @@ const getDegree = (n, nodeIdxMap, edges) => {
 G6.registerLayout('my-grid', {
     // 默认参数
     getDefaultCfg: function getDefaultCfg() {
+        console.log('%c getDefaultCfg===', 'color:#fff;background: red;font-size:18px;')
         return {
             begin: [0, 0],
+            bbxxx: 123,
         };
     },
     begin: [0, 0],
@@ -107,7 +109,11 @@ G6.registerLayout('my-grid', {
         node.y = y;
     },
     execute() {
-        const self = this;
+        const self = {
+            ...this.getDefaultCfg(),
+            ...this,
+        };
+        console.log('%c self===', 'color:#fff;background: red;font-size:18px;', self)
         const nodes = self.nodes;
         const n = nodes.length;
         const begin = self.begin;
