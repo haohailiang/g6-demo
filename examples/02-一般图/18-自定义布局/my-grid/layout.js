@@ -1,14 +1,30 @@
+const isString = (val) => typeof val === 'string'
+const getDegree = (n, nodeIdxMap, edges) => {
+    const degrees = []
+    for (let i = 0; i < n; i++) {
+        degrees[i] = 0
+    }
+    if (!edges) return degrees
+    edges.forEach((e) => {
+        if (e.source) {
+            degrees[nodeIdxMap[e.source]] += 1
+        }
+        if (e.target) {
+            degrees[nodeIdxMap[e.target]] += 1
+        }
+    })
+    return degrees
+}
+
+
 G6.registerLayout('my-grid', {
     // 默认参数
-    // getDefaultCfg: function getDefaultCfg() {
-    //     return {
-    //         center: [0, 0], // 布局的中心
-    //         biSep: 100, // 两部分的间距
-    //         nodeSep: 20, // 同一部分的节点间距
-    //         nodeSize: 20, // 节点大小
-    //         direction: 'horizontal', // 两部分的分布方向
-    //     };
-    // },
+    getDefaultCfg: function getDefaultCfg() {
+        return {
+            begin: [0, 0],
+        };
+    },
+    begin: [0, 0],
     onLayoutEnd() {},
     small(val) {
         const self = this;
@@ -51,6 +67,15 @@ G6.registerLayout('my-grid', {
     use(row, col) {
         const self = this;
         self.cellUsed[`c-${row}-${col}`] = true;
+    },
+    moveToNextCell() {
+        const self = this;
+        const cols = self.cols || 5;
+        self.col++;
+        if (self.col >= cols) {
+            self.col = 0;
+            self.row++;
+        }
     },
     getPos(node) {
         const self = this;
@@ -273,33 +298,5 @@ G6.registerLayout('my-grid', {
         }
 
         if (self.onLayoutEnd) self.onLayoutEnd();
-
-        const mockData = {
-            edges: [
-                {
-                    source: 'node1',
-                    target: 'node2',
-                },
-            ],
-            nodes: [
-                {
-                    id: 'node1',
-                    x: 0,
-                    y: 0,
-                }, {
-                    id: 'node2',
-                    x: 20,
-                    y: 20,
-                },
-            ],
-        }
-
-        // 真实的数
-        // const mockData = {
-        //     edges,
-        //     nodes: layoutNodes
-        // }
-
-        return mockData;
     },
 });
