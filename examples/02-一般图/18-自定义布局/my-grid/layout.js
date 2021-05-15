@@ -1,4 +1,5 @@
 const isString = (val) => typeof val === 'string'
+const isArray = Array.isArray
 const getDegree = (n, nodeIdxMap, edges) => {
     const degrees = []
     for (let i = 0; i < n; i++) {
