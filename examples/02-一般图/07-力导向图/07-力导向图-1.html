@@ -53,11 +53,13 @@
 
         // 这样可以刷新节点的位置,不然拖拽不动
         const forceLayout = graph.get('layoutController').layoutMethod;
+        console.log('%c forceLayout===', 'color:#fff;background: red;font-size:18px;', forceLayout)
         graph.on('node:dragstart', function (e) {
             graph.layout();
             refreshDragedNodePosition(e);
         });
         graph.on('node:drag', function (e) {
+            console.log('%c forceLayout===', 'color:#fff;background: red;font-size:18px;', forceLayout)
             forceLayout.execute();
             refreshDragedNodePosition(e);
         });
