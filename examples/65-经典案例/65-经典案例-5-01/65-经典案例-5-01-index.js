@@ -1,44 +1,10 @@
 
 
 import rawData from './65-经典案例-5-01-data.js'
+import { dataTransform } from './65-经典案例-5-01-util.js'
 import './65-经典案例-5-01-registerBehavior.js'
 import './65-经典案例-5-01-registerEdge.js'
 import './65-经典案例-5-01-registerNode.js'
-
-const dataTransform = (data) => {
-    const nodes = [];
-    const edges = [];
-
-    data.map((node) => {
-        nodes.push({
-            ...node
-        });
-        if (node.attrs) {
-            node.attrs.forEach((attr) => {
-                if (attr.relation) {
-                    attr.relation.forEach((relation) => {
-                        edges.push({
-                            source: node.id,
-                            target: relation.nodeId,
-                            sourceKey: attr.key,
-                            targetKey: relation.key,
-                            label: relation.label,
-                        });
-                    });
-                }
-
-            });
-        }
-    });
-
-    console.log('%c nodes===', 'color:#fff;background: red;font-size:18px;', nodes)
-    console.log('%c edges===', 'color:#fff;background: red;font-size:18px;', edges)
-
-    return {
-        nodes,
-        edges,
-    };
-}
 
 const container = document.getElementById('container');
 
