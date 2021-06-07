@@ -13,14 +13,14 @@ const data = [
                 "relation": [
                     {
                         "key": "id",
-                        "nodeId": "info"
+                        "nodeId": "employee"
                     }
                 ]
             },
         ],
     },
     {
-        "id": "info",
+        "id": "employee",
         "label": "Employee",
         "attrs": [
             {
@@ -30,12 +30,12 @@ const data = [
             {
                 "key": "jobTitle",
                 "type": "varchar(6)",
-                "relation": [
-                    {
-                        "key": "title",
-                        "nodeId": "job"
-                    }
-                ]
+                // "relation": [
+                //     {
+                //         "key": "title",
+                //         "nodeId": "job"
+                //     }
+                // ]
             },
             {
                 "key": "key",
@@ -132,12 +132,12 @@ const data = [
             {
                 "key": "parent",
                 "type": "number(6)",
-                "relation": [
-                    {
-                        "key": "id",
-                        "nodeId": "dept"
-                    }
-                ]
+                // "relation": [
+                //     {
+                //         "key": "id",
+                //         "nodeId": "dept"
+                //     }
+                // ]
             },
             {
                 "key": "manager",

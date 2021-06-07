@@ -7,6 +7,26 @@ const {
 
 registerEdge("dice-er-edge", {
     draw(cfg, group) {
+        /**
+        {
+            // 公共的属性
+            type: 'dice-er-edge',
+            style: {
+                stroke: '#e2e2e2',
+                lineWidth: 4,
+                endArrow: true,
+            },
+            
+            // 自己的属性
+            "source": "aaa",
+            "target": "employee",
+            "sourceKey": "employeeId",
+            "targetKey": "id"
+        }
+         */
+        
+        // console.log('%c cfg===', 'color:#fff;background: red;font-size:18px;', cfg)
+        // console.log('%c group===', 'color:#fff;background: red;font-size:18px;', group)
         const edge = group.cfg.item;
         const sourceNode = edge.getSource().getModel();
         const targetNode = edge.getTarget().getModel();
@@ -14,15 +34,18 @@ registerEdge("dice-er-edge", {
         // console.log('%c sourceNode===', 'color:#fff;background: red;font-size:18px;', sourceNode)
         // console.log('%c targetNode===', 'color:#fff;background: red;font-size:18px;', targetNode)
 
+        // 获取前一个连接的索引值
         const sourceIndex = sourceNode.attrs.findIndex(
             (e) => e.key === cfg.sourceKey
         );
 
+        // 在可视区域中的索引
         const sourceStartIndex = sourceNode.startIndex || 0;
 
         let sourceY = 15;
 
         if (!sourceNode.collapsed && sourceIndex > sourceStartIndex - 1) {
+            // 相对高度,所以多半个
             sourceY = 30 + (sourceIndex - sourceStartIndex + 0.5) * 30;
             sourceY = Math.min(sourceY, 300);
         }
@@ -40,9 +63,11 @@ registerEdge("dice-er-edge", {
             targetY = Math.min(targetY, 300);
         }
 
+        // 起点
         const startPoint = {
             ...cfg.startPoint
         };
+        // 终点
         const endPoint = {
             ...cfg.endPoint
         };
@@ -98,30 +123,5 @@ registerEdge("dice-er-edge", {
         }
 
         return shape;
-    },
-    afterDraw(cfg, group) {
-        const labelCfg = cfg.labelCfg || {};
-        const edge = group.cfg.item;
-        const sourceNode = edge.getSource().getModel();
-        const targetNode = edge.getTarget().getModel();
-        if (sourceNode.collapsed && targetNode.collapsed) {
-            return;
-        }
-        const path = group.find(
-            (element) => element.get("name") === "path-shape"
-        );
-
-        const labelStyle = Util.getLabelPosition(path, 0.5, 0, 0, true);
-        const label = group.addShape("text", {
-            attrs: {
-                ...labelStyle,
-                text: cfg.label || '',
-                fill: "#000",
-                textAlign: "center",
-                stroke: "#fff",
-                lineWidth: 1,
-            },
-        });
-        label.rotateAtStart(labelStyle.rotate);
     },
 });

@@ -246,6 +246,12 @@ registerNode("dice-er-box", {
                             lineWidth: 1,
                             cursor: "pointer",
                         },
+                        circleInfo: {
+                            // type: 'circle',
+                            // direction: 'left',
+                            index: Math.floor(startIndex) + i,
+                        },
+                        // name: `item-circle-left-${Math.floor(startIndex) + i}`,
                     });
                     // 右侧的小圆圈
                     listContainer.addShape("circle", {
@@ -259,6 +265,12 @@ registerNode("dice-er-box", {
                             lineWidth: 1,
                             cursor: "pointer",
                         },
+                        circleInfo: {
+                            // type: 'circle',
+                            // direction: 'right',
+                            index: Math.floor(startIndex) + i,
+                        },
+                        // name: `item-circle-right-${Math.floor(startIndex) + i}`,
                     });
                 }
 
