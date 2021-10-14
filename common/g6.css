@@ -1,0 +1,13 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+#container {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    /* background-color: #fff; */
+    left: 0;
+    top: 0;
+}
