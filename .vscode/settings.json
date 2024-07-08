@@ -2,12 +2,9 @@
     "editor.formatOnSave": false,
     "javascript.format.enable": false,
     "editor.codeActionsOnSave": {
-        // For ESLint
-        "source.fixAll.eslint": false,
-        // For TSLint
-        "source.fixAll.tslint": false,
-        // For Stylelint
-        "source.fixAll.stylelint": false
+        "source.fixAll.eslint": "never",
+        "source.fixAll.tslint": "never",
+        "source.fixAll.stylelint": "never"
     },
     "liveServer.settings.port": 5501
 }

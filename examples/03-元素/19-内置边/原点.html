@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,body {
+            background-color: #000000;
+        }
+        #container {
+            width: 6px;
+            height: 6px;
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const data = {
+            nodes: [
+                {
+                    id: 'leftPoint',
+                    x: 1,
+                    y: 1,
+                    style: {
+                        lineWidth: 0,
+                        fill: '#ffffff',
+                    },
+                    size: 6,
+                },
+                {
+                    id: 'lowPointLeft',
+                    x: 1,
+                    y: 1,
+                    style: {
+                        lineWidth: 0,
+                        fill: 'rgba(116, 122, 136, 1)',
+                    },
+                    size: 3
+                },
+            ],
+            edges: [],
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            fitCenter: true,
+            defaultNode: {
+                size: 20,
+                style: {
+                    fill: '#DEE9FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                type: 'arc',
+                style: {
+                    stroke: '#F6BD16',
+                },
+                labelCfg: {
+                    autoRotate: true,
+                    refY: -10,
+                },
+            },
+            modes: {
+                // 支持的 behavior
+                default: ['drag-node'],
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

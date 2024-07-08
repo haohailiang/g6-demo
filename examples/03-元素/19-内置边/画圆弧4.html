@@ -34,6 +34,8 @@
         const scaleColor = '#a1aac7'
         const midColor = '#529aff'
         const highColor = '#ff9d4d'
+        const pointColor = '#3388ff'
+        const displayTextColor = 'rgba(0, 0, 0, 0.85)';
         
         G6.registerNode('card-node', {
             draw: (cfg, group) => {
@@ -146,84 +148,38 @@
                     id: 'leftPoint',
                     x: 100,
                     y: 50,
-                    // label: '',
                     style: {
                         lineWidth: 0,
                         fill: lowColor,
-                        // fillOpacity: 0,
                     },
                 },
                 {
                     id: 'lowPointLeft',
-                    // x: 182.44294954150536,
-                    // y: -111.80339887498948,
-                    // x: 174.50306578237016, y: -105.7257830353596,
                     x: 172.95210870060458, y: -104.46304838496815,
-                    // label: '',
                     style: {
                         lineWidth: 0,
                         fill: lowColor,
-                        // fillOpacity: 0,
                     },
                 },
-                // {
-                //     id: 'lowPoint',
-                //     x: 182.44294954150536,
-                //     y: -111.80339887498948,
-                //     // label: '',
-                //     style: {
-                //         lineWidth: 0,
-                //         fill: lowColor,
-                //         // fillOpacity: 0,
-                //     },
-                // },
                 {
                     id: 'lowPointRight',
-                    // x: 182.44294954150536,
-                    // y: -111.80339887498948,
-                    // x: 190.67666470425849, y: -117.4765904830131,
                     x: 192.35686881767668, y: -118.56143185576329,
-                    // label: '',
                     style: {
                         lineWidth: 0,
                         fill: midColor,
-                        // fillOpacity: 0,
                     },
                 },
                 {
                     id: 'highPointLeft',
-                    // x: 182.44294954150536,
-                    // y: -111.80339887498948,
-                    // x: 461.8033988749895, y: -67.5570504584946,
-                    // x: 455.72578303535954, y: -75.49693421762986,
                     x: 454.46304838496815, y: -77.04789129939537,
-                    // label: '',
                     style: {
                         lineWidth: 0,
                         fill: midColor,
-                        // fillOpacity: 0,
                     },
                 },
-                // {
-                //     id: 'highPoint',
-                //     // x: 182.44294954150536,
-                //     // y: -111.80339887498948,
-                //     x: 461.8033988749895, y: -67.5570504584946,
-                //     // label: '',
-                //     style: {
-                //         lineWidth: 0,
-                //         fill: midColor,
-                //         // fillOpacity: 0,
-                //     },
-                // },
                 {
                     id: 'highPointRight',
-                    // x: 182.44294954150536,
-                    // y: -111.80339887498948,
-                    // x: 461.8033988749895, y: -67.5570504584946,
-                    // x: 467.4765904830131, y: -59.32333529574147,
                     x: 468.5614318557633, y: -57.643131182323344,
-                    // label: '',
                     style: {
                         lineWidth: 0,
                         fill: highColor,
@@ -234,14 +190,67 @@
                     id: 'rightPoint',
                     x: 500,
                     y: 50,
-                    // label: '1',
                     style: {
                         lineWidth: 0,
                         fill: highColor,
-                        // fillOpacity: 0,
                     },
                 },
                 ...scaleNodes,
+                {
+                    id: 'gradient-bg',
+                    x: 300, // 坐标待计算
+                    y: 50,
+                    style: {
+                        lineWidth: 0,
+                        fill: 'r(0.5, 0.5, 0.5) 0:rgba(0, 204, 255, 1) 1:rgba(82, 220, 255, 0)',
+                        fillOpacity: 0.18,
+                    },
+                    size: 300,
+                },
+                {
+                    id: 'pointer-bg',
+                    x: 500, // 坐标待计算
+                    y: 50,
+                    style: {
+                        lineWidth: 0,
+                        fill: pointColor,
+                    },
+                    size: 28,
+                },
+                {
+                    id: 'pointer-white',
+                    x: 500, // 坐标待计算
+                    y: 50,
+                    style: {
+                        lineWidth: 0,
+                        fill: '#ffffff',
+                    },
+                    size: 12,
+                },
+                { // 文本节点
+                    id: 'display-text',
+                    x: 500, // 坐标待计算
+                    y: 50,
+                    type: 'rect',
+                    label: '5.6',
+                    labelCfg: {
+                        style: {
+                            fill: displayTextColor,
+                            fontSize: 72,
+                            // fontFamily: 'Arial, Microsoft Yahei'
+                            // fontFamily: 'Arial'
+                            fontFamily: 'Microsoft Yahei'
+                        },
+                    }, // 文本配置项
+                    size: [90, 90], // 矩形的中心位置是节点的位置，而不是左上角
+                    color: '#000000',
+                    stateStyles: {}, // 只对 keyShape 起作用
+                    style: {
+                        // radius: '圆角半径',
+                        fill: 'transparent',
+                        lineWidth: 0
+                    },
+                },
             ],
             edges: [
                 {
@@ -249,53 +258,39 @@
                     source: 'leftPoint',
                     target: 'rightPoint',
                     curveOffset: 200,
+                    // curveOffset: 2000,
                     style: {
                         lineWidth: 20,
                         stroke: '#ff0000'
-                        // stroke: 'l(0) 0:#80b5ff 1:#529aff'
-                        // stroke: 'l(0) 0:#ff0000 1:#0000ff'
                     },
                 },
                 {
                     id: 'edgeLow',
                     source: 'leftPoint',
-                    // target: 'lowPoint',
                     target: 'lowPointLeft',
-                    // curveOffset: 21.798695162326418,
                     curveOffset: 16.674743440278608,
                     style: {
                         lineWidth: 20,
-                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
                         stroke: lowColor
-                        // stroke: 'l(0) 0:#ff0000 1:#0000ff'
                     },
                 },
                 {
                     id: 'edgeMid',
-                    // source: 'lowPoint',
                     source: 'lowPointRight',
-                    // target: 'highPoint',
                     target: 'highPointLeft',
-                    // curveOffset: 58.5786437626905,
                     curveOffset: 50.352934723802925,
                     style: {
                         lineWidth: 20,
-                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
-                        // stroke: 'l(0) 0:#80b5ff 1:#529aff'
                         stroke: midColor
                     },
                 },
                 {
                     id: 'edgeHigh',
-                    // source: 'highPoint',
                     source: 'highPointRight',
                     target: 'rightPoint',
-                    // curveOffset: 9.788696740969286,
                     curveOffset: 6.424994974465129,
                     style: {
                         lineWidth: 20,
-                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
-                        // stroke: 'l(0) 0:#ffbf64 1:#ff9d4d'
                         stroke: highColor
                     },
                 },
@@ -309,7 +304,6 @@
             width,
             height,
             linkCenter: true,
-            // translate the graph to align the canvas's center, support by v3.5.1
             fitCenter: true,
             defaultNode: {
                 size: 20,
