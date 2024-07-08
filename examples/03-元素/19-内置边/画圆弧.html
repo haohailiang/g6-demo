@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        /**
+ * The usage of arc edge
+ * by Shiwu
+ */
+
+        const data = {
+            nodes: [
+                {
+                    id: '0',
+                    x: 100,
+                    y: 50,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: '#80b5ff',
+                        // fillOpacity: 0,
+                    },
+                },
+                {
+                    id: '1',
+                    x: 500,
+                    y: 50,
+                    // label: '1',
+                    style: {
+                        lineWidth: 0,
+                        fill: '#529aff',
+                        // fillOpacity: 0,
+                    },
+                },
+            ],
+            edges: [
+                // {
+                //     id: 'edge1',
+                //     source: '0',
+                //     target: '1',
+                //     // label: 'curveOffset = 50', // the bending degree
+                //     curveOffset: 200,
+                //     style: {
+                //         lineWidth: 20,
+                //         // stroke: '#87e8de'
+                //         stroke: 'l(0) 0:rgba(161, 170, 199, 1) 1:rgba(180, 188, 213, 1)'
+                //         // stroke: 'l(0) 0:#ff0000 1:#0000ff'
+                //     },
+                // },
+                {
+                    id: 'edge2',
+                    source: '0',
+                    target: '1',
+                    curveOffset: 200,
+                    style: {
+                        lineWidth: 20,
+                        // stroke: '#87e8de'
+                        stroke: 'l(0) 0:#80b5ff 1:#529aff'
+                        // stroke: 'l(0) 0:#ff0000 1:#0000ff'
+                    },
+                },
+            ],
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            fitCenter: true,
+            defaultNode: {
+                size: 20,
+                style: {
+                    fill: '#DEE9FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                type: 'arc',
+                style: {
+                    stroke: '#F6BD16',
+                },
+                labelCfg: {
+                    autoRotate: true,
+                    refY: -10,
+                },
+            },
+            modes: {
+                // 支持的 behavior
+                default: ['drag-node'],
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

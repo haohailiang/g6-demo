@@ -20,7 +20,7 @@
             text-align: center;
         }
     </style>
-    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <script src="../../../lib/g6-4.5.1.min.js"></script>
     <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
 </head>
 
@@ -50,40 +50,44 @@
             defaultNode: {
                 type: 'circle',
                 size: [160],
-                color: '#5B8FF9',
+                // color: '#5B8FF9',
                 style: {
-                    fill: '#9EC9FF',
-                    lineWidth: 3,
+                    // fill: '#9EC9FF',
+                    // stroke: '#ff0000',
+                    // stroke: 'l(0) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+                    stroke: 'l(0) 0:#ffffff 0.2:#ffffff 0.75:#7ec2f3 1:#1890ff',
+                    // stroke: 'l(0) 0:#ffffff 0.25:#ffffff 0.5:#7ec2f3 0.75:#ffffff 1:#ffffff',
+                    lineWidth: 30,
                 },
-                labelCfg: {
-                    style: {
-                        fill: '#1890ff',
-                        fontSize: 24,
-                    },
-                    position: 'bottom',
-                },
-                // configurations for four linkpoints
-                linkPoints: {
-                    top: true,
-                    right: true,
-                    bottom: true,
-                    left: true,
-                    // the diameter of the linkPoint
-                    size: 10,
-                    lineWidth: 1,
-                    fill: '#fff',
-                    stroke: '#1890FF',
-                },
-                // icon configuration
-                icon: {
-                    // whether show the icon
-                    show: true,
-                    // icon's img address, string type
-                    img:
-                        'https://gw.alipayobjects.com/zos/basement_prod/012bcf4f-423b-4922-8c24-32a89f8c41ce.svg',
-                    width: 60,
-                    height: 60,
-                },
+                // labelCfg: {
+                //     style: {
+                //         fill: '#1890ff',
+                //         fontSize: 24,
+                //     },
+                //     position: 'bottom',
+                // },
+                // // configurations for four linkpoints
+                // linkPoints: {
+                //     top: true,
+                //     right: true,
+                //     bottom: true,
+                //     left: true,
+                //     // the diameter of the linkPoint
+                //     size: 10,
+                //     lineWidth: 1,
+                //     fill: '#fff',
+                //     stroke: '#1890FF',
+                // },
+                // // icon configuration
+                // icon: {
+                //     // whether show the icon
+                //     show: true,
+                //     // icon's img address, string type
+                //     img:
+                //         'https://gw.alipayobjects.com/zos/basement_prod/012bcf4f-423b-4922-8c24-32a89f8c41ce.svg',
+                //     width: 60,
+                //     height: 60,
+                // },
             },
             modes: {
                 default: ['drag-canvas', 'drag-node'],

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #container {
+            width: 392px;
+            height: 314px;
+            border: 1px solid black;
+
+        }
+
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+</body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const containerWidth = 392; // 容器宽
+        const containerHeight = 314; // 容器高
+
+        let graph;
+
+        const COLLAPSE_ICON = function COLLAPSE_ICON(x, y, r) {
+            return [
+                ['M', x - r, y],
+                ['a', r, r, 0, 1, 0, r * 2, 0],
+                ['a', r, r, 0, 1, 0, -r * 2, 0],
+                ['M', x - r + 4, y],
+                ['L', x - r + 2 * r - 4, y],
+            ];
+        };
+        const EXPAND_ICON = function EXPAND_ICON(x, y, r) {
+            return [
+                ['M', x - r, y],
+                ['a', r, r, 0, 1, 0, r * 2, 0],
+                ['a', r, r, 0, 1, 0, -r * 2, 0],
+                ['M', x - r + 4, y],
+                ['L', x - r + 2 * r - 4, y],
+                ['M', x - r + r, y - r + 4],
+                ['L', x, y + r - 4],
+            ];
+        };
+
+        G6.registerNode('card-node', {
+            draw: (cfg, group) => {
+                const { low, high, isLowActive, isHighActive } = cfg;
+
+                // 容器
+                const shape = group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        width: containerWidth,
+                        height: containerHeight,
+                        radius: [containerHeight/2, containerHeight/2],
+                        fill: 'black'
+                    },
+                    name: 'outer-box',
+                    draggable: true,
+                });
+
+                // 低分
+                // const lowWidth = getScoreWidth(low);
+                // group.addShape('rect', {
+                //     attrs: {
+                //         x: 0,
+                //         y: 0,
+                //         // width: containerWidth * (low / 10),
+                //         width: lowWidth,
+                //         height: containerHeight,
+                //         radius: [containerHeight/2, 0, 0, containerHeight/2],
+                //         fill: lowColor,
+                //         opacity: low === 0 ? 0 : 1,
+                //     },
+                //     name: 'low-rect',
+                //     // draggable: true,
+                // });
+
+
+                // 显示2个三角形
+                // if (isLowActive) {
+                //     group.addShape('marker', {
+                //         attrs: {
+                //             x: lowCircleStart,
+                //             y: containerHeight / 2,
+                //             r: 30,
+                //             fill: '#000000',
+                //             symbol: function (x, y, r) {
+                //                 return [
+                //                     ['M', x - 5, y], ['L', x - 5 - 7, y + 7], ['L', x - 5 - 7, y - 7], ['Z'],
+                //                     ['M', x + 5, y], ['L', x + 5 + 7, y + 7], ['L', x + 5 + 7, y - 7], ['Z'],
+                //                 ]
+                //             },
+                //         },
+                //         name: 'marker-triangle-left',
+                //         capture: false,
+                //     });
+                // }
+
+                return shape;
+            },
+        });
+
+
+    const container = document.getElementById('container');
+    const width = container.scrollWidth;
+    const height = container.scrollHeight || 500;
+        graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            // fitCenter: true,
+            modes: {
+                // default: ['drag-node'],
+                default: ['zoom-canvas', 'drag-node'],
+            },
+            defaultNode: {
+                type: 'card-node',
+            },
+        });
+
+        const data = {
+            nodes: [
+                {
+                    x: 0,
+                    y: 0,
+                    id: 'target',
+                    high: 8.0,
+                    low: 3.0,
+                    score: 5.6,
+                    isLowActive: false,
+                    isHighActive: false,
+                }
+            ],
+            edges: [],
+        };
+
+        graph.data(data);
+        graph.render();
+
+    if (typeof window !== 'undefined') {
+        window.onresize = () => {
+            if (!graph || graph.get('destroyed')) return;
+            if (!container || !container.scrollWidth || !container.scrollHeight) return;
+            graph.changeSize(container.scrollWidth, container.scrollHeight);
+        };
+    }
+
+    </script>
+</html>

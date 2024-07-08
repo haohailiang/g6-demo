@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const coverNodeWidth = 22;
+        const coverNodeHeight = 20;
+        const lowColor = '#a1aac7'
+        const scaleColor = '#a1aac7'
+        const midColor = '#529aff'
+        const highColor = '#ff9d4d'
+        
+        G6.registerNode('card-node', {
+            draw: (cfg, group) => {
+                const { leftColor, rightColor, bgColor } = cfg;
+
+                // 容器
+                const shape = group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        width: coverNodeWidth,
+                        height: coverNodeHeight,
+                        // radius: [containerHeight/2, containerHeight/2],
+                        fill: bgColor
+                    },
+                    name: 'outer-box',
+                    // draggable: true,
+                });
+
+                group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        width: coverNodeHeight / 2,
+                        height: coverNodeHeight,
+                        radius: [0, coverNodeHeight/2, coverNodeHeight/2, 0],
+                        fill: leftColor
+                    },
+                    name: 'left-box',
+                    // draggable: true,
+                });
+
+                group.addShape('rect', {
+                    attrs: {
+                        x: coverNodeWidth * 2 / 3,
+                        y: 0,
+                        width: coverNodeHeight / 2,
+                        height: coverNodeHeight,
+                        radius: [coverNodeHeight/2, 0, 0, coverNodeHeight/2],
+                        fill: rightColor
+                    },
+                    name: 'right-box',
+                    // draggable: true,
+                });
+
+                // shape.transform([
+                // ['t', 10, 10], // x 方向平移 10, y 方向平移 10
+                // ['s', 1.2], // 缩放 1.2 倍
+                // ['r', Math.PI / 4], // 旋转 45 度
+                // ]);
+                // https://antv-g6.gitee.io/zh/docs/manual/middle/elements/shape/transform/#rotateradian
+
+                
+                return shape;
+            },
+        });
+        // const fullMarks = 10.0;
+        // const low = 3.0;
+        // const high = 8.0;
+        // const margin = 30;
+        // const borderWidth = 20;
+        // const diameter = 392 - margin * 2 - borderWidth; // 最外边边框的距离
+        // const lowRatio = low / fullMarks;
+        // const highRatio = high / fullMarks;
+
+        // const getNodePosition = (startPoint, endPoint, ratio) => {};
+        const scaleNodes = [ { x: 450, y: 50 },
+  { x: 448.8172051971717, y: 31.200014965354363 },
+  { x: 445.2874741692947, y: 12.69651692527178 },
+  { x: 439.4664728832377, y: -5.218682902701694 },
+  { x: 431.44600200657953, y: -22.263051115257298 },
+  { x: 421.3525491562421, y: -38.16778784387097 },
+  { x: 409.3452941132117, y: -52.6820658893033 },
+  { x: 395.61359846230346, y: -65.57698641636838 },
+  { x: 380.37401924684946, y: -76.64918882530226 },
+  { x: 363.8668937347609, y: -85.72405786990294 },
+  { x: 346.3525491562421, y: -92.65847744427302 },
+  { x: 328.1071971878587, y: -97.3430876093033 },
+  { x: 309.418577929397, y: -99.70400926424074 },
+  { x: 290.58142207060297, y: -99.70400926424074 },
+  { x: 271.89280281214127, y: -97.3430876093033 },
+  { x: 253.64745084375787, y: -92.65847744427302 },
+  { x: 236.1331062652391, y: -85.72405786990291 },
+  { x: 219.6259807531505, y: -76.64918882530225 },
+  { x: 204.38640153769654, y: -65.57698641636838 },
+  { x: 190.65470588678824, y: -52.682065889303274 },
+  { x: 178.6474508437579, y: -38.16778784387098 },
+  { x: 168.55399799342047, y: -22.263051115257284 },
+  { x: 160.5335271167623, y: -5.218682902701666 },
+  { x: 154.71252583070535, y: 12.69651692527178 },
+  { x: 151.1827948028283, y: 31.200014965354388 },
+  { x: 150, y: 50.00000000000005 } ].map((v, index) => ({
+    id: 'scale' + index,
+    // x: 100,
+    // y: 50,
+    ...v,
+    // label: '',
+    size: 4,
+    style: {
+        lineWidth: 0,
+        fill: scaleColor,
+        // fillOpacity: 0,
+    },
+  }))
+
+
+        const data = {
+            nodes: [
+                {
+                    id: 'leftPoint',
+                    x: 100,
+                    y: 50,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: lowColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                {
+                    id: 'lowPointLeft',
+                    // x: 182.44294954150536,
+                    // y: -111.80339887498948,
+                    // x: 174.50306578237016, y: -105.7257830353596,
+                    x: 172.95210870060458, y: -104.46304838496815,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: lowColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                // {
+                //     id: 'lowPoint',
+                //     x: 182.44294954150536,
+                //     y: -111.80339887498948,
+                //     // label: '',
+                //     style: {
+                //         lineWidth: 0,
+                //         fill: lowColor,
+                //         // fillOpacity: 0,
+                //     },
+                // },
+                {
+                    id: 'lowPointRight',
+                    // x: 182.44294954150536,
+                    // y: -111.80339887498948,
+                    // x: 190.67666470425849, y: -117.4765904830131,
+                    x: 192.35686881767668, y: -118.56143185576329,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: midColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                {
+                    id: 'highPointLeft',
+                    // x: 182.44294954150536,
+                    // y: -111.80339887498948,
+                    // x: 461.8033988749895, y: -67.5570504584946,
+                    // x: 455.72578303535954, y: -75.49693421762986,
+                    x: 454.46304838496815, y: -77.04789129939537,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: midColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                // {
+                //     id: 'highPoint',
+                //     // x: 182.44294954150536,
+                //     // y: -111.80339887498948,
+                //     x: 461.8033988749895, y: -67.5570504584946,
+                //     // label: '',
+                //     style: {
+                //         lineWidth: 0,
+                //         fill: midColor,
+                //         // fillOpacity: 0,
+                //     },
+                // },
+                {
+                    id: 'highPointRight',
+                    // x: 182.44294954150536,
+                    // y: -111.80339887498948,
+                    // x: 461.8033988749895, y: -67.5570504584946,
+                    // x: 467.4765904830131, y: -59.32333529574147,
+                    x: 468.5614318557633, y: -57.643131182323344,
+                    // label: '',
+                    style: {
+                        lineWidth: 0,
+                        fill: highColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                {
+                    id: 'rightPoint',
+                    x: 500,
+                    y: 50,
+                    // label: '1',
+                    style: {
+                        lineWidth: 0,
+                        fill: highColor,
+                        // fillOpacity: 0,
+                    },
+                },
+                ...scaleNodes,
+            ],
+            edges: [
+                {
+                    id: 'edgeBg',
+                    source: 'leftPoint',
+                    target: 'rightPoint',
+                    curveOffset: 200,
+                    style: {
+                        lineWidth: 20,
+                        stroke: '#ff0000'
+                        // stroke: 'l(0) 0:#80b5ff 1:#529aff'
+                        // stroke: 'l(0) 0:#ff0000 1:#0000ff'
+                    },
+                },
+                {
+                    id: 'edgeLow',
+                    source: 'leftPoint',
+                    // target: 'lowPoint',
+                    target: 'lowPointLeft',
+                    // curveOffset: 21.798695162326418,
+                    curveOffset: 16.674743440278608,
+                    style: {
+                        lineWidth: 20,
+                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
+                        stroke: lowColor
+                        // stroke: 'l(0) 0:#ff0000 1:#0000ff'
+                    },
+                },
+                {
+                    id: 'edgeMid',
+                    // source: 'lowPoint',
+                    source: 'lowPointRight',
+                    // target: 'highPoint',
+                    target: 'highPointLeft',
+                    // curveOffset: 58.5786437626905,
+                    curveOffset: 50.352934723802925,
+                    style: {
+                        lineWidth: 20,
+                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
+                        // stroke: 'l(0) 0:#80b5ff 1:#529aff'
+                        stroke: midColor
+                    },
+                },
+                {
+                    id: 'edgeHigh',
+                    // source: 'highPoint',
+                    source: 'highPointRight',
+                    target: 'rightPoint',
+                    // curveOffset: 9.788696740969286,
+                    curveOffset: 6.424994974465129,
+                    style: {
+                        lineWidth: 20,
+                        // stroke: 'l(0) 0:#b4bcd5 1:#a1aac7'
+                        // stroke: 'l(0) 0:#ffbf64 1:#ff9d4d'
+                        stroke: highColor
+                    },
+                },
+            ],
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            linkCenter: true,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            fitCenter: true,
+            defaultNode: {
+                size: 20,
+                style: {
+                    fill: '#DEE9FF',
+                    stroke: '#5B8FF9',
+                },
+            },
+            defaultEdge: {
+                type: 'arc',
+                style: {
+                    stroke: '#F6BD16',
+                },
+                labelCfg: {
+                    autoRotate: true,
+                    refY: -10,
+                },
+            },
+            modes: {
+                // 支持的 behavior
+                default: ['drag-node'],
+            },
+        });
+
+        graph.data(data);
+        graph.render();
+    </script>
+</body>
+
+</html>

@@ -21,6 +21,7 @@
         }
     </style>
     <script src="../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="https://gw.alipayobjects.com/os/lib/antv/g6/4.5.1/dist/g6.min.js"></script> -->
     <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
 </head>
 
@@ -33,12 +34,13 @@
             edges: [],
         };
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 5; i++) {
             const id = `node-${i}`;
             data.nodes.push({
                 id,
                 date: `2020${i}`,
-                value: Math.round(Math.random() * 300),
+                // value: Math.round(Math.random() * 300),
+                value: 200,
             });
 
             data.edges.push({
@@ -47,19 +49,22 @@
             });
         }
 
-        const width = document.getElementById('container').scrollWidth;
-        const height = document.getElementById('container').scrollHeight || 500;
-
+        const container = document.getElementById('container');
+        const width = container.scrollWidth;
+        const height = (container.scrollHeight || 500) - 100;
         const timeBarData = [];
 
         const nodeSize = 20;
+        console.info('%c data.nodes===', 'color:#fff;background: red;font-size:18px;', data.nodes);
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 5; i++) {
             timeBarData.push({
                 date: `2020${i}`,
-                value: Math.round(Math.random() * 300),
+                // value: Math.round(Math.random() * 300),
+                value: 200
             });
         }
+        console.info('timeBarData: ', timeBarData);
 
         const timebar = new G6.TimeBar({
             x: 0,
@@ -69,12 +74,13 @@
             padding: 10,
             type: 'trend',
             trend: {
-                data: timeBarData
+                data: timeBarData,
             },
         });
 
         // constrained the layout inside the area
-        const constrainBox = { x: 10, y: 10, width: 580, height: 450 };
+        // const constrainBox = { x: 10, y: 10, width: 580, height: 450 };
+        const constrainBox = { x: 10, y: 10, width: 1700, height: 740 };
 
         const onTick = () => {
             let minx = 99999999;
@@ -107,7 +113,7 @@
         const graph = new G6.Graph({
             container: 'container',
             width,
-            height: height - 100,
+            height,
             linkCenter: true,
             plugins: [timebar],
             layout: {
@@ -129,6 +135,13 @@
         });
         graph.data(data);
         graph.render();
+
+        if (typeof window !== 'undefined')
+            window.onresize = () => {
+                if (!graph || graph.get('destroyed')) return;
+                if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                graph.changeSize(container.scrollWidth, container.scrollHeight - 100);
+            };
     </script>
 </body>
 

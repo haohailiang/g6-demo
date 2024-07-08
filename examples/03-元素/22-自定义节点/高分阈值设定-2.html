@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.0.3.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const containerWidth = 800; // 容器宽
+        const containerHeight = 24; // 容器高
+        const circleDiameter = 24; // 滑块直径
+
+        // 颜色
+        const lowColor = 'l(90) 0:#a1aac7 1:#b4bcd5'; // 低分
+        const midColor = 'l(90) 0:#3388ff 1:#529aff'; // 普通
+        const highColor = 'l(90) 0:#ff9d4d 1:#ffbf64'; // 高分
+        const thinLineColor = 'yellow'; // 短细线
+        const containerTextColor = '#ffffff'; // 容器上文字颜色
+
+        // 颜色/低分
+        const lowCircleBorder = '#747a88'; // 低分handler边框
+        const normalLowCircleBg = '#ffffff'; // 低分handler背景[默认]
+        const normalLowFontColor = '#262626'; // 低分handler文字[默认]
+        const acitveLowCircleBg = '#747a88'; // 低分handler背景[激活]
+        const acitveLowFontColor = '#ffffff'; // 低分handler文字[激活]
+
+        // 颜色/高分
+        const highCircleBorder = '#ff7832'; // 高分handler边框
+        const normalHighCircleBg = '#ffffff'; // 高分handler背景[默认]
+        const normalHighFontColor = '#262626'; // 高分handler文字[默认]
+        const acitveHighCircleBg = '#ff7832'; // 高分handler背景[激活]
+        const acitveHighFontColor = '#ffffff'; // 高分handler文字[激活]
+
+        const triangleColor = '#000000'; // 三角颜色
+
+        // 短刻度
+        const shortScaleStep = containerWidth / 100;
+        const shortScaleWidth = 2;
+        const shrotScaleHeight = 16;
+
+        // 字体大小
+        const containerFontSize = 12; // 容器上字体大小
+        // const handleFontSize = 14; // 滑动手柄字体大小
+        const handleFontSize = 12; // 滑动手柄字体大小
+
+        // 获取分数的具体宽度[四舍五入]
+        const getScoreWidth = (score) => {
+            const integerValue = Number(score.toFixed(1)) * 10;
+            const displayWidth = shortScaleStep * integerValue;
+
+            return displayWidth;
+        }
+
+        let graph;
+
+        const ERROR_COLOR = '#F5222D';
+        const getNodeConfig = (node) => {
+            if (node.nodeError) {
+                return {
+                    basicColor: ERROR_COLOR,
+                    fontColor: '#FFF',
+                    borderColor: ERROR_COLOR,
+                    bgColor: '#E66A6C',
+                };
+            }
+            let config = {
+                basicColor: '#5B8FF9',
+                fontColor: '#5B8FF9',
+                borderColor: '#5B8FF9',
+                bgColor: '#C6E5FF',
+            };
+            switch (node.type) {
+                case 'root': {
+                    config = {
+                        basicColor: '#E3E6E8',
+                        fontColor: 'rgba(0,0,0,0.85)',
+                        borderColor: '#E3E6E8',
+                        bgColor: '#5b8ff9',
+                    };
+                    break;
+                }
+                default:
+                    break;
+            }
+            return config;
+        };
+
+        const COLLAPSE_ICON = function COLLAPSE_ICON(x, y, r) {
+            return [
+                ['M', x - r, y],
+                ['a', r, r, 0, 1, 0, r * 2, 0],
+                ['a', r, r, 0, 1, 0, -r * 2, 0],
+                ['M', x - r + 4, y],
+                ['L', x - r + 2 * r - 4, y],
+            ];
+        };
+        const EXPAND_ICON = function EXPAND_ICON(x, y, r) {
+            return [
+                ['M', x - r, y],
+                ['a', r, r, 0, 1, 0, r * 2, 0],
+                ['a', r, r, 0, 1, 0, -r * 2, 0],
+                ['M', x - r + 4, y],
+                ['L', x - r + 2 * r - 4, y],
+                ['M', x - r + r, y - r + 4],
+                ['L', x, y + r - 4],
+            ];
+        };
+        const nodeBasicMethod = {
+            createNodeBox: (group, config, w, h, isRoot) => {
+                /* 最外面的大矩形 */
+                const container = group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        width: w,
+                        heigh: h,
+                    },
+                    name: 'big-rect-shape',
+                });
+                if (!isRoot) {
+                    /* 左边的小圆点 */
+                    group.addShape('circle', {
+                        attrs: {
+                            x: 3,
+                            y: h / 2,
+                            r: 6,
+                            fill: config.basicColor,
+                        },
+                        name: 'left-dot-shape',
+                    });
+                }
+                /* 矩形 */
+                group.addShape('rect', {
+                    attrs: {
+                        x: 3,
+                        y: 0,
+                        width: w - 19,
+                        height: h,
+                        fill: config.bgColor,
+                        stroke: config.borderColor,
+                        radius: 2,
+                        cursor: 'pointer',
+                    },
+                    name: 'rect-shape',
+                });
+
+                /* 左边的粗线 */
+                group.addShape('rect', {
+                    attrs: {
+                        x: 3,
+                        y: 0,
+                        width: 3,
+                        height: h,
+                        fill: config.basicColor,
+                        radius: 1.5,
+                    },
+                    name: 'left-border-shape',
+                });
+                return container;
+            },
+            /* 生成树上的 marker */
+            createNodeMarker: (group, collapsed, x, y) => {
+                group.addShape('circle', {
+                    attrs: {
+                        x,
+                        y,
+                        r: 13,
+                        fill: 'rgba(47, 84, 235, 0.05)',
+                        opacity: 0,
+                        zIndex: -2,
+                    },
+                    name: 'collapse-icon-bg',
+                });
+                group.addShape('marker', {
+                    attrs: {
+                        x,
+                        y,
+                        r: 7,
+                        symbol: collapsed ? EXPAND_ICON : COLLAPSE_ICON,
+                        stroke: 'rgba(0,0,0,0.25)',
+                        fill: 'rgba(0,0,0,0)',
+                        lineWidth: 1,
+                        cursor: 'pointer',
+                    },
+                    name: 'collapse-icon',
+                });
+            },
+            afterDraw: (cfg, group) => {
+                /* 操作 marker 的背景色显示隐藏 */
+                const icon = group.find((element) => element.get('name') === 'collapse-icon');
+                if (icon) {
+                    const bg = group.find((element) => element.get('name') === 'collapse-icon-bg');
+                    icon.on('mouseenter', () => {
+                        bg.attr('opacity', 1);
+                        graph.get('canvas').draw();
+                    });
+                    icon.on('mouseleave', () => {
+                        bg.attr('opacity', 0);
+                        graph.get('canvas').draw();
+                    });
+                }
+                /* ip 显示 */
+                const ipBox = group.find((element) => element.get('name') === 'ip-box');
+                if (ipBox) {
+                    /* ip 复制的几个元素 */
+                    const ipLine = group.find((element) => element.get('name') === 'ip-cp-line');
+                    const ipBG = group.find((element) => element.get('name') === 'ip-cp-bg');
+                    const ipIcon = group.find((element) => element.get('name') === 'ip-cp-icon');
+                    const ipCPBox = group.find((element) => element.get('name') === 'ip-cp-box');
+
+                    const onMouseEnter = () => {
+                        ipLine.attr('opacity', 1);
+                        ipBG.attr('opacity', 1);
+                        ipIcon.attr('opacity', 1);
+                        graph.get('canvas').draw();
+                    };
+                    const onMouseLeave = () => {
+                        ipLine.attr('opacity', 0);
+                        ipBG.attr('opacity', 0);
+                        ipIcon.attr('opacity', 0);
+                        graph.get('canvas').draw();
+                    };
+                    ipBox.on('mouseenter', () => {
+                        onMouseEnter();
+                    });
+                    ipBox.on('mouseleave', () => {
+                        onMouseLeave();
+                    });
+                    ipCPBox.on('mouseenter', () => {
+                        onMouseEnter();
+                    });
+                    ipCPBox.on('mouseleave', () => {
+                        onMouseLeave();
+                    });
+                    ipCPBox.on('click', () => { });
+                }
+            },
+            setState: (name, value, item) => {
+                const hasOpacityClass = [
+                    'ip-cp-line',
+                    'ip-cp-bg',
+                    'ip-cp-icon',
+                    'ip-cp-box',
+                    'ip-box',
+                    'collapse-icon-bg',
+                ];
+                const group = item.getContainer();
+                const childrens = group.get('children');
+                graph.setAutoPaint(false);
+                if (name === 'emptiness') {
+                    if (value) {
+                        childrens.forEach((shape) => {
+                            if (hasOpacityClass.indexOf(shape.get('name')) > -1) {
+                                return;
+                            }
+                            shape.attr('opacity', 0.4);
+                        });
+                    } else {
+                        childrens.forEach((shape) => {
+                            if (hasOpacityClass.indexOf(shape.get('name')) > -1) {
+                                return;
+                            }
+                            shape.attr('opacity', 1);
+                        });
+                    }
+                }
+                graph.setAutoPaint(true);
+            },
+        };
+
+        G6.registerNode('card-node', {
+            draw: (cfg, group) => {
+                const { low, high, isLowActive, isHighActive } = cfg;
+
+                // 容器
+                const shape = group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        width: containerWidth,
+                        height: containerHeight,
+                        radius: [containerHeight/2, containerHeight/2],
+                        fill: 'black'
+                    },
+                    name: 'outer-box',
+                    draggable: true,
+                });
+
+                // 低分
+                const lowWidth = getScoreWidth(low);
+                group.addShape('rect', {
+                    attrs: {
+                        x: 0,
+                        y: 0,
+                        // width: containerWidth * (low / 10),
+                        width: lowWidth,
+                        height: containerHeight,
+                        radius: [containerHeight/2, 0, 0, containerHeight/2],
+                        fill: lowColor
+                    },
+                    name: 'low-rect',
+                    draggable: true,
+                });
+
+                // 普通
+                const midStart  = lowWidth;
+                const midWidth = getScoreWidth(high - low);
+                group.addShape('rect', {
+                    attrs: {
+                        x: midStart,
+                        y: 0,
+                        width: midWidth,
+                        height: containerHeight,
+                        fill: midColor
+                    },
+                    name: 'mid-rect',
+                    draggable: true,
+                });
+
+                // 高分
+                const highStart = getScoreWidth(high);
+                const highWidth = getScoreWidth(10 - high);
+                group.addShape('rect', {
+                    attrs: {
+                        x: highStart,
+                        y: 0,
+                        width: highWidth,
+                        height: containerHeight,
+                        radius: [0, containerHeight/2, containerHeight/2, 0],
+                        fill: highColor
+                    },
+                    name: 'mid-rect',
+                    draggable: true,
+                });
+
+                // 短刻度
+                // const shortScaleStep = containerWidth / 100;
+                // const shortScaleWidth = 2;
+                // const shrotScaleHeight = 16;
+                Array.from(new Array(100), (v, i) => {
+                    group.addShape('rect', {
+                        attrs: {
+                            x: shortScaleStep * i - 1,
+                            y: (containerHeight - shrotScaleHeight) / 2,
+                            width: shortScaleWidth,
+                            height: shrotScaleHeight,
+                            // radius: [0, containerHeight/2, containerHeight/2, 0],
+                            fill: '#ffffff',
+                            opacity: 0.2,
+                        },
+                        name: 'short-scale',
+                        draggable: true,
+                    });
+                });
+
+                // 长刻度
+                Array.from(new Array(20), (v, i) => {
+                    group.addShape('rect', {
+                        attrs: {
+                            x: (shortScaleStep * 5) * i - 1,
+                            y: 0,
+                            width: shortScaleWidth,
+                            height: containerHeight,
+                            // radius: [0, containerHeight/2, containerHeight/2, 0],
+                            fill: '#ffffff',
+                            opacity: 0.2,
+                        },
+                        name: 'long-scale',
+                        draggable: true,
+                    });
+                });
+
+                // 显示文字/低分
+                const isShowShortText = lowWidth >= containerFontSize * 2;
+                if (isShowShortText) {
+                    const lowTextStart = (lowWidth - containerFontSize * 2) / 2;
+                    group.addShape('text', {
+                        attrs: {
+                            x: lowTextStart,
+                            y: (containerHeight + containerFontSize) / 2,
+                            text: '低分',
+                            fill: containerTextColor,
+                            // textAlign: 'center', // center | end | left | right | start [default]
+                            // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                            fontSize: containerFontSize,
+                        },
+                        name: 'low-text',
+                    });
+                }
+
+                // 显示文字/普通
+                const isShowMidText = midWidth >= containerFontSize * 2;
+                if (isShowMidText) {
+                    const midTextStart = lowWidth + (midWidth - containerFontSize * 2) / 2;
+                    group.addShape('text', {
+                        attrs: {
+                            x: midTextStart,
+                            y: (containerHeight + containerFontSize) / 2,
+                            text: '普通',
+                            fill: containerTextColor,
+                            // textAlign: 'center', // center | end | left | right | start [default]
+                            // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                            fontSize: containerFontSize,
+                        },
+                        name: 'mid-text',
+                    });
+                }
+
+                // 显示文字/高分
+                const isShowHighText = highWidth >= containerFontSize * 2;
+                if (isShowHighText) {
+                    const highTextStart = containerWidth - highWidth + (highWidth - containerFontSize * 2) / 2;
+                    group.addShape('text', {
+                        attrs: {
+                            x: highTextStart,
+                            y: (containerHeight + containerFontSize) / 2,
+                            text: '高分',
+                            // cursor: 'pointer',
+                            fill: containerTextColor,
+                            // textAlign: 'center', // center | end | left | right | start [default]
+                            // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                            fontSize: containerFontSize,
+                        },
+                        name: 'high-text',
+                    });
+                }
+
+                // 显示低分手柄/上
+                const lowCircleStart = getScoreWidth(low);
+                let lowCircleBg = normalLowCircleBg;
+                let lowCapture = true;
+
+                if (isLowActive) {
+                    lowCircleBg = acitveLowCircleBg;
+                    lowCapture = false;
+                }
+
+                group.addShape('circle', {
+                    attrs: {
+                        x: lowCircleStart,
+                        y: - (4 + circleDiameter / 2),
+                        r: circleDiameter / 2,
+                        fill: lowCircleBg, // 填充色
+                        stroke: lowCircleBorder, // 笔触色
+                        lineWidth: 2, // 边宽
+                        cursor: 'pointer',
+                    },
+                    name: 'low-handlebar',
+                    capture: lowCapture,
+                });
+
+                // 显示低分手柄/下
+                // const lowCircleStart = getScoreWidth(low);
+                group.addShape('circle', {
+                    attrs: {
+                        x: lowCircleStart,
+                        y: containerHeight + (4 + circleDiameter / 2),
+                        r: circleDiameter / 2,
+                        fill: lowCircleBg, // 填充色
+                        stroke: lowCircleBorder, // 笔触色
+                        lineWidth: 2, // 边宽
+                        cursor: 'pointer',
+                    },
+                    name: 'low-handlebar',
+                    capture: lowCapture,
+                });
+
+                // 显示低分手柄/连接线
+                group.addShape('rect', {
+                    attrs: {
+                        x: lowCircleStart - 1,
+                        y: -4,
+                        width: shortScaleWidth,
+                        height: 4 * 2 + containerHeight,
+                        // radius: [0, containerHeight/2, containerHeight/2, 0],
+                        fill: lowCircleBorder,
+                    },
+                    name: 'low-connect-line',
+                    capture: false,
+                });
+
+                // 显示低分手柄/上/文字
+                const lowStr = low.toFixed(1);
+                const lowCircleTextSize = G6.Util.getTextSize(lowStr, handleFontSize);
+                const lowCircleTextWidth = lowCircleTextSize[0];
+                const lowCircleTextHeight = lowCircleTextSize[1];
+                let LowFontColor = normalLowFontColor;
+
+                if (isLowActive) {
+                    LowFontColor = acitveLowFontColor;
+                }
+
+                group.addShape('text', {
+                    attrs: {
+                        x: lowCircleStart - lowCircleTextWidth / 2,
+                        y: - 4 - circleDiameter / 2 + lowCircleTextHeight / 2,
+                        text: lowStr,
+                        fill: LowFontColor,
+                        // textAlign: 'center', // center | end | left | right | start [default]
+                        // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                        fontSize: handleFontSize,
+                        cursor: 'pointer',
+                    },
+                    name: 'low-top-circle-text',
+                    capture: false,
+                });
+
+                // 显示低分手柄/下/文字
+                group.addShape('text', {
+                    attrs: {
+                        x: lowCircleStart - lowCircleTextWidth / 2,
+                        y: containerHeight + 4 + circleDiameter / 2 + lowCircleTextHeight / 2,
+                        text: lowStr,
+                        fill: LowFontColor,
+                        // textAlign: 'center', // center | end | left | right | start [default]
+                        // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                        fontSize: handleFontSize,
+                        cursor: 'pointer',
+                    },
+                    name: 'low-bottom-circle-text',
+                    capture: false,
+                });
+
+                // 显示2个三角形
+                if (isLowActive) {
+                    group.addShape('marker', {
+                        attrs: {
+                            x: lowCircleStart,
+                            y: containerHeight / 2,
+                            r: 30,
+                            fill: '#000000',
+                            symbol: function (x, y, r) {
+                                return [
+                                    ['M', x - 5, y], ['L', x - 5 - 7, y + 7], ['L', x - 5 - 7, y - 7], ['Z'],
+                                    ['M', x + 5, y], ['L', x + 5 + 7, y + 7], ['L', x + 5 + 7, y - 7], ['Z'],
+                                ]
+                            },
+                        },
+                        name: 'marker-triangle-left',
+                        capture: false,
+                    });
+                }
+
+                // 显示高分手柄/上
+                const highCircleStart = getScoreWidth(high);
+                let highCircleBg = normalHighCircleBg;
+                let highCapture = true;
+                
+                if (isHighActive) {
+                    highCircleBg = acitveHighCircleBg;
+                    highCapture = false;
+                }
+                group.addShape('circle', {
+                    attrs: {
+                        x: highCircleStart,
+                        y: - (4 + circleDiameter / 2),
+                        r: circleDiameter / 2,
+                        fill: highCircleBg, // 填充色
+                        stroke: highCircleBorder, // 笔触色
+                        lineWidth: 2, // 边宽
+                        cursor: 'pointer',
+                    },
+                    name: 'high-handlebar',
+                    capture: highCapture, // bool
+                });
+
+                // 显示高分手柄/下
+                group.addShape('circle', {
+                    attrs: {
+                        x: highCircleStart,
+                        y: containerHeight + (4 + circleDiameter / 2),
+                        r: circleDiameter / 2,
+                        fill: highCircleBg, // 填充色
+                        stroke: highCircleBorder, // 笔触色
+                        lineWidth: 2, // 边宽
+                        cursor: 'pointer',
+                    },
+                    name: 'high-handlebar',
+                    capture: highCapture, // bool
+                });
+
+                // 显示高分手柄/连接线
+                group.addShape('rect', {
+                    attrs: {
+                        x: highCircleStart - 1,
+                        y: -4,
+                        width: shortScaleWidth,
+                        height: 4 * 2 + containerHeight,
+                        // radius: [0, containerHeight/2, containerHeight/2, 0],
+                        fill: highCircleBorder,
+                    },
+                    name: 'high-connect-line',
+                    capture: false,
+                });
+
+                // 显示高分手柄/上/文字
+                const highStr = high.toFixed(1);
+                const highCircleTextSize = G6.Util.getTextSize(highStr, handleFontSize);
+                const highCircleTextWidth = highCircleTextSize[0];
+                const highCircleTextHeight = highCircleTextSize[1];
+                let highFontColor = normalHighFontColor;
+
+                if (isHighActive) {
+                    highFontColor = acitveHighFontColor;
+                }
+                group.addShape('text', {
+                    attrs: {
+                        x: highCircleStart - highCircleTextWidth / 2,
+                        y: - 4 - circleDiameter / 2 + highCircleTextHeight / 2,
+                        text: highStr,
+                        fill: highFontColor,
+                        // textAlign: 'center', // center | end | left | right | start [default]
+                        // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                        fontSize: handleFontSize,
+                        cursor: 'pointer',
+                    },
+                    name: 'high-top-circle-text',
+                    capture: false,
+                });
+
+                // 显示高分手柄/下/文字
+                group.addShape('text', {
+                    attrs: {
+                        x: highCircleStart - highCircleTextWidth / 2,
+                        y: containerHeight + 4 + circleDiameter / 2 + highCircleTextHeight / 2,
+                        text: highStr,
+                        fill: highFontColor,
+                        // textAlign: 'center', // center | end | left | right | start [default]
+                        // textBaseline: 'middle', // top | middle | bottom [default] | alphabetic | hanging
+                        fontSize: handleFontSize,
+                        cursor: 'pointer',
+                    },
+                    name: 'high-bottom-circle-text',
+                    capture: false,
+                });
+
+                // 显示2个三角形
+                if (isHighActive) {
+                    group.addShape('marker', {
+                        attrs: {
+                            x: highCircleStart,
+                            y: containerHeight / 2,
+                            r: 30,
+                            fill: '#000000',
+                            symbol: function (x, y, r) {
+                                return [
+                                    ['M', x - 5, y], ['L', x - 5 - 7, y + 7], ['L', x - 5 - 7, y - 7], ['Z'],
+                                    ['M', x + 5, y], ['L', x + 5 + 7, y + 7], ['L', x + 5 + 7, y - 7], ['Z'],
+                                ]
+                            },
+                        },
+                        name: 'marker-triangle-right',
+                        capture: false,
+                    });
+                }
+
+                return shape;
+            },
+            afterDraw: nodeBasicMethod.afterDraw,
+            setState: nodeBasicMethod.setState,
+        });
+
+
+    const container = document.getElementById('container');
+    const width = container.scrollWidth;
+    const height = container.scrollHeight || 500;
+        graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            fitCenter: true,
+            modes: {
+                // default: ['drag-node'],
+                default: ['zoom-canvas', 'drag-node'],
+            },
+            defaultNode: {
+                type: 'card-node',
+            },
+        });
+
+        const data = {
+            nodes: [
+                {
+                    id: 'target',
+                    high: 8.1,
+                    low: 3.0,
+                    isLowActive: false,
+                    isHighActive: false,
+                }
+            ],
+            edges: [],
+        };
+
+        graph.data(data);
+        graph.render();
+
+    if (typeof window !== 'undefined') {
+        window.onresize = () => {
+            if (!graph || graph.get('destroyed')) return;
+            if (!container || !container.scrollWidth || !container.scrollHeight) return;
+            graph.changeSize(container.scrollWidth, container.scrollHeight);
+        };
+    }
+
+    let dragFlag = false;
+    let lowHandlebar = undefined;
+
+    graph.on('canvas:mousemove', evt => {
+        // const { clientX, clientY } = evt;
+        // console.log('%c clientX===', 'color:#fffbackground: red', clientX);
+        // console.log('%c clientY===', 'color:#fffbackground: red', clientY);
+        const { x: mouseX } = graph.getPointByClient(evt.clientX, evt.clientY)
+        // console.info('%c mouseX=====', 'color:#fff;background: red;font-size:18px;', mouseX);
+        // console.info('%c dragFlag=====', 'color:#fff;background: red;font-size:18px;', dragFlag);
+
+        if (dragFlag) {
+            const target = graph.findById('target');
+            const { x: startX, width } = target.getBBox();
+            const range = [startX, startX + width];
+            let realX = mouseX;
+
+            if (mouseX <= range[0]) {
+                realX = range[0]
+            } else if (mouseX >= range[1]) {
+                realX = range[1]
+            }
+
+            const low = (realX - range[0]) / (range[1] - range[0]) * 10;
+
+            if (lowHandlebar) {
+                const oldModel = lowHandlebar.getModel();
+                lowHandlebar.update({
+                    ...oldModel,
+                    low,
+                    isLowActive: true,
+                    isHighActive: false,
+                });
+            }
+            // console.info('%c startX=====', 'color:#fff;background: red;font-size:18px;', startX);
+            // console.info('width=====: ', width);
+        } else {
+
+        }
+    });
+
+    graph.on('canvas:mouseup', evt => {
+        console.info('%c ====================', 'color:#fff;background: red;font-size:18px;',  dragFlag);
+        // debug data
+        // const { x: mouseX } = graph.getPointByClient(evt.clientX, evt.clientY)
+        // console.info('%c mouseX=====', 'color:#fff;background: red;font-size:18px;', mouseX);
+        // const { clientX, clientY } = evt;
+        // console.log('%c clientX===', 'color:#fffbackground: red', clientX);
+        // console.log('%c clientY===', 'color:#fffbackground: red', clientY);
+        
+        // if (dragFlag) {
+        //     const oldModel = lowHandlebar.getModel();
+        //     // console.info('oldModel=====: ', oldModel);
+        //     lowHandlebar.update({
+        //         ...oldModel,
+        //         isLowActive: false,
+        //         isHighActive: false,
+        //     });
+    
+        //     dragFlag = false;
+        //     lowHandlebar = undefined;
+        // }
+
+        const item = graph.findById('target');
+        const oldModel = item.getModel();
+        // console.info('oldModel=====: ', oldModel);
+        item.update({
+            ...oldModel,
+            isLowActive: false,
+            isHighActive: false,
+        });
+
+        dragFlag = false;
+    });
+
+    // graph.on('handlebar:mouseup', evt => {
+    //     // debug data
+    //     const { x: mouseX } = graph.getPointByClient(evt.clientX, evt.clientY)
+    //     console.info('%c mouseX=====', 'color:#fff;background: red;font-size:18px;', mouseX);
+    //     // const { clientX, clientY } = evt;
+    //     // console.log('%c clientX===', 'color:#fffbackground: red', clientX);
+    //     // console.log('%c clientY===', 'color:#fffbackground: red', clientY);
+        
+    //     if (dragFlag) {
+    //         // const oldModel = lowHandlebar.getModel();
+    //         // lowHandlebar.update({
+    //         //     ...oldModel,
+    //         //     isLowActive: false,
+    //         //     isHighActive: false,
+    //         // });
+    
+    //         dragFlag = false;
+    //         lowHandlebar = undefined;
+    //     }
+
+    //     // dragFlag = false;
+    //     // lowHandlebar = undefined;
+    // });
+    graph.on('low-handlebar:mousedown', (evt) => {
+        // console.info('%c ====================', 'color:#fff;background: red;font-size:18px;');
+        dragFlag = true;
+        // const { item } = evt;
+        const item = graph.findById('target');
+        lowHandlebar = item;
+        const oldModel = item.getModel();
+        // console.info('%c item=====', 'color:#fff;background: red;font-size:18px;', rtoo);
+
+        item.update({
+            ...oldModel,
+            // high: 8.1,
+            // low: 4.0,
+            isLowActive: true,
+            // isHighActive: true,
+        });
+
+        // graph.updateItem(item, {
+        //     label: '点击了圆',
+        //     labelCfg: {
+        //         style: {
+        //             fill: '#003a8c',
+        //             fontSize: 16,
+        //         },
+        //     },
+        // });
+    });
+
+    </script>
+</body>
+
+</html>

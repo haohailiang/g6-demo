@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人脉拓展</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        html,body {
+            height: 100%;
+        }
+        #container {
+            width: 100vw;
+            height: 100vh;
+            background-color: #061432;
+        }
+
+        /* .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        } */
+
+        /* .g6-tooltip {
+            min-width: 30px;
+            min-height: 32px;
+            padding: 6px 8px;
+            color: #fff;
+            text-align: left;
+            text-decoration: none;
+            word-wrap: break-word;
+            background-color: rgba(0,0,0,.75);
+            border-radius: 2px;
+            /* -webkit-box-shadow: 0 3px 6px -4px rgba(0,0,0,.12),0 6px 16px 0 rgba(0,0,0,.08),0 9px 28px 8px rgba(0,0,0,.05); */
+            /* box-shadow: 0 3px 6px -4px rgba(0,0,0,.12),0 6px 16px 0 rgba(0,0,0,.08),0 9px 28px 8px rgba(0,0,0,.05) */
+        } */
+    </style>
+    <script src="../../../lib/g6-4.5.1.min.js"></script>
+    <!-- <script src="../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const nodeSpacing = 150;
+        const nodeDiameter = 56;
+        const bgColor = '#061432';
+        let maxRadius = nodeSpacing;
+        // const graphRange = {
+        //     leftTop: [0, 0],
+        //     rightBottom: [0, 0]
+        // }
+        const data = {
+            'nodes': [
+                // 画背景的点
+                {
+                    'id': 'level0',
+                    'label': '',
+                    'center': 0,
+                    size: nodeSpacing * 2,
+                    x: 0,
+                    y: 0,
+                    style: {
+                        fill: 'transparent',
+                        // stroke: '#ff0000',
+                        // stroke: 'l(0) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+                        // stroke: 'l(0) 0:#ffffff 0.2:#ffffff 0.75:#7ec2f3 1:#1890ff',
+                        // stroke: `l(0) 0:${bgColor} 0.6:${bgColor} 0.8: #102c6b 0.95:#667eb5 1:#a2b8ea`,
+                        stroke: `l(0) 0:${bgColor} 0.85:${bgColor} 0.90: #102c6b 0.98:#667eb5 1:#a2b8ea`,
+                        // stroke: 'l(0) 0:#ffffff 0.25:#ffffff 0.5:#7ec2f3 0.75:#ffffff 1:#ffffff',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'level1',
+                    'label': '',
+                    'center': 1,
+                    size: nodeSpacing * 4,
+                    x: 0,
+                    y: 0,
+                    style: {
+                        fill: 'transparent',
+                        // stroke: '#ff0000',
+                        // stroke: 'l(0) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+                        // stroke: 'l(0) 0:#ffffff 0.2:#ffffff 0.75:#7ec2f3 1:#1890ff',
+                        stroke: `l(0) 0:${bgColor} 0.85:${bgColor} 0.90: #102c6b 0.98:#667eb5 1:#a2b8ea`,
+                        // stroke: 'l(0) 0:#ffffff 0.25:#ffffff 0.5:#7ec2f3 0.75:#ffffff 1:#ffffff',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'level2',
+                    'label': '',
+                    'center': 2,
+                    size: nodeSpacing * 6,
+                    x: 0,
+                    y: 0,
+                    style: {
+                        fill: 'transparent',
+                        // stroke: '#ff0000',
+                        // stroke: 'l(0) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+                        // stroke: 'l(0) 0:#ffffff 0.2:#ffffff 0.75:#7ec2f3 1:#1890ff',
+                        stroke: `l(0) 0:${bgColor} 0.85:${bgColor} 0.90: #102c6b 0.98:#667eb5 1:#a2b8ea`,
+                        // stroke: 'l(0) 0:#ffffff 0.25:#ffffff 0.5:#7ec2f3 0.75:#ffffff 1:#ffffff',
+                        lineWidth: 1,
+                    },
+                },
+
+                // 定位点
+                {
+                    'id': 'center',
+                    'label': '',
+                    'center': 'center',
+                    size: nodeSpacing,
+                    x: 0,
+                    y: 0,
+                    style: {
+                        // fill: 'red',
+                        fill: 'transparent',
+                        // stroke: '#ff0000',
+                        stroke: 'transparent',
+                        // stroke: 'l(0) 0:#ffffff 0.5:#7ec2f3 1:#1890ff',
+                        // stroke: 'l(0) 0:#ffffff 0.2:#ffffff 0.75:#7ec2f3 1:#1890ff',
+                        // stroke: `l(0) 0:${bgColor} 0.85:${bgColor} 0.90: #102c6b 0.98:#667eb5 1:#a2b8ea`,
+                        // stroke: 'l(0) 0:#ffffff 0.25:#ffffff 0.5:#7ec2f3 0.75:#ffffff 1:#ffffff',
+                        // lineWidth: 1,
+                    },
+                },
+
+                // 真实的点
+                {
+                    'id': 'node-0',
+                    'label': '本人',
+                    'center': 10000,
+                    style: {
+                        fill: 'l(0) 0:#b3b7c0 1:#818695',
+                        stroke: 'rgba(0, 0, 0, 0.15)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-1',
+                    'label': '李明',
+                    'center': 1000,
+                    style: {
+                        fill: 'l(180) 0:#ff7832 1:#ff985c',
+                        stroke: 'rgba(0, 0, 0, 0.14)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-2',
+                    'label': '王总',
+                    'center': 100,
+                    style: {
+                        fill: 'l(180) 0:#42c72c 1:#90e079',
+                        stroke: 'rgba(0, 0, 0, 0.14)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-2-1',
+                    'label': '2-1',
+                    'center': 10,
+                    style: {
+                        fill: 'l(0) 0:#4aa4ff 1:#2c76f5',
+                        stroke: 'rgba(0, 0, 0, 0.15)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-2-2',
+                    'label': '2-2',
+                    'center': 10,
+                    style: {
+                        fill: 'l(0) 0:#4aa4ff 1:#2c76f5',
+                        stroke: 'rgba(0, 0, 0, 0.15)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-2-3',
+                    'label': '2-3',
+                    'center': 10,
+                    style: {
+                        fill: 'l(0) 0:#4aa4ff 1:#2c76f5',
+                        stroke: 'rgba(0, 0, 0, 0.15)',
+                        lineWidth: 1,
+                    },
+                },
+                {
+                    'id': 'node-2-4',
+                    'label': '2-4',
+                    'center': 10,
+                    style: {
+                        fill: 'l(0) 0:#4aa4ff 1:#2c76f5',
+                        stroke: 'rgba(0, 0, 0, 0.15)',
+                        lineWidth: 1,
+                    },
+                },
+                // {
+                //     'id': 'node-2-5',
+                //     'label': '2-5',
+                //     'center': 10,
+                // },
+                // {
+                //     'id': 'node-2-6',
+                //     'label': '2-6',
+                //     'center': 10,
+                // },
+                // {
+                //     'id': 'node-2-7',
+                //     'label': '2-7',
+                //     'center': 10,
+                // },
+            ],
+            'edges': [
+                {
+                    'source': 'node-0',
+                    'target': 'node-1',
+                    'label': '',
+                },
+                {
+                    'source': 'node-1',
+                    'target': 'node-2',
+                    'label': '',
+                },
+                {
+                    'source': 'node-2',
+                    'target': 'node-2-1',
+                    'label': '',
+                },
+                {
+                    'source': 'node-2',
+                    'target': 'node-2-2',
+                    'label': '',
+                },
+                {
+                    'source': 'node-2',
+                    'target': 'node-2-3',
+                    'label': '',
+                },
+                {
+                    'source': 'node-2',
+                    'target': 'node-2-4',
+                    'label': '',
+                },
+                // {
+                //     'source': 'node-2',
+                //     'target': 'node-2-5',
+                //     'label': '',
+                // },
+                // {
+                //     'source': 'node-2',
+                //     'target': 'node-2-6',
+                //     'label': '',
+                // },
+                // {
+                //     'source': 'node-2',
+                //     'target': 'node-2-7',
+                //     'label': '',
+                // },
+            ]
+        }
+
+        // 渲染潜在客户
+        function renderPotentialCustomers() {
+            const minRadius = nodeSpacing * 3;
+            const lastLayerNodes = data.nodes.filter(node => node.center === 10);
+            const nodesLen = lastLayerNodes.length;
+            const arcLength = (nodesLen - 1) * nodeSpacing;
+            const extendAngle = Math.acos(2 / 3) // 默认角度弧度数
+            const curRadius = Math.ceil(Math.max(arcLength / 2 / extendAngle, minRadius) / nodeSpacing) * nodeSpacing;
+            // const unitArc = nodeSpacing / (2 * Math.PI * curRadius);
+            const unitArc = nodeSpacing / curRadius;
+            let radRange = [0, 0];
+
+            // 奇数个点
+            if (nodesLen % 2 === 1) {
+                lastLayerNodes.forEach((node, index) => {
+                    if (index === 0) {
+                        node.x = curRadius;
+                        node.y = 0;
+                    } else if (index % 2 === 1) {
+                        const unitCount = (index + 1) / 2;
+                        node.x = curRadius * Math.cos(unitCount * unitArc);
+                        node.y = - curRadius * Math.sin(unitCount * unitArc);
+                        radRange[0] = - unitCount * unitArc;
+                    } else {
+                        const unitCount = index / 2;
+                        node.x = curRadius * Math.cos(unitCount * unitArc);
+                        node.y = curRadius * Math.sin(unitCount * unitArc);
+                        radRange[1] = unitCount * unitArc;
+                    }
+                })
+            } else {
+                lastLayerNodes.forEach((node, index) => {
+                    const unitCount = Math.floor(index / 2) + 1 / 2;
+                    if (index % 2 === 0) {
+                        node.x = curRadius * Math.cos(unitCount * unitArc);
+                        node.y = - curRadius * Math.sin(unitCount * unitArc);
+                    } else {
+                        node.x = curRadius * Math.cos(unitCount * unitArc);
+                        node.y = curRadius * Math.sin(unitCount * unitArc);
+                    }
+
+                    radRange = [- unitCount * unitArc, unitCount * unitArc];
+                })
+            }
+
+            return { radRange, lastRadius: curRadius }
+        }
+
+        // 渲染背景
+        function renderArcBackground(radRange, lastRadius) {
+            const radRangeAbs = radRange[1] - radRange[0];
+            // 前2个固定
+            // 只渲染最后一个
+            // const bgCenters = [0, 2];
+            const lastBgNode = data.nodes.filter(node => node.center === 2)[0];
+
+            console.info('%c radRangeAbs===', 'color:#fff;background: red;font-size:18px;', radRangeAbs);
+
+            lastBgNode.size = radRangeAbs * 2;
+
+        }
+
+        // 渲染定位点
+        function renderCenterPoint(lastRadius) {
+            const centerNode = data.nodes.filter(node => node.center === 'center')[0];
+            centerNode.x = lastRadius / 2;
+        }
+
+
+        G6.registerLayout('my-concentric', {
+            // 默认参数
+            // getDefaultCfg: function getDefaultCfg() {
+            //     return {
+            //         center: [0, 0], // 布局的中心
+            //         biSep: 100, // 两部分的间距
+            //         nodeSep: 20, // 同一部分的节点间距
+            //         nodeSize: 20, // 节点大小
+            //         direction: 'horizontal', // 两部分的分布方向
+            //     };
+            // },
+            execute() {
+                const self = this;
+                const { nodes, edges } = self;
+
+                // 非潜在客户的节点
+                nodes.filter(node => node.center !== 10).forEach((node, i) => {
+                    if (node.center === 10000) {
+                        node.x = 0
+                        node.y = 0
+                        // graphRange.leftTop = [-nodeDiameter / 2, -nodeDiameter / 2];
+                        // graphRange.rightBottom = [nodeDiameter / 2, nodeDiameter / 2];
+                    } else if (node.center === 1000) {
+                        node.x = nodeSpacing
+                        node.y = 0
+                        // graphRange.rightBottom[0] = nodeSpacing + nodeDiameter / 2;
+                    } else if (node.center === 100) {
+                        node.x = nodeSpacing * 2
+                        node.y = 0
+                        // graphRange.rightBottom[0] = nodeSpacing * 2 + nodeDiameter / 2;
+                    }
+                });
+
+                // 潜在客户的节点
+                const { radRange, lastRadius } = renderPotentialCustomers();
+                maxRadius = lastRadius;
+
+                // 渲染圆弧别经
+                renderArcBackground(radRange, lastRadius);
+
+                // 定位点
+                renderCenterPoint(lastRadius)
+            },
+        });
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'my-concentric',
+                // biSep: 300,
+                // nodeSep: 20,
+                // nodeSize: 20,
+                // nodeSize: 80,
+                // direction: 'horizontal'
+            },
+            // animate: true,
+            defaultNode: {
+                type: 'circle',
+                // size: 20,
+                size: nodeDiameter,
+                labelCfg: {
+                    style: {
+                        fill: '#ffffff',
+                        fontSize: 14,
+                    }
+                }
+            },
+            defaultEdge: {
+                // color: '#1890ff',
+                color: 'rgba(204, 218, 254, 1)',
+                style: {
+                    // stroke: 'l(0) 0:#ffffff 1:#1890ff',
+                    stroke: 'l(180) 0:rgba(204, 218, 254, 1) 1:rgba(44, 71, 128, 1)',
+                    // endArrow: true,
+                    endArrow: {
+                        // fill: '#1890ff',
+                        fill: 'rgba(204, 218, 254, 1)',
+                        path: G6.Arrow.triangle(),
+                    },
+                }
+            },
+            modes: {
+                // default: ['drag-node', 'drag-canvas', 'zoom-canvas'],
+                // default: ['drag-canvas', 'zoom-canvas'],
+                default: [
+                    // 'drag-canvas',
+                    // 'zoom-canvas',
+                    // 'click-select',
+                    // {
+                    //     type: 'tooltip',
+                    //     // 只是简单的tooltip,复杂的显示不了
+                    //     formatText(model) {
+                    //         // const cfg = model.conf;
+                    //         // const text = [];
+                    //         // cfg.forEach((row) => {
+                    //         //     text.push(row.label + ':' + row.value + '<br>');
+                    //         // });
+                    //         console.info('%c model===', 'color:#fff;background: red;font-size:18px;', model);
+                    //         return (
+                    //             `
+                    //                 <div class="">
+                    //                 </div>
+                    //             `
+                    //         );
+                    //     },
+                    //     // formatText(model) {
+                    //     //     const myDiy = '<div class="tool-tip-my">123</div>'
+                    //     //     return myDiy;
+                    //     // },
+                    //     offset: 30,
+                    // },
+                ],
+            },
+        });
+        graph.data(data);
+        graph.render();
+        // graph.fitView();
+
+        // graph.node((node) => {
+        //     const model = node.getModel()
+        //     console.info('%c model===', 'color:#fff;background: red;font-size:18px;', model);
+        // })
+        const bgCenters = [0, 1, 2]
+        // const graphRange = {
+        //     leftTop: [0, 0],
+        //     rightBottom: [0, 0]
+        // }
+        const graphSize = data.nodes.filter(node => !bgCenters.includes(node.center)).reduce((range, node) => {
+            const { x, y } = graph.findById(node.id).getModel();
+
+            if (range.length === 0) {
+                return [{ x, y }, { x, y }];
+            }
+
+            const minX = Math.min(x, range[0].x);
+            const minY = Math.min(y, range[0].y);
+            const maxX = Math.max(x, range[1].x);
+            const maxY = Math.max(y, range[1].y);
+
+            return [{ x: minX, y: minY }, { x: maxX, y: maxY }];
+        }, []);
+        const graphDimensions = {
+            width: graphSize[1].x - graphSize[0].x + nodeDiameter,
+            height: graphSize[1].y - graphSize[0].y + nodeDiameter
+        };
+        const { width: containerWidth, height: containerHeight } = graph.getContainer().getBoundingClientRect();
+        const minZoom = Math.min(containerWidth / graphDimensions.width, containerHeight / graphDimensions.height) * 0.8;
+        // graph.moveTo(- maxRadius / 2, 0);
+        const { x: canvasX, y: canvasY } = graph.getPointByCanvas(containerWidth / 2, containerHeight / 2);
+        // graph.moveTo(0, 0);
+        // graph.moveTo((canvasX - maxRadius / 2), 0);
+        // graph.moveTo(-canvasX + maxRadius / 2, 0);
+        // this.graph.zoomTo(toRatio, { x: canvasX, y: canvasY })
+        // graph.zoom(minZoom)
+        // const { x: canvasX, y: canvasY } = graph.getCanvasByPoint(- maxRadius / 2, 0)
+        graph.zoomTo(minZoom)
+        // graph.zoomTo(minZoom, { x: graphDimensions.width, y: graphDimensions.height })
+        // graph.zoomTo(minZoom, { x: maxRadius / 2 * minZoom, y: 0 })
+        // graph.zoomTo(minZoom, { x: containerWidth / 2, y: containerHeight / 2 });
+        // graph.moveTo(0, 0)
+        const centerNode = graph.findById('center');
+        graph.focusItem(centerNode);
+
+        // graph.on('node:mouseleave', evt => {
+        //     const nodeItem = evt.item
+        //     // this.graph.setItemState(nodeItem, 'hover', false)
+        // })
+
+        graph.on('node:mousemove', evt => {
+            const item = evt.item // 被操作的节点 item
+            const model = item.getModel();
+            const canMouseMoveCenters = [10000, 1000, 100, 10]
+            if (canMouseMoveCenters.includes(model.center)) {
+                console.info('%c model===', 'color:#fff;background: red;font-size:18px;', model);
+            }
+            // console.info('%c item===', 'color:#fff;background: red;font-size:18px;', item);
+            // const shape = evt.target // 被操作的具体图形
+            // const name = shape.get('name') // 被点击的具体shape
+
+            // const clickNodes = this.graph.findAllByState('node', 'click')
+            // clickNodes.forEach((cn) => {
+            //     this.graph.setItemState(cn, 'click', false)
+            // })
+            // const nodeItem = evt.item
+            // this.graph.setItemState(nodeItem, 'click', true)
+        })
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基本力导向布局及节点拖拽</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+    </style>
+    <script src="../../../lib/g6-4.5.1.min.js"></script>
+    <!-- <script src="./07-力导向图-1-实体识别-data-1.js"></script> -->
+    <!-- <script src="./07-力导向图-1-实体识别-data-2.js"></script> -->
+    <script src="./07-力导向图-1-实体识别-data-3.js"></script>
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        const width = document.getElementById('container').scrollWidth;
+        const height = document.getElementById('container').scrollHeight || 500;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            layout: {
+                type: 'force',
+            },
+            defaultNode: {
+                size: 15,
+                color: '#5B8FF9',
+                style: {
+                    lineWidth: 2,
+                    fill: '#C6E5FF',
+                },
+            },
+            defaultEdge: {
+                size: 1,
+                color: '#e2e2e2',
+            },
+        });
+
+        graph.data({
+            nodes: data.nodes,
+            edges: data.edges.map(function (edge, i) {
+                edge.id = 'edge' + i;
+                return Object.assign({}, edge);
+            }),
+        });
+        graph.render();
+
+        // 这样可以刷新节点的位置,不然拖拽不动
+        const forceLayout = graph.get('layoutController').layoutMethod;
+        console.log('%c forceLayout===', 'color:#fff;background: red;font-size:18px;', forceLayout)
+        graph.on('node:dragstart', function (e) {
+            graph.layout();
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:drag', function (e) {
+            console.log('%c forceLayout===', 'color:#fff;background: red;font-size:18px;', forceLayout)
+            forceLayout.execute();
+            refreshDragedNodePosition(e);
+        });
+        graph.on('node:dragend', function (e) {
+            e.item.get('model').fx = null;
+            e.item.get('model').fy = null;
+        });
+
+        function refreshDragedNodePosition(e) {
+            const model = e.item.get('model');
+            model.fx = e.x;
+            model.fy = e.y;
+        }
+    </script>
+</body>
+
+</html>
