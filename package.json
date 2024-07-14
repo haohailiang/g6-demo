@@ -1,0 +1,27 @@
+{
+  "name": "g6-demo",
+  "version": "1.0.0",
+  "description": "",
+  "main": ".eslintrc.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haohailiang/g6-demo.git"
+  },
+  "keywords": [],
+  "author": "haohailiang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/haohailiang/g6-demo/issues"
+  },
+  "homepage": "https://github.com/haohailiang/g6-demo#readme",
+  "dependencies": {
+    "@antv/g6": "^4.8.24"
+  }
+}

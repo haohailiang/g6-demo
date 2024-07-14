@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        html,
+        body {
+            margin: 0;
+        }
+
+        #container {
+            height: 800px;
+            border: 1px solid;
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../lib/g6-4.8.24.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        let graph;
+
+
+        G6.registerNode('card-node', {
+            draw: (cfg, group) => {
+                const containerW = 400;
+                const containerH = 200;
+                const baseX = - containerW / 2;
+                const baseY = - containerH / 2;
+
+                // 容器
+                const keyShape = group.addShape('rect', {
+                    attrs: {
+                        x: baseX,
+                        y: baseY,
+                        width: containerW,
+                        height: containerH,
+                        fill: 'rgba(0, 0, 0, 0.1)',
+                    },
+                    name: 'key-shape',
+                    // capture: true,
+                    draggable: true,
+                });
+
+                // 画梯形
+                let trapeziumTopLeftPointPosition = [baseX + containerW / 4, baseY];
+                let trapeziumTopRightPointPosition = [baseX + containerW * 3 / 4, baseY];
+                let trapeziumBottomRightPointPosition = [baseX + containerW, baseY + containerH];
+                let trapeziumBottomLeftPointPosition = [baseX, baseY + containerH];
+                group.addShape('path', {
+                    attrs: {
+                        path: [
+                            ['M', ...trapeziumTopLeftPointPosition],
+                            ['L', ...trapeziumTopRightPointPosition],
+                            ['L', ...trapeziumBottomRightPointPosition],
+                            ['L', ...trapeziumBottomLeftPointPosition],
+                            ['Z'],
+                        ],
+                        fill: 'rgba(0, 0, 0, 0.5)',
+                        lineWidth: 1,
+                    },
+                    name: 'trapezium-shape',
+                });
+
+                // 画梯形上边的小横条
+                let topBarThickness = 20;
+                let topBarTopLeftPointPosition = [baseX, baseY];
+                let topBarTopRightPointPosition = [baseX + containerW, baseY];
+                let topBarBottomRightPointPosition = [baseX + containerW, baseY + topBarThickness];
+                let topBarBottomLeftPointPosition = [baseX, baseY + topBarThickness];
+                group.addShape('path', {
+                    attrs: {
+                        path: [
+                            ['M', ...topBarTopLeftPointPosition],
+                            ['L', ...topBarTopRightPointPosition],
+                            ['L', ...topBarBottomRightPointPosition],
+                            ['L', ...topBarBottomLeftPointPosition],
+                            ['Z'],
+                        ],
+                        fill: 'rgba(0, 0, 0, 0.8)',
+                        lineWidth: 1,
+                    },
+                    visible: false,
+                    // visible: true,
+                    name: 'top-bar-shape',
+                })
+                .setClip({
+                    type: 'path', // circle | rect | ellipse | Polygon | path [含自定义]
+                    attrs: {
+                        path: [ // 同上边的梯形
+                            ['M', ...trapeziumTopLeftPointPosition],
+                            ['L', ...trapeziumTopRightPointPosition],
+                            ['L', ...trapeziumBottomRightPointPosition],
+                            ['L', ...trapeziumBottomLeftPointPosition],
+                            ['Z'],
+                        ]
+                    },
+                });
+
+                // 下边的渐变条
+                let bottomBarThickness = 40;
+                let bottomBarTopLeftPointPosition = [baseX, baseY + containerH];
+                let bottomBarTopRightPointPosition = [baseX + containerW, baseY + containerH];
+                let bottomBarBottomRightPointPosition = [baseX + containerW, baseY + containerH + bottomBarThickness];
+                let bottomBarBottomLeftPointPosition = [baseX, baseY + containerH + bottomBarThickness];
+                group.addShape('path', {
+                    attrs: {
+                        path: [
+                            ['M', ...bottomBarTopLeftPointPosition],
+                            ['L', ...bottomBarTopRightPointPosition],
+                            ['L', ...bottomBarBottomRightPointPosition],
+                            ['L', ...bottomBarBottomLeftPointPosition],
+                            ['Z'],
+                        ],
+                        fill: 'l(0) 0:rgba(0, 0, 0, 0.5) 0.5:#ffffff 1:rgba(0, 0, 0, 0.5)',
+                        lineWidth: 1,
+                    },
+                    name: 'top-bar-shape',
+                })
+
+
+                return keyShape;
+            },
+        });
+
+
+        const container = document.getElementById('container');
+        const width = container.scrollWidth;
+        const height = container.scrollHeight || 500;
+        graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            // translate the graph to align the canvas's center, support by v3.5.1
+            fitCenter: true,
+            modes: {
+                default: ['drag-node'],
+            },
+            defaultNode: {
+                type: 'rect',
+                size: [400, 200],
+                style: {
+                    fill: '#9EC9FF',
+                    stroke: '#5B8FF9',
+                    lineWidth: 3,
+                },
+            },
+        });
+
+        const data = {
+            nodes: [
+                {
+                    id: 'id1',
+                    label: '123',
+                    x: 0,
+                    y: 0,
+                },
+                {
+                    id: 'id2',
+                    type: 'card-node',
+                    name: 'cardNodeApp',
+                    ip: '127.0.0.1',
+                    nodeError: true,
+                    dataType: 'root',
+                    keyInfo: 'this is a card node info',
+                    x: 200,
+                    y: 200,
+                },
+            ],
+            edges: [],
+        };
+
+        graph.data(data);
+        graph.render();
+
+        graph.moveTo(0, 0);
+
+        graph.on('node:click', evt => {
+            const item = evt.item; // 被操作的节点 item
+            const model = item.getModel();
+            console.log(model.x, model.y)
+        });
+
+        if (typeof window !== 'undefined') {
+            window.onresize = () => {
+                if (!graph || graph.get('destroyed')) return;
+                if (!container || !container.scrollWidth || !container.scrollHeight) return;
+                graph.changeSize(container.scrollWidth, container.scrollHeight);
+            };
+        }
+    </script>
+</body>
+
+</html>
