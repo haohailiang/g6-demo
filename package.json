@@ -22,6 +22,6 @@
   },
   "homepage": "https://github.com/haohailiang/g6-demo#readme",
   "dependencies": {
-    "@antv/g6": "^4.8.24"
+    "@antv/g6": "4.8.21"
   }
 }
