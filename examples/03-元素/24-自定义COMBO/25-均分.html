@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            width: calc(100vw - 50px);
+            height: calc(100vh - 50px);
+        }
+
+        .g6-tooltip {
+            border-radius: 6px;
+            font-size: 12px;
+            color: #fff;
+            background-color: #000;
+            padding: 2px 8px;
+            text-align: center;
+        }
+    </style>
+    <script src="../../../lib/g6-4.8.21.min.js"></script>
+    <!-- <script src="../../00-mock/8dacf27e-e1bc-4522-b6d3-4b6d9b9ed7df.js"></script> -->
+</head>
+
+<body>
+    <!-- 1. 创建容器 -->
+    <div id="container"></div>
+    <script>
+        /**
+ * The demo shows customing a combo type by extending the built-in circle combo
+ * by Shiwu
+ *
+ */
+
+        G6.registerCombo(
+            'layer-combo',
+            {
+                drawShape: function draw(cfg, group) {
+                    const width = 1270;
+                    const height = 200;
+                    const startX = - width / 2;
+                    const startY = - height / 2;
+                    // Add a circle shape as keyShape which is the same as the extended 'circle' type Combo
+                    const circle = group.addShape('rect', {
+                        attrs: {
+                            x: startX,
+                            y: startY,
+                            width,
+                            height,
+                            fill: 'rgba(0,0,0,0.1)'
+                        },
+                        draggable: true,
+                        name: 'combo-keyShape',
+                    });
+
+                    return circle;
+                },
+            },
+        );
+        const nodeHeight = 12;
+        const layerPadding = [24, 24, 24, 24]
+        const borderWidth = 1;
+        const avg = (200 - layerPadding[0] - layerPadding[2] - borderWidth * 2 - nodeHeight * 6) / (6 - 1);
+        const step = avg + nodeHeight;
+        const baseY = - 200 / 2; // 问题应该出在这儿
+        const startY = baseY + layerPadding[0] + borderWidth + nodeHeight / 2;
+        const nodes = Array.from({ length: 6 }).map((_, index) => {
+            return {
+                id: String(index),
+                label: String(index),
+                x: -605,
+                y: startY + step * index,
+            }
+        })
+
+        const data = {
+            // nodes: [
+            //     { id: 'node1', x: 250, y: 200, comboId: 'combo1' },
+            //     { id: 'node2', x: 300, y: 200, comboId: 'combo1' },
+            //     { id: 'node3', x: 100, y: 200, comboId: 'combo3' },
+            // ],
+            nodes,
+            combos: [
+                { id: 'combo1', type: 'layer-combo', x: 0, y: 0 },
+            ],
+        };
+
+        const width = document.getElementById('container').scrollWidth;
+        const height = (document.getElementById('container').scrollHeight || 500) - 20;
+        const graph = new G6.Graph({
+            container: 'container',
+            width,
+            height,
+            fitCenter: true,
+            // Set groupByTypes to false to get rendering result with reasonable visual zIndex for combos
+            groupByTypes: false,
+            // Configure the combos globally
+            modes: {
+                default: ['drag-combo', 'drag-node', 'drag-canvas'],
+            },
+            defaultNode: {
+                type: 'rect',
+                size: [12, 12],
+                labelCfg: {
+                    style: {
+                        fontSize: 6,
+                    }
+                }
+            },
+        });
+        graph.data(data);
+        graph.render();
+
+        // collapse/expand when click the marker
+        graph.on('combo:click', (e) => {
+            const model = e.item.getModel();
+            console.log('model: ', model)
+            // if (e.target.get('name') === 'combo-marker-shape') {
+            //     // graph.collapseExpandCombo(e.item.getModel().id);
+            //     graph.collapseExpandCombo(e.item);
+            //     if (graph.get('layout')) graph.layout();
+            //     else graph.refreshPositions();
+            // }
+        });
+    </script>
+</body>
+
+</html>
