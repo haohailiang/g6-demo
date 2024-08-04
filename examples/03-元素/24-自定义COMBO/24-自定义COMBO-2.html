@@ -156,8 +156,12 @@
         graph.on('combo:click', (e) => {
             if (e.target.get('name') === 'combo-marker-shape') {
                 // graph.collapseExpandCombo(e.item.getModel().id);
+                // 展开或收缩指定的 Combo。
                 graph.collapseExpandCombo(e.item);
+                const todo = graph.get('layout');
+                console.log('todo: ', todo);
                 if (graph.get('layout')) graph.layout();
+                // 当节点位置发生变化时，刷新所有节点位置，并重计算边的位置。
                 else graph.refreshPositions();
             }
         });
