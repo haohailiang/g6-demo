@@ -1,0 +1,10 @@
+html, body {
+    margin: 0;
+}
+#container {
+    margin: 25px;
+    box-sizing: border-box;
+    border: 1px solid;
+    width: calc(100vw - 50px);
+    height: calc(100vh - 50px);
+}
