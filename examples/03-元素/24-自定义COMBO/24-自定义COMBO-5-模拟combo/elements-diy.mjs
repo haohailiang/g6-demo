@@ -1,69 +1,40 @@
 const padding = [50, 100, 150, 200];
 
-export function registerCombo() {
-    G6.registerCombo(
+export function registerNode() {
+    G6.registerNode(
         "card-node",
         {
             get8Points(cfg) {
-                // console.log('cfg: ', cfg);
-                const { comboCenterX, comboCenterY, comboPadding, comboWidth, comboHeight } = cfg;
+                const { comboPadding, comboWidth, comboHeight } = cfg;
 
-                // const comboCenterX = 900;
-                // const comboCenterY = 400;
-                // const comboWidth = 600;
-                // const comboHeight = 400;
-                // // const padding = [50, 100, 150, 200];
-                // const comboPadding = [0, 0, 0, 0];
+                const startX = - comboWidth / 2;
+                const startY = - comboHeight / 2;
 
-                const comboX = comboCenterX - comboWidth / 2;
-                const comboY = comboCenterY - comboHeight / 2;
-                const innerWidth = comboWidth - comboPadding[1] - comboPadding[3];
-                const innerHeight = comboHeight - comboPadding[0] - comboPadding[2];
-                const innerCenterX = comboX + comboPadding[3] + innerWidth / 2;
-                const innerCenterY = comboY + comboPadding[0] + innerHeight / 2;
+                const outer1 = [startX, startY];
+                const outer2 = [startX + comboWidth, startY];
+                const outer3 = [startX + comboWidth, startY + comboHeight];
+                const outer4 = [startX, startY + comboHeight];
 
-                const point1X = innerCenterX - innerWidth / 2;
-                const point1Y = innerCenterY - innerCenterY / 2;
-                const point2X = innerCenterX + innerWidth / 2;
-                const point2Y = innerCenterY - innerCenterY / 2;
-                const point3X = innerCenterX + innerWidth / 2;
-                const point3Y = innerCenterY + innerCenterY / 2;
-                const point4X = innerCenterX - innerWidth / 2;
-                const point4Y = innerCenterY + innerCenterY / 2;
-
-                const outer1 = [0 - innerWidth / 2 - comboPadding[3], 0 - innerHeight / 2 - comboPadding[0]];
-                const outer2 = [0 + innerWidth / 2 + comboPadding[1], 0 - innerHeight / 2 - comboPadding[0]];
-                const outer3 = [0 + innerWidth / 2 + comboPadding[1], 0 + innerHeight / 2 + comboPadding[2]];
-                const outer4 = [0 - innerWidth / 2 - comboPadding[3], 0 + innerHeight / 2 + comboPadding[2]];
-
-                const inner1 = [0 - innerWidth / 2, 0 - innerHeight / 2];
-                const inner2 = [0 + innerWidth / 2, 0 - innerHeight / 2];
-                const inner3 = [0 + innerWidth / 2, 0 + innerHeight / 2];
-                const inner4 = [0 - innerWidth / 2, 0 + innerHeight / 2];
+                const inner1 = [startX + comboPadding[3], startY + comboPadding[0]];
+                const inner2 = [startX + comboWidth - comboPadding[1], startY + comboPadding[0]];
+                const inner3 = [startX + comboWidth - comboPadding[1], startY + comboHeight - comboPadding[2]];
+                const inner4 = [startX + comboPadding[3], startY + comboHeight - comboPadding[2]];
 
                 return {
-                    relative: {
-                        outer1,
-                        outer2,
-                        outer3,
-                        outer4,
-    
-                        inner1,
-                        inner2,
-                        inner3,
-                        inner4,
-                    },
-                    absolute: {
-                        inner1: [point1X, point1Y],
-                        inner2: [point2X, point2Y],
-                        inner3: [point3X, point3Y],
-                        inner4: [point4X, point4Y],
-                    }
+                    outer1,
+                    outer2,
+                    outer3,
+                    outer4,
+
+                    inner1,
+                    inner2,
+                    inner3,
+                    inner4,
                 }
             },
             drawRect(cfg, group) {
                 this.initPoints = this.get8Points(cfg);
-                const { relative: {outer1, outer2, outer3, outer4, inner1, inner2, inner3, inner4} } = this.initPoints;
+                const { outer1, outer2, outer3, outer4, inner1, inner2, inner3, inner4 } = this.initPoints;
 
                 const keyShape = group.addShape("path", {
                     attrs: {
@@ -74,11 +45,11 @@ export function registerCombo() {
                             ["L", ...outer4],
                             ["Z"]
                         ],
-                        // fill: "rgba(255, 0, 0, 0)",
-                        capture: false,
+                        // fill: "rgba(255, 0, 0, 1)",
                         stroke: "rgba(255, 0, 0, 1)",
                         lineWidth: 1
                     },
+                    capture: false,
                     name: "outer-rect-shape"
                 });
 
@@ -91,11 +62,11 @@ export function registerCombo() {
                             ["L", ...inner4],
                             ["Z"]
                         ],
-                        // fill: "rgba(0, 0, 0, 0.5)",
+                        fill: "rgba(0, 0, 0, 0.5)",
                         stroke: "rgba(255, 0, 0, 1)",
-                        capture: false,
                         lineWidth: 1
                     },
+                    capture: false,
                     name: "inner-rect-shape"
                 });
 
