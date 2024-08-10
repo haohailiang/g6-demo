@@ -47,7 +47,7 @@ function renderGraph() {
         }
     });
     const data = getData();
-    console.log('nodes: ', data.nodes);
+    // console.log('nodes: ', data.nodes);
     graph.data(data);
     graph.render();
 

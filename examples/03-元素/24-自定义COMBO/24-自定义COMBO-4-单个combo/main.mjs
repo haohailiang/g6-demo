@@ -11,12 +11,13 @@ bindEvents(graph);
 function renderGraph() {
     const width = document.getElementById("container").scrollWidth;
     const height =
-        (document.getElementById("container").scrollHeight || 500) - 20;
+        (document.getElementById("container").scrollHeight || 500);
     const graph = new G6.Graph({
         container: "container",
         width,
         height,
-        fitCenter: true,
+        fitCenter: false,
+        fitView: false,
         // Set groupByTypes to false to get rendering result with reasonable visual zIndex for combos
         groupByTypes: false,
         // Configure the combos globally
@@ -38,12 +39,12 @@ function renderGraph() {
             // type: "rect",
             type: "circle",
             // size: [100, 100],
-            size: 100,
-            labelCfg: {
-                style: {
-                    fontSize: 6
-                }
-            }
+            // size: 100,
+            // labelCfg: {
+            //     style: {
+            //         fontSize: 6
+            //     }
+            // }
         }
     });
     const data = getData();

@@ -1,117 +1,85 @@
 export function getData() {
-    const nodes = Array.from({ length: Math.floor(Math.random() * 30) }).map((_, index) => {
-        const comboId = Math.floor(Math.random() * 3) + 1;
+    const comboCenterX = 900;
+    const comboCenterY = 400;
+    const comboWidth = 600;
+    const comboHeight = 400;
+    const comboPadding = [50, 100, 150, 200];
+    // const comboPadding = [0, 0, 0, 0];
 
-        return {
-            id: `node-${index}`,
-            label: `node-${index}`,
-            comboId: `combo-${comboId}`,
-        };
-    });
-    const childNodes1 = [
-        {
-            id: `node-1`,
-            label: `node-1`,
-            x: 0,
-            y: 0,
-            comboId: `combo-1`,
-        },
-        {
-            id: `node-2`,
-            label: `node-2`,
-            x: 150,
-            y: 150,
-            comboId: `combo-1`,
-        },
-    ];
+    const comboX = comboCenterX - comboWidth / 2;
+    const comboY = comboCenterY - comboHeight / 2;
+    const innerWidth = comboWidth - comboPadding[1] - comboPadding[3];
+    const innerHeight = comboHeight - comboPadding[0] - comboPadding[2];
+    const innerCenterX = comboX + comboPadding[3] + innerWidth / 2;
+    const innerCenterY = comboY + comboPadding[0] + innerHeight / 2;
 
-    const childNodes3 = [
-        {
-            id: `node-3`,
-            label: `node-3`,
-            x: 700,
-            y: 300,
-            comboId: `combo-3`,
-        }
-    ];
-    const combo1 = [
-        {
-            id: 'combo-1',
-            label: 'combo-1',
-            type: 'card-node',
-            nodes: childNodes1,
-            parentId: 'combo-2',
-        },
-    ]
+    const point1X = innerCenterX - innerWidth / 2;
+    const point1Y = innerCenterY - innerHeight / 2;
+    const point2X = innerCenterX + innerWidth / 2;
+    const point2Y = innerCenterY - innerHeight / 2;
+    const point3X = innerCenterX + innerWidth / 2;
+    const point3Y = innerCenterY + innerHeight / 2;
+    const point4X = innerCenterX - innerWidth / 2;
+    const point4Y = innerCenterY + innerHeight / 2;
 
-
+    const nodeSize = 21;
+    const point5X = point4X + nodeSize / 2 + 10;
+    const point5Y = point4Y - nodeSize / 2 - 10;
     return {
         nodes: [
             {
-                id: `node-1`,
-                label: `node-1`,
-                x: 0,
-                y: 0,
-                comboId: `group-1`,
+                id: 'angle-1',
+                // label: '1',
+                x: point1X,
+                y: point1Y,
+                size: 1,
+                comboId: 'combo-1',
             },
             {
-                id: `node-2`,
-                label: `node-2`,
-                x: 150,
-                y: 150,
-                comboId: `group-1`,
+                id: 'angle-2',
+                // label: '2',
+                x: point2X,
+                y: point2Y,
+                size: 1,
+                comboId: 'combo-1',
             },
             {
-                id: `node-3`,
-                label: `node-3`,
-                x: 700,
-                y: 300,
-                comboId: `group-3`,
+                id: 'angle-3',
+                // label: '3',
+                x: point3X,
+                y: point3Y,
+                size: 1,
+                comboId: 'combo-1',
             },
-            // {
-            //     id: `node-1`,
-            //     label: `node-1`,
-            //     x: 0,
-            //     y: 0,
-            //     comboId: `combo-1`,
-            // },
-            // {
-            //     id: `node-2`,
-            //     label: `node-2`,
-            //     x: 150,
-            //     y: 150,
-            //     comboId: `combo-1`,
-            // },
-            // {
-            //     id: `node-4`,
-            //     label: `node-4`,
-            //     x: 600,
-            //     y: 600,
-            //     comboId: `combo-2`,
-            // },
+            {
+                id: 'angle-4',
+                // label: '4',
+                x: point4X,
+                y: point4Y,
+                size: 1,
+                comboId: 'combo-1',
+            },
+            {
+                id: 'core-5',
+                label: '5',
+                x: point5X,
+                y: point5Y,
+                comboId: 'combo-1',
+            },
         ],
         edges: [],
         combos: [
             {
-                id: 'group-1',
-                label: 'group-1',
+                id: 'combo-1',
+                label: 'combo-1',
+                // type: 'rect',
                 type: 'card-node',
-                // nodes: childNodes1,
-                parentId: 'sublayer-1',
+                comboCenterX,
+                comboCenterY,
+                comboPadding,
+                comboWidth,
+                comboHeight,
             },
-            {
-                id: 'sublayer-1',
-                label: 'sublayer-1',
-                type: 'card-node',
-                combos: combo1
-            },
-            {
-                id: 'group-3',
-                label: 'group-3',
-                type: 'card-node',
-                // nodes: childNodes3,
-                parentId: 'sublayer-1',
-            }
         ]
     }
 }
