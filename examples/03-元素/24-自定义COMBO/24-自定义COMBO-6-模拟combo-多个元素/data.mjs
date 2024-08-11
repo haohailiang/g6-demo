@@ -22,12 +22,16 @@ export function getData() {
     // const point3Y = innerCenterY + innerHeight / 2;
     const startX = comboCenterX - comboWidth / 2;
     const startY = comboCenterY - comboHeight / 2;
+    const point2X = startX + comboWidth - comboPadding[1];
+    const point2Y = startY + comboPadding[0];
     const point4X = startX + comboPadding[3];
     const point4Y = startY + comboHeight - comboPadding[2];
 
     const nodeSize = 21;
-    const point5X = point4X + nodeSize / 2 + 10;
-    const point5Y = point4Y - nodeSize / 2 - 10;
+    const core1X = point2X - nodeSize / 2;
+    const core1Y = point2Y + nodeSize / 2;
+    const core2X = point4X + nodeSize / 2;
+    const core2Y = point4Y - nodeSize / 2;
     return {
         nodes: [
             {
@@ -42,11 +46,18 @@ export function getData() {
                 comboHeight,
             },
             {
-                id: 'core-5',
-                label: '5',
+                id: 'core-1',
+                label: '1',
                 groupId: 'combo-1',
-                x: point5X,
-                y: point5Y,
+                x: core1X,
+                y: core1Y,
+            },
+            {
+                id: 'core-2',
+                label: '2',
+                groupId: 'combo-1',
+                x: core2X,
+                y: core2Y,
             },
         ],
         edges: [],

@@ -80,32 +80,32 @@ export function registerNode() {
      * @param  {Object} cfg Combo 的配置项
      * @param  {G.Group} group 图形分组，Combo 中的图形对象的容器
      */
-            afterDraw(cfg, group) {
-                // console.log("afterDraw: ");
-                // debugger
-            },
+            // afterDraw(cfg, group) {
+            //     // console.log("afterDraw: ");
+            //     // debugger
+            // },
             /**
      * 更新节点后的操作，新增的图形需要在这里控制其更新逻辑
      * @override
      * @param  {Object} cfg 节点的配置项
      * @param  {Combo} combo 节点
      */
-            afterUpdate(cfg, combo) {
-                // console.log('cfg: ', cfg);
-                // console.log('combo: ', combo);
-                // const nextPoints = getNextPoints(this.initPoints, combo);
-                // const { relative: { outer1, outer2, outer3, outer4, inner1, inner2, inner3, inner4 } } = nextPoints;
+            // afterUpdate(cfg, combo) {
+            //     // console.log('cfg: ', cfg);
+            //     // console.log('combo: ', combo);
+            //     // const nextPoints = getNextPoints(this.initPoints, combo);
+            //     // const { relative: { outer1, outer2, outer3, outer4, inner1, inner2, inner3, inner4 } } = nextPoints;
 
-                // const group = combo.get("group");
-                // const keyShape = group.find(
-                //     ele => ele.get("name") === "outer-rect-shape"
-                // );
-                // const innerRectShape = group.find(
-                //     ele => ele.get("name") === "inner-rect-shape"
-                // );
-            },
+            //     // const group = combo.get("group");
+            //     // const keyShape = group.find(
+            //     //     ele => ele.get("name") === "outer-rect-shape"
+            //     // );
+            //     // const innerRectShape = group.find(
+            //     //     ele => ele.get("name") === "inner-rect-shape"
+            //     // );
+            // },
         },
-        "rect"
+        // "rect"
     );
 }
 
@@ -136,10 +136,10 @@ function getBoundaryPoints(initPoints, nodeModels) {
          * 与初始位置比
          * 1. 在初始范围内移动时, 位置不变化
          * 2. 越界时[X和Y单独处理]
-         *    2.1 左边X越界时, 左边扩展, 右边收缩
-         *    2.2 右边X越界时, 右边扩展, 左边收缩
-         *    2.3 上边Y越界时, 上边扩展, 下边收缩
-         *    2.4 下边Y越界时, 下边扩展, 上边收缩
+         *    2.1 左边X越界时, 向左平移
+         *    2.2 右边X越界时, 向右平移
+         *    2.3 上边Y越界时, 向上平移
+         *    2.4 下边Y越界时, 向下平移
          */
         return getSingleNodePosition(initPoints, nodeModels[0]);
     } else { // 多个
